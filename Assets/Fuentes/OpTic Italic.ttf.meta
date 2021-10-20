@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: f4fe1ab6f37a5974d98b88281b7b8279
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: OpTic
+  fontNames:
+  - OpTic
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 13bad72c97028ff4aace330c45ebdb9e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

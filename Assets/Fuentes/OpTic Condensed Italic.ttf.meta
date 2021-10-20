@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 6826d03f0b93b4746b97482f85465994
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: OpTic Condensed
+  fontNames:
+  - OpTic Condensed
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 831b9bbf79e7efd4b8e4e48928012911, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
