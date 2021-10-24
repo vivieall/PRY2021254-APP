@@ -22,6 +22,8 @@ public class SceneManager : MonoBehaviour
     [SerializeField] private GameObject  m_ModificarListaPersonalizUI;
     [SerializeField] private GameObject  m_HistorialUI;
     [SerializeField] private GameObject  m_Tema1UI;
+    [SerializeField] private GameObject  m_Nivel1UI;
+    private ArrayList AllUIs;
 
 
     #region Login
@@ -53,6 +55,25 @@ public class SceneManager : MonoBehaviour
 
     void Start()
     {
+        // No es muy bonito, pero es más bonito que  las 350 lineas de copypaste para cada show
+        AllUIs = new ArrayList();
+		AllUIs.Add(m_LoguinUI);
+		AllUIs.Add(m_RegisterUI);
+		AllUIs.Add(m_PerfilNiñoCrearUI);
+		AllUIs.Add(m_PerfilesGuardadosUI);
+		AllUIs.Add(m_ActualizarDatosUI);
+		AllUIs.Add(m_VerDatosCuidadorUI);
+		AllUIs.Add(m_SeleccionarCategoriaUI);
+		AllUIs.Add(m_SeleccionarTemaUI);
+		AllUIs.Add(m_NivelesCompletosUI);
+		AllUIs.Add(m_PerfilNinoModificarsUI);
+		AllUIs.Add(m_ListaPersonalizadaUI);
+		AllUIs.Add(m_PerfilNinoVistaDatosUI);
+		AllUIs.Add(m_ModificarListaPersonalizUI);
+		AllUIs.Add(m_HistorialUI);
+		AllUIs.Add(m_Tema1UI);
+		AllUIs.Add(m_Nivel1UI);
+
         m_NetworkManager = FindObjectOfType <NetworkManager>();
 
         if (PlayerPrefs.HasKey("toggleIsOn") == true)
@@ -172,6 +193,13 @@ public class SceneManager : MonoBehaviour
             }
         }
     }
+
+    public void ShowUI(GameObject UIToShow) {
+        foreach(GameObject m_ui in AllUIs) {
+            m_ui.SetActive(false);
+		}
+        UIToShow.SetActive(true);
+	}
 //Se puede mejorar estas funciones creando una que solo reciba la funcion especifica y que solo cambie el que se ponga true 
     public void ShowLoguin(){
         m_RegisterUI.SetActive(false);
