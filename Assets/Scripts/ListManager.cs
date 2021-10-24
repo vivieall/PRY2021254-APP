@@ -11,6 +11,7 @@ public class ListManager : MonoBehaviour
     [SerializeField] private string CurrentSearch;
     [SerializeField] private GameObject ContentPanel;
     [SerializeField] private GameObject ListItemPrefab;
+	[SerializeField] private bool allowDuplicates = true;
 
     void Start()
     {
@@ -23,7 +24,7 @@ public class ListManager : MonoBehaviour
 
     public void AddItem(string item)
 	{
-        if (!AllListItems.Contains(item)) {
+        if (allowDuplicates || !AllListItems.Contains(item)) {
             AllListItems.Add(item);
 			GameObject newItem = Instantiate(ListItemPrefab) as GameObject;
 			ListItemManager lim = newItem.GetComponent<ListItemManager>();
