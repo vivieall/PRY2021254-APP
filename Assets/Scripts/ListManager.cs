@@ -1,14 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ListManager : MonoBehaviour
 {
 
     [SerializeField] private ArrayList AllListItems;
 	[SerializeField] private ArrayList AllListInstancedItems;
-    [SerializeField] private ArrayList SearchedListItems;
-    [SerializeField] private string CurrentSearch;
     [SerializeField] private GameObject ContentPanel;
     [SerializeField] private GameObject ListItemPrefab;
 	[SerializeField] private bool allowDuplicates = true;
@@ -19,7 +18,6 @@ public class ListManager : MonoBehaviour
         // Ejemplo usando solo strings
         AllListItems = new ArrayList();
         AllListInstancedItems = new ArrayList();
-        SearchedListItems = new ArrayList();
     }
 
     public void AddItem(string item)
@@ -47,20 +45,23 @@ public class ListManager : MonoBehaviour
 			Destroy(item);
 			AllListItems.RemoveAt(i);
 			AllListInstancedItems.RemoveAt(i);
+			// TODO: Eliminar de base de datos / etc.
 		}
 		else Debug.Log(item.name + " was not in list");
 	}
 
-
-    public void UpdateList()
+    public void UpdateList(string CurrentSearch)
 	{
-        if (CurrentSearch.Equals(""))
+		foreach(GameObject item in AllListInstancedItems)
 		{
-			foreach(string item in AllListItems)
-			{
-				AddItem(item);
-			}
+			ListItemManager lim = item.GetComponent<ListItemManager>();
+			item.SetActive(lim.text.text.Contains(CurrentSearch));
 		}
+	}
+
+    public void UpdateList(Text CurrentSearch)
+	{
+		UpdateList(CurrentSearch.text);
 	}
 
 
