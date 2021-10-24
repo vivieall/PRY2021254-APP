@@ -33,10 +33,22 @@ public class ListManager : MonoBehaviour
 				Debug.Log(item + " gave null ListItemManager");
 			}
 			lim.text.text = item;
+			lim.ListManager = this;
 			newItem.transform.parent = ContentPanel.transform;
 			newItem.transform.localScale = Vector3.one;
 			AllListInstancedItems.Add(newItem);
 		}
+	}
+
+    public void RemoveItem(GameObject item)
+	{
+        if (AllListInstancedItems.Contains(item)) {
+			int i = AllListInstancedItems.IndexOf(item);
+			Destroy(item);
+			AllListItems.RemoveAt(i);
+			AllListInstancedItems.RemoveAt(i);
+		}
+		else Debug.Log(item.name + " was not in list");
 	}
 
 
