@@ -3,7 +3,33 @@ guid: 19bebb0bdea14f64383f51c1b33fcfbc
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - m_LoguinUI: {instanceID: 0}
+  - m_RegisterUI: {instanceID: 0}
+  - "m_PerfilNi\xF1oCrearUI": {instanceID: 0}
+  - m_PerfilesGuardadosUI: {instanceID: 0}
+  - m_ActualizarDatosUI: {instanceID: 0}
+  - m_VerDatosCuidadorUI: {instanceID: 0}
+  - m_SeleccionarCategoriaUI: {instanceID: 0}
+  - m_SeleccionarTemaUI: {instanceID: 0}
+  - m_SeleccionarTematicaUI: {fileID: 165198, guid: 43be0d579e45af147961af4bc311abf8,
+      type: 3}
+  - m_NivelesCompletosUI: {instanceID: 0}
+  - m_PerfilNinoModificarsUI: {instanceID: 0}
+  - m_ListaPersonalizadaUI: {instanceID: 0}
+  - m_PerfilNinoVistaDatosUI: {instanceID: 0}
+  - m_ModificarListaPersonalizUI: {instanceID: 0}
+  - m_HistorialUI: {instanceID: 0}
+  - m_Tema1UI: {instanceID: 0}
+  - m_Nivel1UI: {instanceID: 0}
+  - m_PasswordInputLogin: {instanceID: 0}
+  - m_UserInputLogin: {instanceID: 0}
+  - m_Username: {instanceID: 0}
+  - m_Email: {instanceID: 0}
+  - m_Password: {instanceID: 0}
+  - m_ConfirmPassword: {instanceID: 0}
+  - m_ErrorText: {instanceID: 0}
+  - toggleSesion: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -15,6 +15,10 @@ public class SceneManager : MonoBehaviour
     [SerializeField] private GameObject  m_VerDatosCuidadorUI= null;
     [SerializeField] private GameObject  m_SeleccionarCategoriaUI= null;
     [SerializeField] private GameObject  m_SeleccionarTemaUI= null;
+    [SerializeField] private GameObject m_SeleccionarTematicaUI = null;
+    [SerializeField] private GameObject m_AnimalesFiltroUI= null;
+    [SerializeField] private GameObject m_PersonajesFiltroUI = null;
+    [SerializeField] private GameObject m_VariedadesFiltroUI = null;
     [SerializeField] private GameObject  m_NivelesCompletosUI= null;
     [SerializeField] private GameObject  m_PerfilNinoModificarsUI= null;
     [SerializeField] private GameObject  m_ListaPersonalizadaUI= null;
@@ -65,7 +69,11 @@ public class SceneManager : MonoBehaviour
 		AllUIs.Add(m_VerDatosCuidadorUI);
 		AllUIs.Add(m_SeleccionarCategoriaUI);
 		AllUIs.Add(m_SeleccionarTemaUI);
-		AllUIs.Add(m_NivelesCompletosUI);
+        AllUIs.Add(m_SeleccionarTematicaUI);
+        AllUIs.Add(m_AnimalesFiltroUI);
+        AllUIs.Add(m_PersonajesFiltroUI);
+        AllUIs.Add(m_VariedadesFiltroUI);
+        AllUIs.Add(m_NivelesCompletosUI);
 		AllUIs.Add(m_PerfilNinoModificarsUI);
 		AllUIs.Add(m_ListaPersonalizadaUI);
 		AllUIs.Add(m_PerfilNinoVistaDatosUI);
@@ -210,8 +218,12 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);
-        m_HistorialUI.SetActive(false); 
+        m_HistorialUI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
         m_PerfilNinoVistaDatosUI.SetActive(false);
@@ -229,6 +241,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
@@ -236,6 +249,9 @@ public class SceneManager : MonoBehaviour
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);   
         m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
     }
     public void ShowPerfilNiño(){
         m_RegisterUI.SetActive(false);
@@ -246,6 +262,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
@@ -253,6 +270,9 @@ public class SceneManager : MonoBehaviour
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);   
         m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
     }
         public void ShowPerfilsGuardados(){
         m_RegisterUI.SetActive(false);
@@ -263,6 +283,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
@@ -270,7 +291,10 @@ public class SceneManager : MonoBehaviour
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);   
         m_Tema1UI.SetActive(false);
-        
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
+
     }
         public void ShowActualizarDatos(){
         m_RegisterUI.SetActive(false);
@@ -281,14 +305,18 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
         m_PerfilNinoVistaDatosUI.SetActive(false);
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);  
-        m_Tema1UI.SetActive(false); 
-        
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
+
     }
         public void ShowVerDatosCuidador(){
         m_RegisterUI.SetActive(false);
@@ -299,6 +327,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(true);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
@@ -306,7 +335,10 @@ public class SceneManager : MonoBehaviour
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);   
         m_Tema1UI.SetActive(false);
-        
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
+
     }
         public void ShowCategoria(){
         m_RegisterUI.SetActive(false);
@@ -317,6 +349,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(true);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
@@ -324,7 +357,10 @@ public class SceneManager : MonoBehaviour
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);   
         m_Tema1UI.SetActive(false);
-        
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
+
     }
     public void ShowTema(){
         m_RegisterUI.SetActive(false);
@@ -335,6 +371,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(true);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
@@ -342,7 +379,10 @@ public class SceneManager : MonoBehaviour
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);   
         m_Tema1UI.SetActive(false);
-        
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
+
     }
     public void ShowNivelesCompletos(){
         m_RegisterUI.SetActive(false);
@@ -353,6 +393,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(true); 
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
@@ -360,6 +401,9 @@ public class SceneManager : MonoBehaviour
         m_ModificarListaPersonalizUI.SetActive(false);       
         m_HistorialUI.SetActive(false);   
         m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
     }
 
 
@@ -372,6 +416,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);     
         m_PerfilNinoModificarsUI.SetActive(false);
         m_ListaPersonalizadaUI.SetActive(false);
@@ -379,6 +424,9 @@ public class SceneManager : MonoBehaviour
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);   
         m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
     }
     public void ShowPerfilNinoModificar(){
         m_RegisterUI.SetActive(false);
@@ -389,6 +437,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);   
 
         m_PerfilNinoModificarsUI.SetActive(true);
@@ -396,7 +445,10 @@ public class SceneManager : MonoBehaviour
         m_PerfilNinoVistaDatosUI.SetActive(false);
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);  
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
     }
     public void ShowListaPersonalizada(){
         m_RegisterUI.SetActive(false);
@@ -407,6 +459,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);   
 
         m_PerfilNinoModificarsUI.SetActive(false);
@@ -414,7 +467,10 @@ public class SceneManager : MonoBehaviour
         m_PerfilNinoVistaDatosUI.SetActive(false);
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);     
-        m_Tema1UI.SetActive(false);     
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
     }
     public void ShowModificarListaPersonalizada(){
         m_RegisterUI.SetActive(false);
@@ -425,6 +481,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false); 
 
         m_PerfilNinoModificarsUI.SetActive(false);
@@ -432,7 +489,10 @@ public class SceneManager : MonoBehaviour
         m_PerfilNinoVistaDatosUI.SetActive(false);
         m_ModificarListaPersonalizUI.SetActive(true);
         m_HistorialUI.SetActive(false);    
-        m_Tema1UI.SetActive(false);     
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
     }
     public void ShowHistorial(){
         m_RegisterUI.SetActive(false);
@@ -443,6 +503,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);    
 
         m_PerfilNinoModificarsUI.SetActive(false);
@@ -450,7 +511,10 @@ public class SceneManager : MonoBehaviour
         m_PerfilNinoVistaDatosUI.SetActive(false);
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(true);    
-        m_Tema1UI.SetActive(false);  
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
     }
     
     public void ShowTema1(){
@@ -462,6 +526,7 @@ public class SceneManager : MonoBehaviour
         m_VerDatosCuidadorUI.SetActive(false);
         m_SeleccionarCategoriaUI.SetActive(false);
         m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
         m_NivelesCompletosUI.SetActive(false);    
 
         m_PerfilNinoModificarsUI.SetActive(false);
@@ -469,6 +534,105 @@ public class SceneManager : MonoBehaviour
         m_PerfilNinoVistaDatosUI.SetActive(false);
         m_ModificarListaPersonalizUI.SetActive(false);
         m_HistorialUI.SetActive(false);    
-        m_Tema1UI.SetActive(true);  
+        m_Tema1UI.SetActive(true);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
+    }
+
+    public void ShowTematica()
+    {
+        m_RegisterUI.SetActive(false);
+        m_LoguinUI.SetActive(false);
+        m_PerfilNiñoCrearUI.SetActive(false);
+        m_PerfilesGuardadosUI.SetActive(false);
+        m_ActualizarDatosUI.SetActive(false);
+        m_VerDatosCuidadorUI.SetActive(false);
+        m_SeleccionarCategoriaUI.SetActive(false);
+        m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(true);
+        m_NivelesCompletosUI.SetActive(false);
+
+        m_PerfilNinoModificarsUI.SetActive(false);
+        m_ListaPersonalizadaUI.SetActive(false);
+        m_PerfilNinoVistaDatosUI.SetActive(false);
+        m_ModificarListaPersonalizUI.SetActive(false);
+        m_HistorialUI.SetActive(false);
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
+    }
+
+    public void ShowAnimalesFiltro()
+    {
+        m_RegisterUI.SetActive(false);
+        m_LoguinUI.SetActive(false);
+        m_PerfilNiñoCrearUI.SetActive(false);
+        m_PerfilesGuardadosUI.SetActive(false);
+        m_ActualizarDatosUI.SetActive(false);
+        m_VerDatosCuidadorUI.SetActive(false);
+        m_SeleccionarCategoriaUI.SetActive(false);
+        m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
+        m_NivelesCompletosUI.SetActive(false);
+
+        m_PerfilNinoModificarsUI.SetActive(false);
+        m_ListaPersonalizadaUI.SetActive(false);
+        m_PerfilNinoVistaDatosUI.SetActive(false);
+        m_ModificarListaPersonalizUI.SetActive(false);
+        m_HistorialUI.SetActive(false);
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(true);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(false);
+    }
+
+    public void ShowPersonajesFiltro()
+    {
+        m_RegisterUI.SetActive(false);
+        m_LoguinUI.SetActive(false);
+        m_PerfilNiñoCrearUI.SetActive(false);
+        m_PerfilesGuardadosUI.SetActive(false);
+        m_ActualizarDatosUI.SetActive(false);
+        m_VerDatosCuidadorUI.SetActive(false);
+        m_SeleccionarCategoriaUI.SetActive(false);
+        m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
+        m_NivelesCompletosUI.SetActive(false);
+
+        m_PerfilNinoModificarsUI.SetActive(false);
+        m_ListaPersonalizadaUI.SetActive(false);
+        m_PerfilNinoVistaDatosUI.SetActive(false);
+        m_ModificarListaPersonalizUI.SetActive(false);
+        m_HistorialUI.SetActive(false);
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(true);
+        m_VariedadesFiltroUI.SetActive(false);
+    }
+
+    public void ShowVariedadesFiltro()
+    {
+        m_RegisterUI.SetActive(false);
+        m_LoguinUI.SetActive(false);
+        m_PerfilNiñoCrearUI.SetActive(false);
+        m_PerfilesGuardadosUI.SetActive(false);
+        m_ActualizarDatosUI.SetActive(false);
+        m_VerDatosCuidadorUI.SetActive(false);
+        m_SeleccionarCategoriaUI.SetActive(false);
+        m_SeleccionarTemaUI.SetActive(false);
+        m_SeleccionarTematicaUI.SetActive(false);
+        m_NivelesCompletosUI.SetActive(false);
+
+        m_PerfilNinoModificarsUI.SetActive(false);
+        m_ListaPersonalizadaUI.SetActive(false);
+        m_PerfilNinoVistaDatosUI.SetActive(false);
+        m_ModificarListaPersonalizUI.SetActive(false);
+        m_HistorialUI.SetActive(false);
+        m_Tema1UI.SetActive(false);
+        m_AnimalesFiltroUI.SetActive(false);
+        m_PersonajesFiltroUI.SetActive(false);
+        m_VariedadesFiltroUI.SetActive(true);
     }
 }
