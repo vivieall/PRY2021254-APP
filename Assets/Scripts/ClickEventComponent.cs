@@ -4,54 +4,82 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class ClickEventComponent : MonoBehaviour, IPointerDownHandler
+public class ClickEventComponent : MonoBehaviour
 {
     // Los "listeners" se agregan desde el editor
     [SerializeField] public UnityEvent OnSingleTap;
     [SerializeField] public UnityEvent OnDoubleTap;
     [SerializeField] public GameObject CameraRef;
 
-    float FirstTapTime = 0.0f; // Tiempo en que se hizo el primer tap.
-    float TimeWindowForDoubleTap = 0.2f; // Tiempo en segundos que puede pasar entre primer y segundo tap.
-    bool bIsSecondTap = false; // Auxiliar para guardar el estado de clicks.
+    float FirstPressTime = 0.0f; // Tiempo en que se hizo el primer press.
+    float TimeWindowForDoublePress = 0.2f; // Tiempo en segundos que puede pasar entre primer y segundo press.
+    bool bIsSecondPress = false; // Auxiliar para guardar el estado de clicks.
+    private GameObject lastHitObject = null;
 
+    public void Update()
+	{
+        bool isTapping = Input.touchCount > 0 && (Input.touches[0].phase == TouchPhase.Began);
+        if (Input.GetMouseButtonDown(0) || isTapping)
+		{
+            Vector3 touchLocation;
+            if (isTapping)
+			{
+                Vector2 pos2D = Input.GetTouch(0).position;
+                touchLocation = new Vector3(pos2D.x, pos2D.y, 0.0f);
+			}
+            else
+			{
+                touchLocation = Input.mousePosition;
+			}
+            Ray ray = Camera.main.ScreenPointToRay(touchLocation);
+            RaycastHit hitResult;
+            if (Physics.Raycast(ray, out hitResult))
+			{
+                GameObject hitObject = hitResult.transform.gameObject;
+                // Si se toca un objeto nuevo, no puede ser un doble-click
+                bIsSecondPress &= (lastHitObject == hitObject);
+                lastHitObject = hitObject;
+                OnPress();
+			}
+		}
+	}
 
     // TODO: Arreglar colisiones, el click no se detecta. Es necesario usar raycasts al parecer.
-    public void OnPointerDown(PointerEventData eventData)
+    public void OnPress()
     {
-        if (!bIsSecondTap) // Primer tap/click
+        if (!bIsSecondPress) // Primer tap/click
         {
             // Invoke sirve para llamar un metodo luego de un tiempo T
             // CancelInvoke se utiliza para cancelar un Invoke pendiente
-            Invoke("SingleTap", TimeWindowForDoubleTap);
-            bIsSecondTap = true;
-            FirstTapTime = Time.time;
+            Invoke("SinglePress", TimeWindowForDoublePress);
+            bIsSecondPress = true;
+            FirstPressTime = Time.time;
         }
-        else if (Time.time - FirstTapTime  < TimeWindowForDoubleTap) // Segundo tap/click se hizo a tiempo
+        else if (Time.time - FirstPressTime < TimeWindowForDoublePress) // Segundo tap/click se hizo a tiempo
         {
-            CancelInvoke("SingleTap"); 
-            DoubleTap();
+            CancelInvoke("SinglePress"); 
+            DoublePress();
         }
     }
 
-    void SingleTap()
+    void SinglePress()
     {
-        bIsSecondTap = false; 
-        Debug.Log("SingleTap called from " + this.name);
+        bIsSecondPress = false; 
+        Debug.Log("SinglePress called from " + (gameObject ? gameObject.name : "DestroyedGameObject"));
         if (OnSingleTap != null)
         {
-            Debug.Log("SingleTap event is not null");
+            Debug.Log("SinglePress event is not null");
             OnSingleTap.Invoke();
         }
     }
 
-    void DoubleTap()
+    void DoublePress()
     {
-        bIsSecondTap = false;
-        Debug.Log("DoubleTap called from " + this.name);
+        bIsSecondPress = false;
+        Debug.Log("DoublePress called from " + (gameObject ? gameObject.name : "DestroyedGameObject"));
         if (OnDoubleTap != null)
         {
-            Debug.Log("DoubleTap event is not null");
+            Debug.Log("DoublePress event is not null");
             OnDoubleTap.Invoke();
         }
     }
