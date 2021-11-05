@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 
-public class SceneManager : MonoBehaviour
+public class SceneUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject m_LoguinUI;
     [SerializeField] private GameObject m_RegisterUI;
@@ -115,7 +115,15 @@ public class SceneManager : MonoBehaviour
                 m_UserInputLogin.text = "";
             }
         }
-        
+        var state = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().GetState();
+        if (state==1)
+        {
+            ShowUI(m_Nivel1UI);
+        }
+        else if (state == 2)
+        {
+            ShowPerfilsGuardados();
+        }
     }
 
     //<summary>

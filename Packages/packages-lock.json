@@ -22,6 +22,15 @@
         "com.google.firebase.app": "8.4.0"
       }
     },
+    "com.ptc.vuforia.engine": {
+      "version": "8.1.12",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.2d.animation": {
       "version": "3.2.10",
       "depth": 0,
