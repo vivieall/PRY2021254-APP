@@ -5,13 +5,23 @@ using UnityEngine.SceneManagement;
 
 public class SceneSwitcher : MonoBehaviour
 {
+    PersistanceHandler Handler;
+    void Start()
+    {
+        Handler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
+
+    }
     public void playGame()
     {
-        
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+        Handler.NextScene();
     }
     public void Back()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex - 1);
+        Handler.PrevScene();
     }
+    public void BackHome()
+    {
+        Handler.MainMenu();
+    }
+
 }

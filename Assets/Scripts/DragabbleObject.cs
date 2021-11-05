@@ -6,11 +6,18 @@ using UnityEngine.EventSystems;
 public class DragabbleObject : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
 {
     [SerializeField] private Canvas canvas;
+    //Vuforia Object es un objeto compuesto de 3 objetos en este orden de indices
+    //0 -> Canvas
+    //1 -> Objeto 3D a mostrar
+    //2 -> Objeto 3d a mostrar al completar la funcion
+    public GameObject VuforiaObject;
+
+    private GameObject GoalObject;
+
     private RectTransform rectTransform;
-    private Vector2 zeroArea;
-    public GameObject GoalObject;
     private Canvas GoalCanvas;
 
+    private Vector2 zeroArea;
     private Vector3 DL;
     private Vector3 UR;
 
@@ -37,7 +44,9 @@ public class DragabbleObject : MonoBehaviour, IDragHandler, IEndDragHandler, IBe
             {
                 if (rectTransform.position.y >= DL.y && rectTransform.position.y <= UR.y)
                 {
-                    GoalObject.transform.parent.parent.gameObject.SetActive(false);
+                    VuforiaObject.transform.GetChild(0).gameObject.SetActive(false);
+                    VuforiaObject.transform.GetChild(1).gameObject.SetActive(false);
+                    VuforiaObject.transform.GetChild(2).gameObject.SetActive(true);
                     gameObject.SetActive(false);
                 }
             }
@@ -49,7 +58,8 @@ public class DragabbleObject : MonoBehaviour, IDragHandler, IEndDragHandler, IBe
     {
         rectTransform = GetComponent<RectTransform>();
         zeroArea = GetComponent<RectTransform>().anchoredPosition;
-        GoalCanvas = GoalObject.transform.parent.GetComponent<Canvas>();
+        GoalCanvas = VuforiaObject.transform.GetChild(0).GetComponent<Canvas>();
+        GoalObject = VuforiaObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
         DL = new Vector3(GoalObject.transform.position.x - rectTransform.rect.width / 2, GoalObject.transform.position.y - rectTransform.rect.height / 2, GoalObject.transform.position.z);
         UR = new Vector3(GoalObject.transform.position.x + rectTransform.rect.width / 2, GoalObject.transform.position.y + rectTransform.rect.height / 2, GoalObject.transform.position.z);
     }
