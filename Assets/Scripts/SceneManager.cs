@@ -30,6 +30,19 @@ public class SceneManager : MonoBehaviour
     private ArrayList AllUIs;
 
 
+    [SerializeField]  private InputField m_InputCorreo;
+    [SerializeField]  private InputField m_InputContrasena;
+    [SerializeField]  private InputField m_InputNombre;
+    [SerializeField]  private InputField m_InputApellido;
+    [SerializeField]  private InputField m_InputFechaDia;
+    [SerializeField]  private InputField m_InputFechaMes;
+    [SerializeField]  private InputField m_InputFechaAnio;
+    [SerializeField]  private InputField m_InputUsuario;
+
+
+    [SerializeField] private InputField m_InputContrasenaLogin;
+    [SerializeField] private InputField m_InputUsuarioLogin;
+
     #region Login
     [Header("Login Inputs")]
     public InputField m_PasswordInputLogin;
@@ -48,8 +61,8 @@ public class SceneManager : MonoBehaviour
 
 
     #endregion
+    [SerializeField] private Toggle toggleSesion;
     private NetworkManager m_NetworkManager;
-    public Toggle toggleSesion;
 
     [Header("Direcciones de corre")]
     public string[] Emails;
@@ -82,8 +95,11 @@ public class SceneManager : MonoBehaviour
 		AllUIs.Add(m_Tema1UI);
 		AllUIs.Add(m_Nivel1UI);
 
-        m_NetworkManager = FindObjectOfType <NetworkManager>();
+        m_NetworkManager = FindObjectOfType<NetworkManager>();
+        Debug.Log("test");
 
+        
+        Debug.Log(toggleSesion.isOn);
         if (PlayerPrefs.HasKey("toggleIsOn") == true)
         {
             toggleSesion.isOn = Convert.ToBoolean(PlayerPrefs.GetInt("toggleIsOn"));
@@ -99,6 +115,7 @@ public class SceneManager : MonoBehaviour
                 m_UserInputLogin.text = "";
             }
         }
+        
     }
 
     //<summary>
@@ -132,13 +149,41 @@ public class SceneManager : MonoBehaviour
                             PlayerPrefs.SetInt ("toggleIsOn", valueSave);
                         }
 
-                        //UnityEngine.SceneManagement.SceneManager.LoadScene("m_PerfilNiñoUI");
                         // m_LoguinUI.SetActive(false);
                         //m_PerfilNiñoUI.SetActive(true);
                     }
                 });
                 //m_LoguinUI.SetActive(false);
                //m_PerfilNiñoUI.SetActive(true);
+    }
+
+    public void submitLogin2()
+    {
+        if (m_InputContrasenaLogin.text == "" || m_InputUsuarioLogin.text == "")
+        {
+            return;
+        }
+        CallLogin(m_InputUsuarioLogin.text, m_InputContrasenaLogin.text, delegate (Response response)
+        {
+            m_ErrorText.text = "Logueando espere un momento";
+            m_ErrorText.text = response.message;
+
+            if (response.done)
+            {
+                if (toggleSesion.isOn)
+                {
+                    PlayerPrefs.SetString("SavePasswordToggle_Data", m_InputContrasenaLogin.text);
+                    PlayerPrefs.SetString("SaveUserToggle_Data", m_InputUsuarioLogin.text);
+                    var valueSave = Convert.ToInt32(toggleSesion.isOn);
+                    PlayerPrefs.SetInt("toggleIsOn", valueSave);
+                }
+                ShowPerfilsGuardados();
+
+                //UnityEngine.SceneManagement.SceneManager.LoadScene("m_PerfilNiñoUI");
+                // m_LoguinUI.SetActive(false);
+                //m_PerfilNiñoUI.SetActive(true);
+            }
+        });
     }
 
     void blankRegisterSpace()
@@ -201,7 +246,63 @@ public class SceneManager : MonoBehaviour
             }
         }
     }
+    public void SubmitRegister2()
+    {
+        foreach (string emailSet in Emails)
+        {
+            if (m_InputCorreo.text.Contains(emailSet))
+            {
+                cuentaRegistradaConExito = true;
+                if (m_InputUsuario.text == "" || m_InputCorreo.text == "" || m_InputContrasena.text == "" || m_InputContrasena.text == "")
+                {
+                    m_ErrorText.text = "Error 444: Verifica que ningun campo este vacio";
+                    return;
+                }
 
+                if (m_InputContrasena.text == m_InputContrasena.text)
+                {
+                    if (m_InputContrasena.text.Length >= MaxLenght)
+                    {
+                        m_ErrorText.text = "Procesando informacion por favor espera un momento";
+                        CallRegister(m_InputUsuario.text, m_InputContrasena.text, m_InputCorreo.text,
+                            m_InputNombre.text, m_InputApellido.text, "2018-05-05", "8",
+                            delegate (Response response)
+                        {
+
+                            m_ErrorText.text = response.message;
+                            if (response.done == true)
+                            {
+                                ////ESCRIBIR CODIGO DE ACEPTACION AL REGISTRARSE
+                                cuentaRegistradaConExito = false;
+                                blankRegisterSpace();
+                                print("Cuenta creada con exito");
+                                ShowLoguin();
+                            }
+                            else
+                            {
+                                ///ACCION AL NO REGISTRAR CUENTA
+
+                            }
+                        });
+                    }
+                    else
+                    {
+                        m_ErrorText.text = "Tu contraseña debe contener minimo 8 caracteres";
+                    }
+                }
+                else
+                {
+                    m_ErrorText.text = "Error 565: Hay datos que no son similares intentalo de nuevo";
+                    return;
+                }
+            }
+
+            if (!m_InputCorreo.text.Contains(emailSet) && !cuentaRegistradaConExito)
+            {
+                m_ErrorText.text = "Error 877: Lo sentimos pero no se puede leer un email valido";
+            }
+        }
+    }
     public void ShowUI(GameObject UIToShow) {
         foreach(GameObject m_ui in AllUIs) {
             m_ui.SetActive(false);
@@ -634,5 +735,49 @@ public class SceneManager : MonoBehaviour
         m_AnimalesFiltroUI.SetActive(false);
         m_PersonajesFiltroUI.SetActive(false);
         m_VariedadesFiltroUI.SetActive(true);
+    }
+
+
+    // Codigo de conexion a la bd se debe enviar a otro script
+    public void CallRegister(string user, string pass, string email, string names, string lastnames, string birthday,
+        string id, Action<Response> response)
+    {
+        StartCoroutine(Register(user, pass, email, names, lastnames, birthday, id, response));
+    }
+
+    IEnumerator Register(string user, string pass, string email, string names, string lastnames, string birthday,
+        string id, Action<Response> response)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("email", email);
+        form.AddField("password", pass);
+        form.AddField("names", names);
+        form.AddField("lastnames", lastnames);
+        form.AddField("username", user);
+        form.AddField("birthday", birthday);
+        form.AddField("id", id);
+        WWW www = new WWW("http://localhost/sqlconnect/register.php", form);
+        yield return www;
+
+        Debug.Log(www.text);
+        response(JsonUtility.FromJson<Response>(www.text));
+    }
+
+
+    public void CallLogin(string user, string pass, Action<Response> response)
+    {
+        StartCoroutine(Login(user, pass,response));
+    }
+
+    IEnumerator Login(string user, string pass, Action<Response> response)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("password", pass);
+        form.AddField("username", user);
+        WWW www = new WWW("http://localhost/sqlconnect/login.php", form);
+        yield return www;
+
+        Debug.Log(www.text);
+        response(JsonUtility.FromJson<Response>(www.text));
     }
 }
