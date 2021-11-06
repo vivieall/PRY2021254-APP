@@ -98,7 +98,7 @@ public class SceneManager : MonoBehaviour
         m_NetworkManager = FindObjectOfType<NetworkManager>();
         Debug.Log("test");
 
-        
+        /*
         Debug.Log(toggleSesion.isOn);
         if (PlayerPrefs.HasKey("toggleIsOn") == true)
         {
@@ -115,7 +115,7 @@ public class SceneManager : MonoBehaviour
                 m_UserInputLogin.text = "";
             }
         }
-        
+        */
     }
 
     //<summary>
