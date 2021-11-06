@@ -98,7 +98,7 @@ public class SceneUIManager : MonoBehaviour
         m_NetworkManager = FindObjectOfType<NetworkManager>();
         Debug.Log("test");
 
-        
+        /*
         Debug.Log(toggleSesion.isOn);
         if (PlayerPrefs.HasKey("toggleIsOn") == true)
         {
@@ -115,15 +115,7 @@ public class SceneUIManager : MonoBehaviour
                 m_UserInputLogin.text = "";
             }
         }
-        var state = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().GetState();
-        if (state==1)
-        {
-            ShowUI(m_Nivel1UI);
-        }
-        else if (state == 2)
-        {
-            ShowPerfilsGuardados();
-        }
+        */
     }
 
     //<summary>
