@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 
-public class SceneManager : MonoBehaviour
+public class SceneUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject m_LoguinUI;
     [SerializeField] private GameObject m_RegisterUI;
