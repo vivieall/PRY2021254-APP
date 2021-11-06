@@ -23,7 +23,7 @@
       }
     },
     "com.ptc.vuforia.engine": {
-      "version": "8.1.12",
+      "version": "8.5.9",
       "depth": 0,
       "source": "registry",
       "dependencies": {

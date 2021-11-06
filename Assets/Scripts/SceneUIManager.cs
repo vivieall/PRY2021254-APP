@@ -116,6 +116,15 @@ public class SceneUIManager : MonoBehaviour
             }
         }
         */
+        var state = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().GetState();
+        if (state == 1)
+        {
+            ShowUI(m_Nivel1UI);
+        }
+        else if (state == 2)
+        {
+            ShowPerfilsGuardados();
+        }
     }
 
     //<summary>
