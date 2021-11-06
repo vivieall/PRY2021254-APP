@@ -19140,6 +19140,7 @@ GameObject:
   - component: {fileID: 851567701}
   - component: {fileID: 851567700}
   - component: {fileID: 851567699}
+  - component: {fileID: 851567702}
   m_Layer: 5
   m_Name: PerroButton
   m_TagString: Untagged
@@ -19221,6 +19222,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 851567702}
+        m_MethodName: SendPrefabToFaceManager
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &851567700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19258,6 +19270,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 851567697}
   m_CullTransparentMesh: 0
+--- !u!114 &851567702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 851567697}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905d43680855ad54a9ee37348e76b2e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FaceManager: {fileID: 916721864}
+  FacePrefab: {fileID: 7765100736414676002, guid: 7d68d7bb365fd264ab26c493d0df6f20,
+    type: 3}
 --- !u!1 &853227495
 GameObject:
   m_ObjectHideFlags: 0
@@ -21219,6 +21246,7 @@ GameObject:
   - component: {fileID: 950671987}
   - component: {fileID: 950671986}
   - component: {fileID: 950671985}
+  - component: {fileID: 950671988}
   m_Layer: 5
   m_Name: OsoButton
   m_TagString: Untagged
@@ -21290,7 +21318,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 519420030}
-        m_MethodName: 
+        m_MethodName: ShowUI
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 398983571}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 950671988}
+        m_MethodName: SendPrefabToFaceManager
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -21337,6 +21376,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 950671983}
   m_CullTransparentMesh: 0
+--- !u!114 &950671988
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 950671983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905d43680855ad54a9ee37348e76b2e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FaceManager: {fileID: 916721864}
+  FacePrefab: {fileID: 7765100736414676002, guid: 5a8b1614abcbe054e8aa6f7b4f297d34,
+    type: 3}
 --- !u!1 &954411388
 GameObject:
   m_ObjectHideFlags: 0
@@ -25423,6 +25477,8 @@ GameObject:
   - component: {fileID: 1176671615}
   - component: {fileID: 1176671614}
   - component: {fileID: 1176671613}
+  - component: {fileID: 1176671617}
+  - component: {fileID: 1176671616}
   m_Layer: 5
   m_Name: GatoButton
   m_TagString: Untagged
@@ -25504,6 +25560,17 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1176671616}
+        m_MethodName: SendPrefabToFaceManager
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1176671614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25541,6 +25608,33 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1176671611}
   m_CullTransparentMesh: 0
+--- !u!114 &1176671616
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176671611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905d43680855ad54a9ee37348e76b2e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FaceManager: {fileID: 916721864}
+  FacePrefab: {fileID: 7765100736414676002, guid: 90a1c5af597cb8a4ea12efceabf35fca,
+    type: 3}
+--- !u!114 &1176671617
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1176671611}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d2bc1d42d9ad6c4ba059ff809027d4c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1176992513
 GameObject:
   m_ObjectHideFlags: 0
@@ -40036,6 +40130,7 @@ GameObject:
   - component: {fileID: 1860142252}
   - component: {fileID: 1860142251}
   - component: {fileID: 1860142250}
+  - component: {fileID: 1860142253}
   m_Layer: 5
   m_Name: ConejoButton
   m_TagString: Untagged
@@ -40107,7 +40202,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 519420030}
-        m_MethodName: 
+        m_MethodName: ShowUI
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 398983571}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1860142253}
+        m_MethodName: SendPrefabToFaceManager
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -40154,6 +40260,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860142248}
   m_CullTransparentMesh: 0
+--- !u!114 &1860142253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860142248}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 905d43680855ad54a9ee37348e76b2e0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  FaceManager: {fileID: 916721864}
+  FacePrefab: {fileID: 7765100736414676002, guid: d92f7f9002f05c3409193574e0a799ef,
+    type: 3}
 --- !u!1 &1869169530
 GameObject:
   m_ObjectHideFlags: 0
