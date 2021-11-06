@@ -4,13 +4,13 @@ using UnityEngine;
 
 public class UIScreenComponent : MonoBehaviour
 {
-	private SceneManager sceneManager;
+	private SceneUIManager sceneUIManager;
     private GameObject ParentUI = null;
 
 	private void Start()
 	{
-		sceneManager = Camera.main.GetComponent<SceneManager>();
-		if (!sceneManager)
+		sceneUIManager = Camera.main.GetComponent<SceneUIManager>();
+		if (!sceneUIManager)
 			Debug.Log(gameObject.name + " " + name + ": NO SCENE MANAGER FOUND");
 	}
 
@@ -22,6 +22,6 @@ public class UIScreenComponent : MonoBehaviour
 
 	public void OnBackButtonPress()
 	{
-		sceneManager.ShowUI_GoBack(ParentUI);
+		sceneUIManager.ShowUI_GoBack(ParentUI);
 	}
 }
