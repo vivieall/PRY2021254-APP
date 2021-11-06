@@ -193,7 +193,7 @@ public class SceneUIManager : MonoBehaviour
                 }
                 ShowPerfilsGuardados();
 
-                //UnityEngine.SceneManagement.SceneManager.LoadScene("m_PerfilNiñoUI");
+                //UnityEngine.SceneManagement.SceneUIManager.LoadScene("m_PerfilNiñoUI");
                 // m_LoguinUI.SetActive(false);
                 //m_PerfilNiñoUI.SetActive(true);
             }
@@ -344,10 +344,6 @@ public class SceneUIManager : MonoBehaviour
             UIToShow.SetActive(true);
 		}
 	}
-
-    // Really want to get rid of all these functions
-    // as soon as possible and replace every reference to these functions with new ShowUI
-	#region PleaseDeleteThisSoon
 
 	//Se puede mejorar estas funciones creando una que solo reciba la funcion especifica y que solo cambie el que se ponga true 
 	public void ShowLoguin(){
@@ -777,7 +773,7 @@ public class SceneUIManager : MonoBehaviour
         m_PersonajesFiltroUI.SetActive(false);
         m_VariedadesFiltroUI.SetActive(true);
     }
-        #endregion
+        
 
     // Codigo de conexion a la bd se debe enviar a otro script
     public void CallRegister(string user, string pass, string email, string names, string lastnames, string birthday,

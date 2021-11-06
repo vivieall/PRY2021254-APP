@@ -11774,6 +11774,7 @@ MonoBehaviour:
   m_HistorialUI: {fileID: 1282203550}
   m_Tema1UI: {fileID: 1240657903}
   m_Nivel1UI: {fileID: 258740237}
+  m_FiltroUI: {fileID: 398983571}
   m_InputCorreo: {fileID: 1639307943}
   m_InputContrasena: {fileID: 129069280}
   m_InputNombre: {fileID: 1435825780}
@@ -11784,7 +11785,6 @@ MonoBehaviour:
   m_InputUsuario: {fileID: 1385610294}
   m_InputContrasenaLogin: {fileID: 520247237}
   m_InputUsuarioLogin: {fileID: 2058939657}
-  m_FiltroUI: {fileID: 398983571}
   m_PasswordInputLogin: {fileID: 520247237}
   m_UserInputLogin: {fileID: 2058939657}
   m_Username: {fileID: 1435825780}
@@ -28860,7 +28860,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_FontData:
-    m_Font: {fileID: 12800000, guid: ce649c6856fd348f7a9ef464d5026100, type: 3}
+    m_Font: {fileID: 12800000, guid: da193c16021584676a5f1f92e0513c63, type: 3}
     m_FontSize: 18
     m_FontStyle: 0
     m_BestFit: 0
@@ -30318,6 +30318,7 @@ GameObject:
   - component: {fileID: 1407768748}
   - component: {fileID: 1407768747}
   - component: {fileID: 1407768746}
+  - component: {fileID: 1407768750}
   m_Layer: 5
   m_Name: Canvas
   m_TagString: Untagged
@@ -30459,6 +30460,7 @@ MonoBehaviour:
   m_HistorialUI: {fileID: 0}
   m_Tema1UI: {fileID: 0}
   m_Nivel1UI: {fileID: 0}
+  m_FiltroUI: {fileID: 0}
   m_InputCorreo: {fileID: 0}
   m_InputContrasena: {fileID: 0}
   m_InputNombre: {fileID: 0}
