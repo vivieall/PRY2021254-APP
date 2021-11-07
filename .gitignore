@@ -35,5 +35,4 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
-*.tgz
 Assets/.DS_Store
