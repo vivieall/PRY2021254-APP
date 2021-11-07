@@ -10,35 +10,49 @@ public class SceneManager : MonoBehaviour
     [SerializeField] private GameObject m_LoguinUI;
     [SerializeField] private GameObject m_RegisterUI;
     [SerializeField] private GameObject m_PerfilNiñoCrearUI;
-    [SerializeField] private GameObject  m_PerfilesGuardadosUI= null;
-    [SerializeField] private GameObject  m_ActualizarDatosUI= null;
-    [SerializeField] private GameObject  m_VerDatosCuidadorUI= null;
-    [SerializeField] private GameObject  m_SeleccionarCategoriaUI= null;
-    [SerializeField] private GameObject  m_SeleccionarTemaUI= null;
+    [SerializeField] private GameObject m_PerfilesGuardadosUI = null;
+    [SerializeField] private GameObject m_ActualizarDatosUI = null;
+    [SerializeField] private GameObject m_VerDatosCuidadorUI = null;
+    [SerializeField] private GameObject m_SeleccionarCategoriaUI = null;
+    [SerializeField] private GameObject m_SeleccionarTemaUI = null;
     [SerializeField] private GameObject m_SeleccionarTematicaUI = null;
-    [SerializeField] private GameObject m_AnimalesFiltroUI= null;
+    [SerializeField] private GameObject m_AnimalesFiltroUI = null;
     [SerializeField] private GameObject m_PersonajesFiltroUI = null;
     [SerializeField] private GameObject m_VariedadesFiltroUI = null;
-    [SerializeField] private GameObject  m_NivelesCompletosUI= null;
-    [SerializeField] private GameObject  m_PerfilNinoModificarsUI= null;
-    [SerializeField] private GameObject  m_ListaPersonalizadaUI= null;
-    [SerializeField] private GameObject  m_PerfilNinoVistaDatosUI;
-    [SerializeField] private GameObject  m_ModificarListaPersonalizUI;
-    [SerializeField] private GameObject  m_HistorialUI;
-    [SerializeField] private GameObject  m_Tema1UI;
-    [SerializeField] private GameObject  m_Nivel1UI;
+    [SerializeField] private GameObject m_NivelesCompletosUI = null;
+    [SerializeField] private GameObject m_PerfilNinoModificarsUI = null;
+    [SerializeField] private GameObject m_ListaPersonalizadaUI = null;
+    [SerializeField] private GameObject m_PerfilNinoVistaDatosUI;
+    [SerializeField] private GameObject m_ModificarListaPersonalizUI;
+    [SerializeField] private GameObject m_HistorialUI;
+    [SerializeField] private GameObject m_Tema1UI;
+    [SerializeField] private GameObject m_Nivel1UI;
     private ArrayList AllUIs;
 
+    #region Register Guardian
+    [Header("Register Guardian Inputs")]
+    [SerializeField] private InputField m_InputCorreo;
+    [SerializeField] private InputField m_InputContrasena;
+    [SerializeField] private InputField m_InputNombre;
+    [SerializeField] private InputField m_InputApellido;
+    [SerializeField] private InputField m_InputFechaDia;
+    [SerializeField] private InputField m_InputFechaMes;
+    [SerializeField] private InputField m_InputFechaAnio;
+    [SerializeField] private InputField m_InputUsuario;
 
-    [SerializeField]  private InputField m_InputCorreo;
-    [SerializeField]  private InputField m_InputContrasena;
-    [SerializeField]  private InputField m_InputNombre;
-    [SerializeField]  private InputField m_InputApellido;
-    [SerializeField]  private InputField m_InputFechaDia;
-    [SerializeField]  private InputField m_InputFechaMes;
-    [SerializeField]  private InputField m_InputFechaAnio;
-    [SerializeField]  private InputField m_InputUsuario;
+    #endregion
 
+
+    #region Register Child
+    [Header("Register Child Inputs")]
+    [SerializeField] private InputField m_InputNombreChild;
+    [SerializeField] private InputField m_InputApellidoChild;
+    [SerializeField] private InputField m_InputFechaDiaChild;
+    [SerializeField] private InputField m_InputFechaMesChild;
+    [SerializeField] private InputField m_InputFechaAnioChild;
+    [SerializeField] private InputField m_GeneroChild;
+
+    #endregion
 
     [SerializeField] private InputField m_InputContrasenaLogin;
     [SerializeField] private InputField m_InputUsuarioLogin;
@@ -64,14 +78,50 @@ public class SceneManager : MonoBehaviour
     [SerializeField] private Toggle toggleSesion;
     private NetworkManager m_NetworkManager;
 
-    [Header("Direcciones de corre")]
+    [Header("Direcciones de correo")]
     public string[] Emails;
     public bool cuentaRegistradaConExito;
     public int MaxLenght;
 
 
+    private bool sesionIniciada;
+    private string id_guardian;
+    private string nivelAutismoChild;
+    private string generoChild;
+    private bool[] sintomas = new bool[] { false, false, false, false, false, false, false };
+
+    public void setGenderM()
+    {
+        generoChild = "M";
+    }
+
+    public void setGenderF()
+    {
+        generoChild = "F";
+    }
+
+    public void setNivelAutismoL()
+    {
+        nivelAutismoChild = "Leve";
+    }
+    public void setNivelAutismoM()
+    {
+        nivelAutismoChild = "Moderado";
+    }
+    public void setNivelAutismoG()
+    {
+        nivelAutismoChild = "Grave";
+    }
+
+    public void setSintoma(int idx)
+    {
+        sintomas[idx] = !sintomas[idx];
+    }
+
     void Start()
     {
+
+        sesionIniciada = false;
         // No es muy bonito, pero es más bonito que  las 350 lineas de copypaste para cada show
         AllUIs = new ArrayList();
 		AllUIs.Add(m_LoguinUI);
@@ -177,6 +227,8 @@ public class SceneManager : MonoBehaviour
                     var valueSave = Convert.ToInt32(toggleSesion.isOn);
                     PlayerPrefs.SetInt("toggleIsOn", valueSave);
                 }
+                sesionIniciada = true;
+                id_guardian = response.message;
                 ShowPerfilsGuardados();
 
                 //UnityEngine.SceneManagement.SceneManager.LoadScene("m_PerfilNiñoUI");
@@ -265,11 +317,13 @@ public class SceneManager : MonoBehaviour
                     {
                         m_ErrorText.text = "Procesando informacion por favor espera un momento";
                         CallRegister(m_InputUsuario.text, m_InputContrasena.text, m_InputCorreo.text,
-                            m_InputNombre.text, m_InputApellido.text, "2018-05-05", "8",
+                            m_InputNombre.text, m_InputApellido.text, m_InputFechaAnio.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaDia.text,
                             delegate (Response response)
                         {
 
                             m_ErrorText.text = response.message;
+
+                            print(response.message);
                             if (response.done == true)
                             {
                                 ////ESCRIBIR CODIGO DE ACEPTACION AL REGISTRARSE
@@ -302,6 +356,32 @@ public class SceneManager : MonoBehaviour
                 m_ErrorText.text = "Error 877: Lo sentimos pero no se puede leer un email valido";
             }
         }
+    }
+
+
+    public void SubmitRegisterChild()
+    {     
+        CallRegisterChild(id_guardian, m_InputNombreChild.text, m_InputApellidoChild.text, m_InputFechaAnioChild.text + "-" + m_InputFechaMesChild.text + "-" + m_InputFechaDiaChild.text, generoChild, nivelAutismoChild, sintomas,
+            delegate (Response response)
+            {
+
+
+                print(response.message);
+                if (response.done == true)
+                {
+                    print("Cuenta creada con exito");
+                }
+                else
+                {
+                    ///ACCION AL NO REGISTRAR CUENTA
+
+                }
+            });
+            
+        
+            
+
+        
     }
     public void ShowUI(GameObject UIToShow) {
         foreach(GameObject m_ui in AllUIs) {
@@ -739,15 +819,14 @@ public class SceneManager : MonoBehaviour
 
 
     // Codigo de conexion a la bd se debe enviar a otro script
-    public void CallRegister(string user, string pass, string email, string names, string lastnames, string birthday,
-        string id, Action<Response> response)
+    public void CallRegister(string user, string pass, string email, string names, string lastnames, string birthday, Action<Response> response)
     {
-        StartCoroutine(Register(user, pass, email, names, lastnames, birthday, id, response));
+        StartCoroutine(Register(user, pass, email, names, lastnames, birthday, response));
     }
 
-    IEnumerator Register(string user, string pass, string email, string names, string lastnames, string birthday,
-        string id, Action<Response> response)
+    IEnumerator Register(string user, string pass, string email, string names, string lastnames, string birthday, Action<Response> response)
     {
+        Debug.Log("ENTRANDO");
         WWWForm form = new WWWForm();
         form.AddField("email", email);
         form.AddField("password", pass);
@@ -755,11 +834,8 @@ public class SceneManager : MonoBehaviour
         form.AddField("lastnames", lastnames);
         form.AddField("username", user);
         form.AddField("birthday", birthday);
-        form.AddField("id", id);
         WWW www = new WWW("http://localhost/sqlconnect/register.php", form);
         yield return www;
-
-        Debug.Log(www.text);
         response(JsonUtility.FromJson<Response>(www.text));
     }
 
@@ -780,4 +856,42 @@ public class SceneManager : MonoBehaviour
         Debug.Log(www.text);
         response(JsonUtility.FromJson<Response>(www.text));
     }
+
+
+    public void CallRegisterChild(string guardian_id, string names, string lastnames, string birthday, string gender, string asdlevel, bool[] symptoms, Action<Response> response)
+    {
+        StartCoroutine(RegisterChild(guardian_id, names, lastnames, birthday, gender, asdlevel, symptoms, response));
+    }
+
+    IEnumerator RegisterChild(string guardian_id, string names, string lastnames, string birthday, string gender, string asdlevel, bool[] symptoms, Action<Response> response)
+    {
+
+        string sintomasStr = "";
+        for(int i = 0; i < 7; i++)
+        {
+            if(symptoms[i] == true)
+            {
+                sintomasStr += "1";
+            }
+            else
+            {
+                sintomasStr += "0";
+            }
+        }
+
+        Debug.Log(sintomasStr);
+        WWWForm form = new WWWForm();
+        form.AddField("guardian_id", guardian_id);
+        form.AddField("gender", gender);
+        form.AddField("names", names);
+        form.AddField("lastnames", lastnames);
+        form.AddField("asdlevel", asdlevel);
+        form.AddField("symptoms", sintomasStr);
+        form.AddField("birthday", birthday);
+        WWW www = new WWW("http://localhost/sqlconnect/registerChild.php", form);
+        yield return www;
+        response(JsonUtility.FromJson<Response>(www.text));
+    }
+
+
 }
