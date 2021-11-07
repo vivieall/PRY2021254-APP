@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 
-public class SceneManager : MonoBehaviour
+public class SceneUIManager : MonoBehaviour
 {
     [SerializeField] private GameObject m_LoguinUI;
     [SerializeField] private GameObject m_RegisterUI;
@@ -15,6 +15,12 @@ public class SceneManager : MonoBehaviour
     [SerializeField] private GameObject m_VerDatosCuidadorUI = null;
     [SerializeField] private GameObject m_SeleccionarCategoriaUI = null;
     [SerializeField] private GameObject m_SeleccionarTemaUI = null;
+=======
+    [SerializeField] private GameObject m_PerfilesGuardadosUI= null;
+    [SerializeField] private GameObject m_ActualizarDatosUI= null;
+    [SerializeField] private GameObject m_VerDatosCuidadorUI= null;
+    [SerializeField] private GameObject m_SeleccionarCategoriaUI= null;
+    [SerializeField] private GameObject m_SeleccionarTemaUI= null;
     [SerializeField] private GameObject m_SeleccionarTematicaUI = null;
     [SerializeField] private GameObject m_AnimalesFiltroUI = null;
     [SerializeField] private GameObject m_PersonajesFiltroUI = null;
@@ -22,11 +28,15 @@ public class SceneManager : MonoBehaviour
     [SerializeField] private GameObject m_NivelesCompletosUI = null;
     [SerializeField] private GameObject m_PerfilNinoModificarsUI = null;
     [SerializeField] private GameObject m_ListaPersonalizadaUI = null;
+    [SerializeField] private GameObject m_NivelesCompletosUI= null;
+    [SerializeField] private GameObject m_PerfilNinoModificarsUI= null;
+    [SerializeField] private GameObject m_ListaPersonalizadaUI= null;
     [SerializeField] private GameObject m_PerfilNinoVistaDatosUI;
     [SerializeField] private GameObject m_ModificarListaPersonalizUI;
     [SerializeField] private GameObject m_HistorialUI;
     [SerializeField] private GameObject m_Tema1UI;
     [SerializeField] private GameObject m_Nivel1UI;
+    [SerializeField] private GameObject m_FiltroUI;
     private ArrayList AllUIs;
 
     #region Register Guardian
@@ -123,6 +133,9 @@ public class SceneManager : MonoBehaviour
 
         sesionIniciada = false;
         // No es muy bonito, pero es más bonito que  las 350 lineas de copypaste para cada show
+
+        // TODO: Create UILayerComponent or something similar that automatically "registers" itself into this AllUIs' array list
+        // instead of manually adding every reference.
         AllUIs = new ArrayList();
 		AllUIs.Add(m_LoguinUI);
 		AllUIs.Add(m_RegisterUI);
@@ -144,6 +157,7 @@ public class SceneManager : MonoBehaviour
 		AllUIs.Add(m_HistorialUI);
 		AllUIs.Add(m_Tema1UI);
 		AllUIs.Add(m_Nivel1UI);
+        AllUIs.Add(m_FiltroUI);
 
         m_NetworkManager = FindObjectOfType<NetworkManager>();
         Debug.Log("test");
@@ -166,6 +180,15 @@ public class SceneManager : MonoBehaviour
             }
         }
         */
+        var state = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().GetState();
+        if (state == 1)
+        {
+            ShowUI(m_Nivel1UI);
+        }
+        else if (state == 2)
+        {
+            ShowPerfilsGuardados();
+        }
     }
 
     //<summary>
@@ -231,7 +254,7 @@ public class SceneManager : MonoBehaviour
                 id_guardian = response.message;
                 ShowPerfilsGuardados();
 
-                //UnityEngine.SceneManagement.SceneManager.LoadScene("m_PerfilNiñoUI");
+                //UnityEngine.SceneManagement.SceneUIManager.LoadScene("m_PerfilNiñoUI");
                 // m_LoguinUI.SetActive(false);
                 //m_PerfilNiñoUI.SetActive(true);
             }
@@ -358,7 +381,6 @@ public class SceneManager : MonoBehaviour
         }
     }
 
-
     public void SubmitRegisterChild()
     {     
         CallRegisterChild(id_guardian, m_InputNombreChild.text, m_InputApellidoChild.text, m_InputFechaAnioChild.text + "-" + m_InputFechaMesChild.text + "-" + m_InputFechaDiaChild.text, generoChild, nivelAutismoChild, sintomas,
@@ -383,14 +405,37 @@ public class SceneManager : MonoBehaviour
 
         
     }
-    public void ShowUI(GameObject UIToShow) {
+    public void ShowUI_GoBack(GameObject UIToShow) {
         foreach(GameObject m_ui in AllUIs) {
             m_ui.SetActive(false);
 		}
-        UIToShow.SetActive(true);
+        if (UIToShow) 
+            UIToShow.SetActive(true);
 	}
-//Se puede mejorar estas funciones creando una que solo reciba la funcion especifica y que solo cambie el que se ponga true 
-    public void ShowLoguin(){
+
+    public void ShowUI(GameObject UIToShow) {
+
+        GameObject currentlyActiveUI = null;
+        foreach(GameObject m_ui in AllUIs) {
+            if (m_ui.activeInHierarchy) 
+                currentlyActiveUI = m_ui;
+            m_ui.SetActive(false);
+		}
+
+        UIScreenComponent screenComp = UIToShow.GetComponent<UIScreenComponent>();
+        if (screenComp)
+		{
+            screenComp.ShowUIFromParent(currentlyActiveUI);
+		}
+		else
+		{
+            UIToShow.SetActive(true);
+		}
+	}
+
+	//Se puede mejorar estas funciones creando una que solo reciba la funcion especifica y que solo cambie el que se ponga true 
+	public void ShowLoguin(){
+
         m_RegisterUI.SetActive(false);
         m_LoguinUI.SetActive(true);
         m_PerfilNiñoCrearUI.SetActive(false);
@@ -816,7 +861,7 @@ public class SceneManager : MonoBehaviour
         m_PersonajesFiltroUI.SetActive(false);
         m_VariedadesFiltroUI.SetActive(true);
     }
-
+        
 
     // Codigo de conexion a la bd se debe enviar a otro script
     public void CallRegister(string user, string pass, string email, string names, string lastnames, string birthday, Action<Response> response)
