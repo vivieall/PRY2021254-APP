@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
+using System.Text;
+using System;
+using System.Linq;
 
 public class SceneUIManager : MonoBehaviour
 {
@@ -177,12 +180,12 @@ public class SceneUIManager : MonoBehaviour
         {
             return;
         }
-        CallLogin(m_InputUsuarioLogin.text, m_InputContrasenaLogin.text, delegate (Response response)
+        CallLoginApi(m_InputUsuarioLogin.text, m_InputContrasenaLogin.text, delegate (LoginResponse response)
         {
             m_ErrorText.text = "Logueando espere un momento";
             m_ErrorText.text = response.message;
 
-            if (response.done)
+            if (response.idResponse != -3)
             {
                 if (toggleSesion.isOn)
                 {
@@ -816,5 +819,50 @@ public class SceneUIManager : MonoBehaviour
 
         Debug.Log(www.text);
         response(JsonUtility.FromJson<Response>(www.text));
+    }
+
+
+
+
+    void CallLoginApi(string user, string pass, Action<LoginResponse> response)
+    {
+        LoginData ld = new LoginData();
+        ld.username = user;
+        ld.password = pass;
+        string json = JsonUtility.ToJson(ld);
+        StartCoroutine(PostRequestLogin("https://teapprendo.herokuapp.com/guardians/login", json, response));
+    }
+
+    IEnumerator PostRequestLogin(string url, string json, Action<LoginResponse> response)
+    {
+        var uwr = new UnityWebRequest(url, "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
+        uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        uwr.SetRequestHeader("Content-Type", "application/json");
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + uwr.downloadHandler.text);
+            response(JsonUtility.FromJson<LoginResponse>(uwr.downloadHandler.text));
+        }
+    }
+
+    private class LoginData
+    {
+        public string username;
+        public string password;
+    }
+
+    private class LoginResponse
+    {
+        public int idResponse;
+        public string message;
     }
 }
