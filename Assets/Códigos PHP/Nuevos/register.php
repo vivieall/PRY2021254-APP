@@ -6,7 +6,7 @@
     echo mysqli_connect_errno();
     exit();
   }
-
+  Header('Content-Type: application/json');
   
   $email = $_POST["email"];
   $password = $_POST["password"];
@@ -14,20 +14,22 @@
   $lastnames = $_POST["lastnames"];
   $names = $_POST["names"];
   $username = $_POST["username"];
-  $id_user = $_POST["id"];
 
-  $inserquery1 = "INSERT INTO user_login (id_user_login, is_active,password, username) VALUES ($id_user,1,'" . $password . "', '" . $username . "');";
+  $inserquery1 = "INSERT INTO user_login (is_active,password, username) VALUES (1,'" . $password . "', '" . $username . "');";
+  $registroFallido1 = array('done' => false, 'message' => 'Registro fallido, error en la primera query');
+  mysqli_query($con, $inserquery1) or die(json_encode($registroFallido1));
 
-  $inserquery2 = "INSERT INTO guardian (id_guardian, email, user_login_id_user_login, birthday, last_names, names) VALUES ($id_user, '" . $email . "','" . $id_user . "','" . $birthday . "','" . $lastnames . "','" . $names . "');";
 
+  $id = mysqli_insert_id($con);
+  $inserquery2 = "INSERT INTO guardian (id_guardian, email, user_login_id_user_login, birthday, last_names, names) VALUES ( $id , '" . $email . "', $id ,'" . $birthday . "','" . $lastnames . "','" . $names . "');";
+  $registroFallido2 = array('done' => false, 'message' => 'Registro fallido, error en la segunda query');
+  mysqli_query($con, $inserquery2) or die(json_encode($registroFallido2));
 
-  mysqli_query($con, $inserquery1) or die("Error en la primera query" );
-  mysqli_query($con, $inserquery2) or die("Error en la segunda query" );
   
 
   $data = array('done' => true, 'message' => 'Registro realizado con exito');
-    Header('Content-Type: application/json');
-    echo json_encode($data);
+  
+  echo json_encode($data);
 
   
 ?>

@@ -34,21 +34,40 @@ public class SceneUIManager : MonoBehaviour
     private ArrayList AllUIs;
 
 
-    [SerializeField]  private InputField m_InputCorreo;
-    [SerializeField]  private InputField m_InputContrasena;
-    [SerializeField]  private InputField m_InputNombre;
-    [SerializeField]  private InputField m_InputApellido;
-    [SerializeField]  private InputField m_InputFechaDia;
-    [SerializeField]  private InputField m_InputFechaMes;
-    [SerializeField]  private InputField m_InputFechaAnio;
-    [SerializeField]  private InputField m_InputUsuario;
+    #region Register Guardian
+    [Header("Register Guardian Inputs")]
+    [SerializeField] private InputField m_InputCorreo;
+    [SerializeField] private InputField m_InputContrasena;
+    [SerializeField] private InputField m_InputContrasenaConf;
+    [SerializeField] private InputField m_InputNombre;
+    [SerializeField] private InputField m_InputApellido;
+    [SerializeField] private InputField m_InputFechaDia;
+    [SerializeField] private InputField m_InputFechaMes;
+    [SerializeField] private InputField m_InputFechaAnio;
+    [SerializeField] private InputField m_InputUsuario;
 
+    #endregion
 
-    [SerializeField] private InputField m_InputContrasenaLogin;
-    [SerializeField] private InputField m_InputUsuarioLogin;
+    #region Update Guardian
+    [Header("Update Guardian Inputs")]
+    [SerializeField] private InputField m_InputCorreoUpdate;
+    [SerializeField] private InputField m_InputContrasenaActualUpdate;
+    [SerializeField] private InputField m_InputContrasenaNuevaUpdate;
+    [SerializeField] private InputField m_InputContrasenaNuevaConfUpdate;
+    [SerializeField] private InputField m_InputNombreUpdate;
+    [SerializeField] private InputField m_InputApellidoUpdate;
+    [SerializeField] private InputField m_InputFechaDiaUpdate;
+    [SerializeField] private InputField m_InputFechaMesUpdate;
+    [SerializeField] private InputField m_InputFechaAnioUpdate;
+
+    #endregion
+
+    
 
     #region Login
     [Header("Login Inputs")]
+    [SerializeField] private InputField m_InputContrasenaLogin;
+    [SerializeField] private InputField m_InputUsuarioLogin;
     public InputField m_PasswordInputLogin;
     public InputField m_UserInputLogin;
     #endregion
@@ -72,6 +91,25 @@ public class SceneUIManager : MonoBehaviour
     public string[] Emails;
     public bool cuentaRegistradaConExito;
     public int MaxLenght;
+
+    #region Register Child
+    [Header("Register Child Inputs")]
+    [SerializeField] private InputField m_InputNombreChild;
+    [SerializeField] private InputField m_InputApellidoChild;
+    [SerializeField] private InputField m_InputFechaDiaChild;
+    [SerializeField] private InputField m_InputFechaMesChild;
+    [SerializeField] private InputField m_InputFechaAnioChild;
+    [SerializeField] private InputField m_GeneroChild;
+
+    #endregion
+
+    private bool sesionIniciada;
+    private string id_guardian;
+    private string nivelAutismoChild;
+    private string generoChild;
+    private string avatarChild;
+    private bool[] sintomas = new bool[] { false, false, false, false, false, false, false };
+
 
 
     void Start()
@@ -102,7 +140,7 @@ public class SceneUIManager : MonoBehaviour
 		AllUIs.Add(m_Tema1UI);
 		AllUIs.Add(m_Nivel1UI);
         AllUIs.Add(m_FiltroUI);
-
+        sesionIniciada = false;
         m_NetworkManager = FindObjectOfType<NetworkManager>();
         Debug.Log("test");
 
@@ -134,6 +172,30 @@ public class SceneUIManager : MonoBehaviour
             ShowPerfilsGuardados();
         }
     }
+
+
+    public void setGenero(string genero)
+    {
+        generoChild = genero;
+    }
+
+
+    public void setNivelAutismo(string nivel)
+    {
+        nivelAutismoChild = nivel;
+    }
+
+
+    public void setSintoma(int idx)
+    {
+        sintomas[idx] = !sintomas[idx];
+    }
+
+    public void setAvatar(string avatarCode)
+    {
+        avatarChild = avatarCode;
+    }
+    
 
     //<summary>
     //Orden para enviar datos
@@ -185,7 +247,7 @@ public class SceneUIManager : MonoBehaviour
             m_ErrorText.text = "Logueando espere un momento";
             m_ErrorText.text = response.message;
 
-            if (response.idResponse != -3)
+            if (response.idResponse >= 0)
             {
                 if (toggleSesion.isOn)
                 {
@@ -194,6 +256,8 @@ public class SceneUIManager : MonoBehaviour
                     var valueSave = Convert.ToInt32(toggleSesion.isOn);
                     PlayerPrefs.SetInt("toggleIsOn", valueSave);
                 }
+                id_guardian = response.idResponse.ToString();
+                sesionIniciada = true;
                 ShowPerfilsGuardados();
 
                 //UnityEngine.SceneManagement.SceneUIManager.LoadScene("m_PerfilNiñoUI");
@@ -270,19 +334,19 @@ public class SceneUIManager : MonoBehaviour
             if (m_InputCorreo.text.Contains(emailSet))
             {
                 cuentaRegistradaConExito = true;
-                if (m_InputUsuario.text == "" || m_InputCorreo.text == "" || m_InputContrasena.text == "" || m_InputContrasena.text == "")
+                if (m_InputUsuario.text == "" || m_InputCorreo.text == "" || m_InputContrasena.text == "" || m_InputContrasenaConf.text == "")
                 {
                     m_ErrorText.text = "Error 444: Verifica que ningun campo este vacio";
                     return;
                 }
 
-                if (m_InputContrasena.text == m_InputContrasena.text)
+                if (m_InputContrasena.text == m_InputContrasenaConf.text)
                 {
                     if (m_InputContrasena.text.Length >= MaxLenght)
                     {
                         m_ErrorText.text = "Procesando informacion por favor espera un momento";
                         CallRegister(m_InputUsuario.text, m_InputContrasena.text, m_InputCorreo.text,
-                            m_InputNombre.text, m_InputApellido.text, "2018-05-05", "8",
+                            m_InputNombre.text, m_InputApellido.text, m_InputFechaAnio.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaDia.text,
                             delegate (Response response)
                         {
 
@@ -320,6 +384,8 @@ public class SceneUIManager : MonoBehaviour
             }
         }
     }
+
+
     public void ShowUI_GoBack(GameObject UIToShow) {
         foreach(GameObject m_ui in AllUIs) {
             m_ui.SetActive(false);
@@ -779,14 +845,13 @@ public class SceneUIManager : MonoBehaviour
         
 
     // Codigo de conexion a la bd se debe enviar a otro script
-    public void CallRegister(string user, string pass, string email, string names, string lastnames, string birthday,
-        string id, Action<Response> response)
+    public void CallRegister(string user, string pass, string email, string names, string lastnames, string birthday
+       , Action<Response> response)
     {
-        StartCoroutine(Register(user, pass, email, names, lastnames, birthday, id, response));
+        StartCoroutine(Register(user, pass, email, names, lastnames, birthday, response));
     }
 
-    IEnumerator Register(string user, string pass, string email, string names, string lastnames, string birthday,
-        string id, Action<Response> response)
+    IEnumerator Register(string user, string pass, string email, string names, string lastnames, string birthday, Action<Response> response)
     {
         WWWForm form = new WWWForm();
         form.AddField("email", email);
@@ -795,12 +860,30 @@ public class SceneUIManager : MonoBehaviour
         form.AddField("lastnames", lastnames);
         form.AddField("username", user);
         form.AddField("birthday", birthday);
-        form.AddField("id", id);
         WWW www = new WWW("http://localhost/sqlconnect/register.php", form);
         yield return www;
 
         Debug.Log(www.text);
         response(JsonUtility.FromJson<Response>(www.text));
+    }
+
+    public void SubmitRegisterChild()
+    {
+        CallRegisterChild(id_guardian, m_InputNombreChild.text, m_InputApellidoChild.text, m_InputFechaAnioChild.text + "-" + m_InputFechaMesChild.text + "-" + m_InputFechaDiaChild.text, generoChild, nivelAutismoChild, sintomas,
+            delegate (Response response)
+            {
+
+
+                print(response.message);
+                if (response.done == true)
+                {
+                    print("Cuenta creada con exito");
+                }
+                else
+                {
+                    ///ACCION AL NO REGISTRAR CUENTA
+                }
+            });
     }
 
 
@@ -824,7 +907,7 @@ public class SceneUIManager : MonoBehaviour
 
 
 
-    void CallLoginApi(string user, string pass, Action<LoginResponse> response)
+    private void CallLoginApi(string user, string pass, Action<LoginResponse> response)
     {
         LoginData ld = new LoginData();
         ld.username = user;
@@ -865,4 +948,100 @@ public class SceneUIManager : MonoBehaviour
         public int idResponse;
         public string message;
     }
+
+
+    
+
+
+    private void CallRegisterChild(string guardian_id, string names, string lastnames, string birthday, string gender, string asdlevel, bool[] symptoms, Action<Response> response)
+    {
+        StartCoroutine(RegisterChild(guardian_id, names, lastnames, birthday, gender, asdlevel, symptoms, response));
+    }
+
+    IEnumerator RegisterChild(string guardian_id, string names, string lastnames, string birthday, string gender, string asdlevel, bool[] symptoms, Action<Response> response)
+    {
+
+        string sintomasStr = "";
+        for (int i = 0; i < 7; i++)
+        {
+            if (symptoms[i] == true)
+            {
+                sintomasStr += "1";
+            }
+            else
+            {
+                sintomasStr += "0";
+            }
+        }
+
+        Debug.Log(sintomasStr);
+        WWWForm form = new WWWForm();
+        form.AddField("guardian_id", guardian_id);
+        form.AddField("gender", gender);
+        form.AddField("names", names);
+        form.AddField("lastnames", lastnames);
+        form.AddField("asdlevel", asdlevel);
+        form.AddField("symptoms", sintomasStr);
+        form.AddField("birthday", birthday);
+        WWW www = new WWW("http://localhost/sqlconnect/registerChild.php", form);
+        yield return www;
+        response(JsonUtility.FromJson<Response>(www.text));
+    }
+
+
+    private void CallUpdateGuardian(string user, string pass, string email, string names, string lastnames, string birthday
+       , Action<GuardianResponse> response)
+    {
+        GuardianData gd = new GuardianData();
+        gd.username = user;
+        gd.password = pass;
+        gd.email = email;
+        gd.names = names;
+        gd.lastNames = lastnames;
+        gd.birthday = birthday;
+        string json = JsonUtility.ToJson(gd);
+        StartCoroutine(UpdateGuardianApi("https://teapprendo.herokuapp.com/guardians/login", json,  response));
+    }
+
+    IEnumerator UpdateGuardianApi(string url, string json, Action<GuardianResponse> response)
+    {
+        var uwr = new UnityWebRequest(url, "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
+        uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        uwr.SetRequestHeader("Content-Type", "application/json");
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + uwr.downloadHandler.text);
+            response(JsonUtility.FromJson<GuardianResponse>(uwr.downloadHandler.text));
+        }
+    }
+
+    private class GuardianData
+    {
+        public string username;
+        public string password;
+        public string email;
+        public string names;
+        public string lastNames;
+        public string birthday;
+    }
+    private class GuardianResponse
+    {
+        public string test;
+    }
+
+
+    
+
+    
+
+
 }

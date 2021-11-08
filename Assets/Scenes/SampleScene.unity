@@ -4575,7 +4575,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 179074042}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setAvatar
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: avatar2
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &179074042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5251,7 +5262,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 219701030}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setGenero
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: F
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &219701030
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8076,7 +8098,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 342747848}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setNivelAutismo
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Leve
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &342747848
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8195,7 +8228,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 346405735}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setAvatar
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: avatar1
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &346405735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8314,7 +8358,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 349426399}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setGenero
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: M
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &349426399
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11713,7 +11768,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setSintoma
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &519420028
 GameObject:
@@ -11777,17 +11843,27 @@ MonoBehaviour:
   m_FiltroUI: {fileID: 398983571}
   m_InputCorreo: {fileID: 1639307943}
   m_InputContrasena: {fileID: 129069280}
+  m_InputContrasenaConf: {fileID: 2138248419}
   m_InputNombre: {fileID: 1435825780}
   m_InputApellido: {fileID: 1811723136}
   m_InputFechaDia: {fileID: 627880053}
   m_InputFechaMes: {fileID: 711176772}
   m_InputFechaAnio: {fileID: 1619610744}
   m_InputUsuario: {fileID: 1385610294}
+  m_InputCorreoUpdate: {fileID: 1611828686}
+  m_InputContrasenaActualUpdate: {fileID: 20610265}
+  m_InputContrasenaNuevaUpdate: {fileID: 629210993}
+  m_InputContrasenaNuevaConfUpdate: {fileID: 1373940577}
+  m_InputNombreUpdate: {fileID: 1756022530}
+  m_InputApellidoUpdate: {fileID: 1514715339}
+  m_InputFechaDiaUpdate: {fileID: 1999455963}
+  m_InputFechaMesUpdate: {fileID: 1221246143}
+  m_InputFechaAnioUpdate: {fileID: 406218301}
   m_InputContrasenaLogin: {fileID: 520247237}
   m_InputUsuarioLogin: {fileID: 2058939657}
   m_PasswordInputLogin: {fileID: 520247237}
   m_UserInputLogin: {fileID: 2058939657}
-  m_Username: {fileID: 1435825780}
+  m_Username: {fileID: 1385610294}
   m_Email: {fileID: 1639307943}
   m_Password: {fileID: 129069280}
   m_ConfirmPassword: {fileID: 2138248419}
@@ -11799,6 +11875,12 @@ MonoBehaviour:
   - '@hotmail.com'
   cuentaRegistradaConExito: 0
   MaxLenght: 0
+  m_InputNombreChild: {fileID: 399296101}
+  m_InputApellidoChild: {fileID: 1061567483}
+  m_InputFechaDiaChild: {fileID: 657845741}
+  m_InputFechaMesChild: {fileID: 155661550}
+  m_InputFechaAnioChild: {fileID: 1097426910}
+  m_GeneroChild: {fileID: 0}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -15138,7 +15220,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 656448697}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setNivelAutismo
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Grave
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &656448697
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15660,7 +15753,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setSintoma
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 6
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &680918942
 GameObject:
@@ -16390,7 +16494,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setSintoma
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &715456599
 GameObject:
@@ -20265,7 +20380,18 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 879198649}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setNivelAutismo
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: Moderado
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &879198649
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22187,7 +22313,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1006610608
 Transform:
   m_ObjectHideFlags: 0
@@ -25508,7 +25634,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1154717043
 Transform:
   m_ObjectHideFlags: 0
@@ -30096,7 +30222,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setSintoma
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 3
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &1393729048
 GameObject:
@@ -30463,12 +30600,22 @@ MonoBehaviour:
   m_FiltroUI: {fileID: 0}
   m_InputCorreo: {fileID: 0}
   m_InputContrasena: {fileID: 0}
+  m_InputContrasenaConf: {fileID: 0}
   m_InputNombre: {fileID: 0}
   m_InputApellido: {fileID: 0}
   m_InputFechaDia: {fileID: 0}
   m_InputFechaMes: {fileID: 0}
   m_InputFechaAnio: {fileID: 0}
   m_InputUsuario: {fileID: 0}
+  m_InputCorreoUpdate: {fileID: 0}
+  m_InputContrasenaActualUpdate: {fileID: 0}
+  m_InputContrasenaNuevaUpdate: {fileID: 0}
+  m_InputContrasenaNuevaConfUpdate: {fileID: 0}
+  m_InputNombreUpdate: {fileID: 0}
+  m_InputApellidoUpdate: {fileID: 0}
+  m_InputFechaDiaUpdate: {fileID: 0}
+  m_InputFechaMesUpdate: {fileID: 0}
+  m_InputFechaAnioUpdate: {fileID: 0}
   m_InputContrasenaLogin: {fileID: 0}
   m_InputUsuarioLogin: {fileID: 0}
   m_PasswordInputLogin: {fileID: 0}
@@ -30482,6 +30629,12 @@ MonoBehaviour:
   Emails: []
   cuentaRegistradaConExito: 0
   MaxLenght: 0
+  m_InputNombreChild: {fileID: 0}
+  m_InputApellidoChild: {fileID: 0}
+  m_InputFechaDiaChild: {fileID: 0}
+  m_InputFechaMesChild: {fileID: 0}
+  m_InputFechaAnioChild: {fileID: 0}
+  m_GeneroChild: {fileID: 0}
 --- !u!1001 &1409914723
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -32221,7 +32374,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setSintoma
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1001 &1480788810
 PrefabInstance:
@@ -35388,7 +35552,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setSintoma
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &1615990662
 GameObject:
@@ -41831,7 +42006,18 @@ MonoBehaviour:
   m_Group: {fileID: 0}
   onValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420030}
+        m_MethodName: setSintoma
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   m_IsOn: 1
 --- !u!1 &1947720747
 GameObject:
