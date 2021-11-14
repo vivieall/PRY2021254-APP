@@ -7,9 +7,12 @@ public class ShowFilterScreenButton : MonoBehaviour
 {
     [SerializeField] ARFaceManager FaceManager;
     [SerializeField] GameObject FacePrefab;
+    [SerializeField] GameObject SelectFilterScreenRoot;
 
     public void SendPrefabToFaceManager()
 	{
+        ShowFilterScreenButton[] screenButtons = SelectFilterScreenRoot.GetComponentsInChildren<ShowFilterScreenButton>();
+
         if (FacePrefab)
 		{
             FaceManager.facePrefab = FacePrefab;

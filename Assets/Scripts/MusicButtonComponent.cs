@@ -42,6 +42,7 @@ public class MusicButtonComponent : MonoBehaviour
         UpdateButtonState();
 	}
 
+    // Update proper button image when changing windows / views
 	void OnEnable()
 	{
 		UpdateButtonState();
