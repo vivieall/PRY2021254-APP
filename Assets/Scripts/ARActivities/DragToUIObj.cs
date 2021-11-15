@@ -3,20 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DragabbleObject : MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
+public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
 {
-    [SerializeField] private Canvas canvas;
     //Vuforia Object es un objeto compuesto de 3 objetos en este orden de indices
     //0 -> Canvas
-    //1 -> Objeto 3D a mostrar
-    //2 -> Objeto 3d a mostrar al completar la funcion
+    //1 -> Objeto 3D a mostrar/modificar
     public GameObject VuforiaObject;
 
     private GameObject GoalObject;
 
     private RectTransform rectTransform;
     private Canvas GoalCanvas;
-
+    private Object robj, wobj;
     private Vector2 zeroArea;
     private Vector3 DL;
     private Vector3 UR;
@@ -28,7 +26,7 @@ public class DragabbleObject : MonoBehaviour, IDragHandler, IEndDragHandler, IBe
 
     public void OnDrag(PointerEventData eventData)
     {
-        rectTransform.anchoredPosition += eventData.delta/canvas.scaleFactor;
+        rectTransform.anchoredPosition += eventData.delta/ GoalCanvas.scaleFactor;
     }
     public void OnEndDrag(PointerEventData eventData)
     {
@@ -45,8 +43,9 @@ public class DragabbleObject : MonoBehaviour, IDragHandler, IEndDragHandler, IBe
                 if (rectTransform.position.y >= DL.y && rectTransform.position.y <= UR.y)
                 {
                     VuforiaObject.transform.GetChild(0).gameObject.SetActive(false);
-                    VuforiaObject.transform.GetChild(1).gameObject.SetActive(false);
-                    VuforiaObject.transform.GetChild(2).gameObject.SetActive(true);
+                    var rendobj = VuforiaObject.transform.GetChild(1).gameObject.transform;
+                    Destroy(rendobj.GetChild(0).gameObject);
+                    Instantiate(robj, rendobj);
                     gameObject.SetActive(false);
                 }
             }
@@ -56,6 +55,8 @@ public class DragabbleObject : MonoBehaviour, IDragHandler, IEndDragHandler, IBe
     // Start is called before the first frame update
     void Start()
     {
+        robj = Resources.Load("Prefabs/CorrectAnswer");
+        wobj = Resources.Load("Prefabs/WrongAnswer");
         rectTransform = GetComponent<RectTransform>();
         zeroArea = GetComponent<RectTransform>().anchoredPosition;
         GoalCanvas = VuforiaObject.transform.GetChild(0).GetComponent<Canvas>();

@@ -10,6 +10,10 @@ using System.Linq;
 
 public class SceneUIManager : MonoBehaviour
 {
+    [Header("Starting UI")]
+    [SerializeField] private GameObject startingUI;
+    private GameObject currentUI;
+    [Header("Scene Manager")]
     [SerializeField] private GameObject m_LoguinUI;
     [SerializeField] private GameObject m_RegisterUI;
     [SerializeField] private GameObject m_PerfilNiñoCrearUI;
@@ -28,8 +32,10 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private GameObject m_PerfilNinoVistaDatosUI;
     [SerializeField] private GameObject m_ModificarListaPersonalizUI;
     [SerializeField] private GameObject m_HistorialUI;
-    [SerializeField] private GameObject m_Tema1UI;
-    [SerializeField] private GameObject m_Nivel1UI;
+    [SerializeField] private GameObject m_Tema_MathUI;
+    [SerializeField] private GameObject m_Chooselvl_MathUI;
+    [SerializeField] private GameObject m_Tema_CommUI;
+    [SerializeField] private GameObject m_Chooselvl_CommUI;
     [SerializeField] private GameObject m_FiltroUI;
     private ArrayList AllUIs;
 
@@ -73,6 +79,7 @@ public class SceneUIManager : MonoBehaviour
     public bool cuentaRegistradaConExito;
     public int MaxLenght;
 
+   
 
     void Start()
     {
@@ -99,9 +106,16 @@ public class SceneUIManager : MonoBehaviour
 		AllUIs.Add(m_PerfilNinoVistaDatosUI);
 		AllUIs.Add(m_ModificarListaPersonalizUI);
 		AllUIs.Add(m_HistorialUI);
-		AllUIs.Add(m_Tema1UI);
-		AllUIs.Add(m_Nivel1UI);
+        AllUIs.Add(m_Tema_MathUI);
+        AllUIs.Add(m_Chooselvl_MathUI);
+        AllUIs.Add(m_Tema_CommUI);
+        AllUIs.Add(m_Chooselvl_CommUI);
         AllUIs.Add(m_FiltroUI);
+
+        foreach (GameObject ui in AllUIs)
+        {
+            ui.SetActive(false);
+        }
 
         m_NetworkManager = FindObjectOfType<NetworkManager>();
         Debug.Log("test");
@@ -124,14 +138,23 @@ public class SceneUIManager : MonoBehaviour
             }
         }
         */
+        //Display Reqired Screen on Scene Load depending on State
         var state = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().GetState();
-        if (state == 1)
+        currentUI = startingUI;
+        switch (state)
         {
-            ShowUI(m_Nivel1UI);
-        }
-        else if (state == 2)
-        {
-            ShowPerfilsGuardados();
+            case 0:
+                ShowUI(startingUI);
+                break;
+            case 1:
+                ShowUI(m_SeleccionarCategoriaUI);
+                break;
+            case 2:
+                ShowUI(m_Chooselvl_MathUI);
+                break;
+            case 3:
+                ShowUI(m_Chooselvl_CommUI);
+                break;
         }
     }
 
@@ -320,6 +343,7 @@ public class SceneUIManager : MonoBehaviour
             }
         }
     }
+
     public void ShowUI_GoBack(GameObject UIToShow) {
         foreach(GameObject m_ui in AllUIs) {
             m_ui.SetActive(false);
@@ -329,455 +353,78 @@ public class SceneUIManager : MonoBehaviour
 	}
 
     public void ShowUI(GameObject UIToShow) {
-
-        GameObject currentlyActiveUI = null;
-        foreach(GameObject m_ui in AllUIs) {
-            if (m_ui.activeInHierarchy) 
-                currentlyActiveUI = m_ui;
-            m_ui.SetActive(false);
-		}
-
-        UIScreenComponent screenComp = UIToShow.GetComponent<UIScreenComponent>();
-        if (screenComp)
-		{
-            screenComp.ShowUIFromParent(currentlyActiveUI);
-		}
-		else
-		{
-            UIToShow.SetActive(true);
-		}
-	}
+        currentUI.SetActive(false);
+        UIToShow.SetActive(true);
+        currentUI = UIToShow;
+        print(currentUI);
+    }
 
 	//Se puede mejorar estas funciones creando una que solo reciba la funcion especifica y que solo cambie el que se ponga true 
+    //D.L.: Si se pudo mejorar
 	public void ShowLoguin(){
-
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(true);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-        m_HistorialUI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        
+        ShowUI(m_LoguinUI);
     }
     public void ShowRegister(){
-        m_RegisterUI.SetActive(true);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+        ShowUI(m_RegisterUI);
     }
     public void ShowPerfilNiño(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(true);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+        ShowUI(m_PerfilNiñoCrearUI);
     }
-        public void ShowPerfilsGuardados(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(true);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
-
+    public void ShowPerfilsGuardados(){
+        ShowUI(m_PerfilesGuardadosUI);
     }
-        public void ShowActualizarDatos(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(true);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);  
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
-
+    public void ShowActualizarDatos(){
+        ShowUI(m_ActualizarDatosUI);
     }
-        public void ShowVerDatosCuidador(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(true);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
-
+    public void ShowVerDatosCuidador(){
+        ShowUI(m_VerDatosCuidadorUI);
     }
-        public void ShowCategoria(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(true);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
-
+    public void ShowCategoria(){
+        ShowUI(m_SeleccionarCategoriaUI);
     }
-    public void ShowTema(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(true);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
-
+    public void ShowTemaMath(){
+        ShowUI(m_Tema_MathUI);
+    }
+    public void ShowTemaComm(){
+        ShowUI(m_Tema_CommUI);
     }
     public void ShowNivelesCompletos(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(true); 
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);       
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+        ShowUI(m_NivelesCompletosUI);
     }
-
-
     public void ShowNinoVistaDatos(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);     
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(true);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+        ShowUI(m_PerfilNinoVistaDatosUI);
     }
     public void ShowPerfilNinoModificar(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);   
-
-        m_PerfilNinoModificarsUI.SetActive(true);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);   
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+        ShowUI(m_PerfilNinoVistaDatosUI);
     }
     public void ShowListaPersonalizada(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);   
-
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(true);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);     
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+        ShowUI(m_ListaPersonalizadaUI);
     }
     public void ShowModificarListaPersonalizada(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false); 
-
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(true);
-        m_HistorialUI.SetActive(false);    
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+        ShowUI(m_ModificarListaPersonalizUI);
     }
     public void ShowHistorial(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);    
-
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(true);    
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+        ShowUI(m_HistorialUI);
     }
-    
-    public void ShowTema1(){
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);    
-
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);    
-        m_Tema1UI.SetActive(true);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+    public void ShowlvlMath(){
+        ShowUI(m_Chooselvl_MathUI);
     }
-
-    public void ShowTematica()
-    {
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(true);
-        m_NivelesCompletosUI.SetActive(false);
-
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+    public void ShowlvlComm(){
+        ShowUI(m_Chooselvl_CommUI);
     }
-
-    public void ShowAnimalesFiltro()
-    {
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(true);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(false);
+    public void ShowTematica(){
+        ShowUI(m_SeleccionarTematicaUI);
     }
-
-    public void ShowPersonajesFiltro()
-    {
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(true);
-        m_VariedadesFiltroUI.SetActive(false);
+    public void ShowAnimalesFiltro(){
+        ShowUI(m_AnimalesFiltroUI);
     }
-
-    public void ShowVariedadesFiltro()
-    {
-        m_RegisterUI.SetActive(false);
-        m_LoguinUI.SetActive(false);
-        m_PerfilNiñoCrearUI.SetActive(false);
-        m_PerfilesGuardadosUI.SetActive(false);
-        m_ActualizarDatosUI.SetActive(false);
-        m_VerDatosCuidadorUI.SetActive(false);
-        m_SeleccionarCategoriaUI.SetActive(false);
-        m_SeleccionarTemaUI.SetActive(false);
-        m_SeleccionarTematicaUI.SetActive(false);
-        m_NivelesCompletosUI.SetActive(false);
-
-        m_PerfilNinoModificarsUI.SetActive(false);
-        m_ListaPersonalizadaUI.SetActive(false);
-        m_PerfilNinoVistaDatosUI.SetActive(false);
-        m_ModificarListaPersonalizUI.SetActive(false);
-        m_HistorialUI.SetActive(false);
-        m_Tema1UI.SetActive(false);
-        m_AnimalesFiltroUI.SetActive(false);
-        m_PersonajesFiltroUI.SetActive(false);
-        m_VariedadesFiltroUI.SetActive(true);
+    public void ShowPersonajesFiltro(){
+        ShowUI(m_PersonajesFiltroUI);
+    }
+    public void ShowVariedadesFiltro(){
+        ShowUI(m_VariedadesFiltroUI);
     }
         
-
     // Codigo de conexion a la bd se debe enviar a otro script
     public void CallRegister(string user, string pass, string email, string names, string lastnames, string birthday,
         string id, Action<Response> response)
@@ -820,9 +467,6 @@ public class SceneUIManager : MonoBehaviour
         Debug.Log(www.text);
         response(JsonUtility.FromJson<Response>(www.text));
     }
-
-
-
 
     void CallLoginApi(string user, string pass, Action<LoginResponse> response)
     {

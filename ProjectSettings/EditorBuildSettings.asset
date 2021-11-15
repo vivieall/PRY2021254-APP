@@ -9,8 +9,11 @@ EditorBuildSettings:
     path: Assets/Scenes/SampleScene.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
-    path: Assets/Scenes/ARPilotScene.unity
+    path: Assets/Scenes/Math_Activity.unity
     guid: 382233c987097f748865f688bcb18d75
+  - enabled: 1
+    path: Assets/Scenes/Comm_Activity.unity
+    guid: 7418671a36f1f254493367f38e19ab8d
   m_configObjects:
     com.unity.xr.management.arcore_loader: {fileID: 11400000, guid: 343129741aee3d348a20c6fb07fb7ae1,
       type: 2}
