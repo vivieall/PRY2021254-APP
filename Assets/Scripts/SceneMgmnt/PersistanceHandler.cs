@@ -7,7 +7,6 @@ public class PersistanceHandler : MonoBehaviour {
     private static PersistanceHandler handlerInstance;
     private int UIState;
     private int ActivityNum;
-
     void Start() {
         /*UIStates:
          * 0 -> Login Screen
@@ -26,7 +25,6 @@ public class PersistanceHandler : MonoBehaviour {
             Object.Destroy(gameObject);
         }
     }
-
     void Update() { }
     public void PlayActivity(int scenenum,int activitynum){
         ActivityNum = activitynum;

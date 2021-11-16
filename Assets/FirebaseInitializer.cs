@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -28,4 +28,4 @@ public class FirebaseInitializer : MonoBehaviour
             // Firebase Unity SDK is not safe to use here.
         }
     }
-}
+}*/

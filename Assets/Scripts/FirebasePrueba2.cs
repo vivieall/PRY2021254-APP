@@ -1,4 +1,4 @@
-using System.Collections;
+/*using System.Collections;
 using UnityEngine;
 using Firebase;
 using Firebase.Auth;
@@ -192,3 +192,4 @@ public class AuthManager : MonoBehaviour
         }
     }
 }
+*/

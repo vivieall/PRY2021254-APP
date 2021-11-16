@@ -6,22 +6,6 @@
       "source": "local-tarball",
       "dependencies": {}
     },
-    "com.google.firebase.app": {
-      "version": "file:../GooglePackages/com.google.firebase.app-8.4.0.tgz",
-      "depth": 0,
-      "source": "local-tarball",
-      "dependencies": {
-        "com.google.external-dependency-manager": "1.2.167"
-      }
-    },
-    "com.google.firebase.auth": {
-      "version": "file:../GooglePackages/com.google.firebase.auth-8.4.0.tgz",
-      "depth": 0,
-      "source": "local-tarball",
-      "dependencies": {
-        "com.google.firebase.app": "8.4.0"
-      }
-    },
     "com.ptc.vuforia.engine": {
       "version": "8.5.9",
       "depth": 0,
