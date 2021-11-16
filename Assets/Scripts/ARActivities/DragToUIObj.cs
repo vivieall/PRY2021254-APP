@@ -18,7 +18,8 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     private Vector2 zeroArea;
     private Vector3 DL;
     private Vector3 UR;
-
+    private bool done;
+    private ActivityManager evSys;
     public void OnBeginDrag(PointerEventData eventData)
     {
         return;
@@ -47,6 +48,8 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
                     Destroy(rendobj.GetChild(0).gameObject);
                     Instantiate(robj, rendobj);
                     gameObject.SetActive(false);
+                    done = true;
+                    evSys.CheckCompletion();
                 }
             }
         }
@@ -55,6 +58,7 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     // Start is called before the first frame update
     void Start()
     {
+        evSys = GameObject.Find("EventSystem").GetComponent<ActivityManager>();
         robj = Resources.Load("Prefabs/CorrectAnswer");
         wobj = Resources.Load("Prefabs/WrongAnswer");
         rectTransform = GetComponent<RectTransform>();
@@ -69,5 +73,10 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     void Update()
     {
         
+    }
+
+    public bool GetDone()
+    {
+        return done;
     }
 }

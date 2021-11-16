@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class PersistanceHandler : MonoBehaviour {
     private static PersistanceHandler handlerInstance;
     private int UIState;
+    private int ActivityNum;
 
     void Start() {
         /*UIStates:
@@ -27,8 +28,9 @@ public class PersistanceHandler : MonoBehaviour {
     }
 
     void Update() { }
-    public void PlayActivity(int a){
-        SceneManager.LoadScene(a);
+    public void PlayActivity(int scenenum,int activitynum){
+        ActivityNum = activitynum;
+        SceneManager.LoadScene(scenenum);
     }
     public void ReturnToUI(int NUM){
         UIState = NUM;
@@ -40,5 +42,9 @@ public class PersistanceHandler : MonoBehaviour {
     }
     public int GetState(){
         return UIState;
+    }
+    public int GetActivityNum()
+    {
+        return ActivityNum;
     }
 }

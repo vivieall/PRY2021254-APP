@@ -406,10 +406,10 @@ public class SceneUIManager : MonoBehaviour
     public void ShowHistorial(){
         ShowUI(m_HistorialUI);
     }
-    public void ShowlvlMath(){
+    public void ShowChooselvlMath(){
         ShowUI(m_Chooselvl_MathUI);
     }
-    public void ShowlvlComm(){
+    public void ShowChooselvlComm(){
         ShowUI(m_Chooselvl_CommUI);
     }
     public void ShowTematica(){
