@@ -5,88 +5,146 @@ using UnityEngine.UI;
 
 public class ListManager : MonoBehaviour
 {
-
-    [SerializeField] private ArrayList AllListItems;
-	[SerializeField] private ArrayList AllListInstancedItems;
-    [SerializeField] private GameObject ContentPanel;
-    [SerializeField] private GameObject ListItemPrefab;
-	[SerializeField] private bool allowDuplicates = true;
-
-	private void Awake()
+	public struct ItemStruct
 	{
-        // Deberia leerse la lista guardada del usuario
-        // Ejemplo usando solo strings
-        AllListItems = new ArrayList();
-        AllListInstancedItems = new ArrayList();
+		public ListItemManager item;
+		public GameObject button;
+
+		public ItemStruct(GameObject _button)
+		{
+			this.item = GetItemManager(_button);
+			this.button = _button;
+		}
+		public ItemStruct(ListItemManager _item, GameObject _button)
+		{
+			this.item = _item;
+			this.button = _button;
+		}
+
+		public override bool Equals(object obj)
+		{
+			ListItemManager other = obj as ListItemManager;
+			return other ? (item.Id == other.Id) : false;
+		}
+		public override int GetHashCode() { return item.Id; }
+	};
+
+	[SerializeField] private GameObject ListUI;
+	[SerializeField] private SceneUIManager SceneManager;
+    [SerializeField] private ArrayList ListItems = null;
+    [SerializeField] private GameObject ContentPanel = null;
+	[SerializeField] private GameObject ConfirmPopup = null;
+    [SerializeField] private GameObject ListItemPrefab = null;
+	[SerializeField] private bool allowDuplicates = false;
+
+	private ListItemManager PendingItem = null;
+	private bool PendingOperationType; // true for add, false for delete
+	private bool bIsInEditMode = false; 
+
+	public static ListItemManager GetItemManager(GameObject go) { return go ? go.GetComponent<ListItemManager>() : null; }
+	private void Awake() { if (ListItems == null) ListItems = new ArrayList(); }
+	public void OnEnable() { SetEditMode(false); }
+
+	#region UI_Interactions
+	public void PromptItemOperation(ListItemManager item, bool bIsAdding)
+	{
+		PendingItem = item; 
+		PendingOperationType = bIsAdding;
+		ConfirmPopupComponent confirmComp = ConfirmPopup.GetComponent<ConfirmPopupComponent>();
+		confirmComp.ClearAllEvents();
+		confirmComp.OnAccept.AddListener(ConfirmOperation);
+		confirmComp.OnDecline.AddListener(DeclineOperation);
+		ConfirmPopup.SetActive(true); 
 	}
+	public void PromptAddItem(ListItemManager item) { PromptItemOperation(item, true); }
 
-	public void AddItem(string item)
+	public void PromptRemoveItem(ListItemManager item) { PromptItemOperation(item, false); } 
+	public void DeclineOperation() { PendingItem = null; ConfirmPopup.SetActive(false); }
+
+	public void ConfirmOperation() { 
+		ConfirmPopup.SetActive(false);
+		if (PendingOperationType) // Add
+		{
+			AddItem(PendingItem); 
+			SceneManager.ShowUI(ListUI); 
+		}
+		else // Remove
+		{
+			RemoveItem(PendingItem);
+			SetEditMode(false);
+		}
+	} 
+
+	public void SetEditMode() { bIsInEditMode = !bIsInEditMode; SetEditMode(bIsInEditMode); }
+	public void SetEditMode(bool bIsEditMode)
 	{
-		AddItem_internal(item);
+		bIsInEditMode = bIsEditMode;
+		foreach(ItemStruct item in ListItems)
+			item.item.SetEditMode(bIsInEditMode);
 	}
+	#endregion
 
-    public bool AddItem_internal(string item)
+	#region AddItems
+	public void AddItem(GameObject go) { AddItem_internal(go); }
+	public void AddItem(ListItemManager lim) { AddItem_internal(lim.gameObject); }
+
+    public bool AddItem_internal(GameObject go)
 	{
-        if (allowDuplicates || !AllListItems.Contains(item)) {
-            AllListItems.Add(item);
-			GameObject newItem = Instantiate(ListItemPrefab) as GameObject;
-			ListItemManager lim = newItem.GetComponent<ListItemManager>();
-			if (lim == null)
-			{
-				Debug.Log(item + " gave null ListItemManager");
-			}
-			lim.text.text = item;
+		ListItemManager item = GetItemManager(go);
+		if (!item)
+			return false;
+
+        if (allowDuplicates || !ListItems.Contains(item)) {
+			GameObject newItem = Instantiate(go);
+			ListItemManager lim = GetItemManager(newItem);
+			if (lim.ListManager == null)
+				Debug.Log("LIM LIST MANAGER NULL");
 			lim.ListManager = this;
 			newItem.transform.SetParent(ContentPanel.transform);
 			newItem.transform.localScale = Vector3.one;
-			AllListInstancedItems.Add(newItem);
+			ListItems.Add(new ItemStruct(lim, newItem));
+			item.ResetButtons();
 			return true;
 		}
 		return false;
 	}
+	#endregion
 
-	public void RemoveItem(GameObject item)
-	{
-		RemoveItem_internal(item);
-	}
+	#region RemoveItems
+	public void RemoveItem(GameObject item) { RemoveItem_internal(GetItemManager(item)); }
+	public void RemoveItem(ListItemManager item) { RemoveItem_internal(item); }
 
-    public bool RemoveItem_internal(GameObject item)
+    public bool RemoveItem_internal(ListItemManager item)
 	{
-		// Nota: ahorita solo funciona para eliminar desde dentro de la lista
-		// Se tendría que hacer otra comparación para validar que ambos gameobjects representen el mismo item
-        if (AllListInstancedItems.Contains(item)) {
-			int i = AllListInstancedItems.IndexOf(item);
-			Destroy(item);
-			AllListItems.RemoveAt(i);
-			AllListInstancedItems.RemoveAt(i);
-			// TODO: Eliminar de base de datos / etc.
+        if (item && ListItems.Contains(item)) {
+			int i = ListItems.IndexOf(item);
+			Destroy(item.gameObject);
+			ListItems.RemoveAt(i);
 			return true;
 		}
-		Debug.Log(item.name + " was not in list");
 		return false;
 	}
+	#endregion
 
-    public void UpdateList(string CurrentSearch)
+	#region Search
+	public void UpdateList(string CurrentSearch)
 	{
-		foreach(GameObject item in AllListInstancedItems)
+		foreach(ItemStruct item in ListItems)
+			item.button.SetActive(item.item.text.text.Contains(CurrentSearch));
+	}
+
+    public void UpdateList(Text CurrentSearch) { UpdateList(CurrentSearch.text); }
+	public bool ListContains(GameObject item) { 
+		if (ListItems == null)
+			ListItems = new ArrayList();
+		ListItemManager lim = GetItemManager(item);
+		foreach(ItemStruct itemStruct in ListItems)
 		{
-			ListItemManager lim = item.GetComponent<ListItemManager>();
-			item.SetActive(lim.text.text.Contains(CurrentSearch));
+			if (itemStruct.item.Id == lim.Id)
+				return true;
 		}
+		return false;
 	}
-
-    public void UpdateList(Text CurrentSearch)
-	{
-		UpdateList(CurrentSearch.text);
-	}
-
-	public bool ListContains(GameObject item)
-	{
-		// Placeholder: No buscar por referencia, es inutil.
-		// Cada botón debería tener un identificador
-		// y se debería buscar en base a ese identificador
-		return AllListInstancedItems.Contains(item);
-	}
-
+	#endregion
 
 }

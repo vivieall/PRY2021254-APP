@@ -29,6 +29,7 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private GameObject m_NivelesCompletosUI = null;
     [SerializeField] private GameObject m_PerfilNinoModificarsUI = null;
     [SerializeField] private GameObject m_ListaPersonalizadaUI = null;
+    [SerializeField] private GameObject m_ListaLikesUI = null;
     [SerializeField] private GameObject m_PerfilNinoVistaDatosUI;
     [SerializeField] private GameObject m_ModificarListaPersonalizUI;
     [SerializeField] private GameObject m_HistorialUI;
@@ -164,6 +165,7 @@ public class SceneUIManager : MonoBehaviour
         AllUIs.Add(m_NivelesCompletosUI);
         AllUIs.Add(m_PerfilNinoModificarsUI);
         AllUIs.Add(m_ListaPersonalizadaUI);
+        AllUIs.Add(m_ListaLikesUI);
         AllUIs.Add(m_PerfilNinoVistaDatosUI);
         AllUIs.Add(m_ModificarListaPersonalizUI);
         AllUIs.Add(m_HistorialUI);

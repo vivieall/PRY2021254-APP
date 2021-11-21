@@ -5,43 +5,45 @@ using UnityEngine.UI;
 
 public class ListItemManager : MonoBehaviour
 {
-	[SerializeField] public Text text;
 	[SerializeField] public ListManager ListManager = null;
 	[SerializeField] private GameObject AddButton = null;
 	[SerializeField] private GameObject RemoveButton = null;
+	[SerializeField] public int Id;
+	[SerializeField] public Text text;
+	[SerializeField] public Color inListAddColor;
+	private Color originalAddColor;
 
-	public void Start()
-	{
-		if (ListManager) UpdateButtons();
-		else Debug.Log(name + " does not have a ListManager");
+	private void Awake() {
+		// Id = Random.Range(int.MinValue, int.MaxValue);
+		Button buttonComp = AddButton.GetComponent<Button>();
+		originalAddColor = buttonComp.image.color;
 	}
-	public void AddToList()
-	{
-		if (ListManager)
-		{
-			ListManager.AddItem(text.text);
-			UpdateButtons();
-		}
-		else Debug.Log(name + " does not have a ListManager");
-	}
+	private void OnEnable() { ResetButtons(); }
 
-	public void RemoveFromList()
-	{
-		if (ListManager)
-		{
-			ListManager.RemoveItem(gameObject);
-			UpdateButtons();
-		}
-		else Debug.Log(name + " does not have a ListManager");
+	public void SetEditMode(bool bIsRemoving = true) { 
+		AddButton.SetActive(!bIsRemoving); 
+		RemoveButton.SetActive(bIsRemoving); 
 	}
 
-	public void UpdateButtons()
+	public void PromptAddToList()
+	{
+		if (!ListManager.ListContains(gameObject))
+			ListManager.PromptItemOperation(this, true);
+	}
+
+	public void PromptRemoveFromList()
+	{
+		if (ListManager.ListContains(gameObject))
+			ListManager.PromptItemOperation(this, false);
+	}
+
+	public void ResetButtons()
 	{
 		if (ListManager)
 		{
 			bool inList = ListManager.ListContains(gameObject);
-			AddButton.SetActive(!inList);
-			RemoveButton.SetActive(inList);
+			AddButton.GetComponent<Button>().image.color = inList ? inListAddColor : originalAddColor;
+			SetEditMode(false);
 		}
 		else Debug.Log(name + " does not have a ListManager");
 	}
