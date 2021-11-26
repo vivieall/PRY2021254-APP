@@ -35,22 +35,53 @@ public class ListManager : MonoBehaviour
     [SerializeField] private GameObject ContentPanel = null;
 	[SerializeField] private GameObject ConfirmPopup = null;
     [SerializeField] private GameObject ListItemPrefab = null;
+	[SerializeField] private string ListName = "Lista Personalizada";
 	[SerializeField] private bool allowDuplicates = false;
+	[SerializeField] private bool bConfirmCreateList = false;
 
 	private ListItemManager PendingItem = null;
 	private bool PendingOperationType; // true for add, false for delete
 	private bool bIsInEditMode = false; 
+	private bool bWasListCreated = false;
 
 	public static ListItemManager GetItemManager(GameObject go) { return go ? go.GetComponent<ListItemManager>() : null; }
 	private void Awake() { if (ListItems == null) ListItems = new ArrayList(); }
 	public void OnEnable() { SetEditMode(false); }
 
-	#region UI_Interactions
+	#region UI_Interactions_CreateList
+	public void PromptCreateList()
+	{
+		if (bConfirmCreateList && !bWasListCreated)
+		{
+			ConfirmPopupComponent confirmComp = ConfirmPopup.GetComponent<ConfirmPopupComponent>();
+			confirmComp.SetConfirmationText("¿Desea crear una " + ListName + "?");
+			confirmComp.ClearAllEvents();
+			confirmComp.OnAccept.AddListener(ConfirmCreateList);
+			confirmComp.OnDecline.AddListener(DenyCreateList);
+			ConfirmPopup.SetActive(true); 
+		}
+		else SceneManager.ShowUI(ListUI);
+	}
+
+	public void ConfirmCreateList() { 
+		bWasListCreated = true; 
+		ConfirmPopup.SetActive(false); 
+		SceneManager.ShowUI(ListUI); 
+	}
+
+	public void DenyCreateList() { ConfirmPopup.SetActive(false); }
+	#endregion
+
+	#region UI_Interactions_Main
 	public void PromptItemOperation(ListItemManager item, bool bIsAdding)
 	{
 		PendingItem = item; 
 		PendingOperationType = bIsAdding;
 		ConfirmPopupComponent confirmComp = ConfirmPopup.GetComponent<ConfirmPopupComponent>();
+		string popupText = bIsAdding ? 
+			"¿Desea añadir este nivel a " + ListName + "?" : 
+			"¿Desea eliminar este nivel de " + ListName + "?";
+		confirmComp.SetConfirmationText(popupText);
 		confirmComp.ClearAllEvents();
 		confirmComp.OnAccept.AddListener(ConfirmOperation);
 		confirmComp.OnDecline.AddListener(DeclineOperation);

@@ -391,7 +391,25 @@ public class SceneUIManager : MonoBehaviour
         //m_PerfilNiñoUI.SetActive(true);
     }
 
-    public void logout()
+	#region Logout
+
+    [Header("Confirm Logout")]
+    [SerializeField] private GameObject ConfirmPopup;
+    public void PromptLogout()
+	{
+        ConfirmPopupComponent confirmComp = ConfirmPopup.GetComponent<ConfirmPopupComponent>();
+        confirmComp.ClearAllEvents();
+        confirmComp.OnAccept.AddListener(OnLogoutConfirm);
+        confirmComp.OnDecline.AddListener(OnLogoutDeny);
+        confirmComp.SetConfirmationText("¿Desea cerrar sesión?");
+        ConfirmPopup.SetActive(true);
+	}
+
+    public void OnLogoutConfirm() { ConfirmPopup.SetActive(false); logout(); }
+
+    public void OnLogoutDeny() { ConfirmPopup.SetActive(false); }
+
+	public void logout()
     {
         id_guardian = null;
         sesionIniciada = false;
@@ -400,6 +418,7 @@ public class SceneUIManager : MonoBehaviour
         ShowLoguin();
     }
 
+    #endregion
 
     public void submitLogin2()
     {
