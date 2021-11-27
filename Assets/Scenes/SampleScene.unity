@@ -14483,6 +14483,11 @@ PrefabInstance:
       propertyPath: SceneManager
       value: 
       objectReference: {fileID: 519420030}
+    - target: {fileID: 3775268806279506221, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: bConfirmCreateList
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3775268806279506230, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -22599,7 +22604,7 @@ PrefabInstance:
     - target: {fileID: 3775268806279506221, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
       propertyPath: bConfirmCreateList
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3775268806279506230, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
@@ -35108,8 +35113,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 519420030}
-        m_MethodName: ShowListaPersonalizada
+      - m_Target: {fileID: 2068912406}
+        m_MethodName: PromptCreateList
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
