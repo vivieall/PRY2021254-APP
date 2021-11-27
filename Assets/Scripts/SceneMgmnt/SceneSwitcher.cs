@@ -10,10 +10,11 @@ public class SceneSwitcher : MonoBehaviour
     {
         Handler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
     }
-    //SceneType
-    //1->Math 2->Comm 3->PerSoc 4->C&T
+    
     public void playGame(string parameters)
     {
+        //SceneType
+        //1->Math 2->Comm 3->PerSoc 4->C&T
         string temp = parameters.Substring(0,1);
         int scenenum = int.Parse(temp);
         temp = parameters.Substring(1, 1);

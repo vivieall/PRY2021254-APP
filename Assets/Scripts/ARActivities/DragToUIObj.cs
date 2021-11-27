@@ -56,13 +56,13 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     void Start()
     {
         evSys = GameObject.Find("EventSystem").GetComponent<ActivityManager>();
-        
         rectTransform = GetComponent<RectTransform>();
         zeroArea = GetComponent<RectTransform>().anchoredPosition;
         GoalCanvas = VuforiaObject.transform.GetChild(0).GetComponent<Canvas>();
         GoalObject = VuforiaObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
         DL = new Vector3(GoalObject.transform.position.x - rectTransform.rect.width / 2, GoalObject.transform.position.y - rectTransform.rect.height / 2, GoalObject.transform.position.z);
         UR = new Vector3(GoalObject.transform.position.x + rectTransform.rect.width / 2, GoalObject.transform.position.y + rectTransform.rect.height / 2, GoalObject.transform.position.z);
+        InitializeResource(1,1);
     }
 
     void InitializeResource(int actnum,int objnum)
@@ -83,7 +83,6 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
         var rendobj = VuforiaObject.transform.GetChild(1).gameObject.transform;
         //Destroys current 3d object
         Destroy(rendobj.GetChild(0).gameObject);
-
         //if true, show 3d checkmark, else show 3d activity object
         if (done) {
             //Instantiates new 3d object with the prev object transform properties
