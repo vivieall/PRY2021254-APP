@@ -5,10 +5,11 @@ using UnityEngine.EventSystems;
 
 public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDragHandler
 {
-    //Vuforia Object es un objeto compuesto de 3 objetos en este orden de indices
+    //Vuforia Object es un objeto compuesto de 2 objetos en este orden de indices
     //0 -> Canvas
-    //1 -> Objeto 3D a mostrar/modificar
-    public GameObject VuforiaObject;
+    //1 -> Objeto 3D a mostrar/modificar DENTRO DEL RENDEROBJECT
+    [SerializeField] public GameObject VuforiaObject;
+    [SerializeField] private int GameObjectNumber;
 
     private GameObject GoalObject;
 
@@ -18,7 +19,7 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     private Vector2 zeroArea;
     private Vector3 DL;
     private Vector3 UR;
-    private bool done;
+    private bool done = false;
     private ActivityManager evSys;
     public void OnBeginDrag(PointerEventData eventData)
     {
@@ -43,12 +44,8 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
             {
                 if (rectTransform.position.y >= DL.y && rectTransform.position.y <= UR.y)
                 {
-                    VuforiaObject.transform.GetChild(0).gameObject.SetActive(false);
-                    var rendobj = VuforiaObject.transform.GetChild(1).gameObject.transform;
-                    Destroy(rendobj.GetChild(0).gameObject);
-                    Instantiate(robj, rendobj);
+                    SwitchState();
                     gameObject.SetActive(false);
-                    done = true;
                     evSys.CheckCompletion();
                 }
             }
@@ -59,8 +56,7 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     void Start()
     {
         evSys = GameObject.Find("EventSystem").GetComponent<ActivityManager>();
-        robj = Resources.Load("Prefabs/CorrectAnswer");
-        wobj = Resources.Load("Prefabs/WrongAnswer");
+        
         rectTransform = GetComponent<RectTransform>();
         zeroArea = GetComponent<RectTransform>().anchoredPosition;
         GoalCanvas = VuforiaObject.transform.GetChild(0).GetComponent<Canvas>();
@@ -69,10 +65,45 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
         UR = new Vector3(GoalObject.transform.position.x + rectTransform.rect.width / 2, GoalObject.transform.position.y + rectTransform.rect.height / 2, GoalObject.transform.position.z);
     }
 
-    // Update is called once per frame
-    void Update()
+    void InitializeResource(int actnum,int objnum)
     {
-        
+        string aux = "Act" + actnum + "_Obj"+objnum;
+        var ActivityObj = Resources.Load(aux);
+        robj = Resources.Load("Prefabs/CorrectAnswer");
+        wobj = Resources.Load("Prefabs/WrongAnswer");
+    }
+
+    private void SwitchState()
+    {
+        //Switches done state of object
+        done = !done;
+        //Switches the ImageTarget# UI
+        VuforiaObject.transform.GetChild(0).gameObject.SetActive(!done);
+        //Grabs current 3d object transform properties
+        var rendobj = VuforiaObject.transform.GetChild(1).gameObject.transform;
+        //Destroys current 3d object
+        Destroy(rendobj.GetChild(0).gameObject);
+
+        //if true, show 3d checkmark, else show 3d activity object
+        if (done) {
+            //Instantiates new 3d object with the prev object transform properties
+            Instantiate(robj, rendobj);
+        } else
+        {
+            Instantiate(robj, rendobj);
+        }
+    }
+
+    // Update is called once per frame
+    void Update(){}
+
+    public void Reset()
+    {
+        switch (evSys.GetCurrActivityNum())
+        {
+            default:
+                break;
+        }
     }
 
     public bool GetDone()

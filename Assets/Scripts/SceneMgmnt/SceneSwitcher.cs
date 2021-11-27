@@ -13,7 +13,6 @@ public class SceneSwitcher : MonoBehaviour
     //SceneType
     //1->Math 2->Comm 3->PerSoc 4->C&T
     public void playGame(string parameters)
-    //1->Math 2->Comm 3->PerSoc 4->C&T
     {
         string temp = parameters.Substring(0,1);
         int scenenum = int.Parse(temp);
