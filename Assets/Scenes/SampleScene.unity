@@ -33577,7 +33577,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 519420030}
-        m_MethodName: ShowChooselvlComm
+        m_MethodName: ShowChooselvlScience
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -73513,7 +73513,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 519420030}
-        m_MethodName: ShowChooselvlComm
+        m_MethodName: ShowChooselvlPSocial
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
