@@ -37,6 +37,11 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private GameObject m_Chooselvl_MathUI;
     [SerializeField] private GameObject m_Tema_CommUI;
     [SerializeField] private GameObject m_Chooselvl_CommUI;
+    [SerializeField] private GameObject m_Tema_PSocialUI;
+    [SerializeField] private GameObject m_Chooselvl_PSocialUI;
+    [SerializeField] private GameObject m_Tema_ScienceUI;
+    [SerializeField] private GameObject m_Chooselvl_ScienceUI;
+
     [SerializeField] private GameObject m_FiltroUI;
     [SerializeField] private GameObject m_ResetPasswordWindow;
     [SerializeField] private GameObject m_PremiumPaymentWindow;
@@ -208,6 +213,8 @@ public class SceneUIManager : MonoBehaviour
         AllUIs.Add(m_Chooselvl_MathUI);
         AllUIs.Add(m_Tema_CommUI);
         AllUIs.Add(m_Chooselvl_CommUI);
+        AllUIs.Add(m_Tema_PSocialUI);
+        AllUIs.Add(m_Chooselvl_PSocialUI);
         AllUIs.Add(m_FiltroUI);
 
         foreach (GameObject ui in AllUIs)
@@ -254,6 +261,12 @@ public class SceneUIManager : MonoBehaviour
                 break;
             case 3:
                 ShowUI(m_Chooselvl_CommUI);
+                break;
+            case 4:
+                ShowUI(m_Chooselvl_PSocialUI);
+                break;
+            case 5:
+                ShowUI(m_Chooselvl_ScienceUI);
                 break;
         }
     }
@@ -791,6 +804,14 @@ public class SceneUIManager : MonoBehaviour
     public void ShowTemaComm(){
         ShowUI(m_Tema_CommUI);
     }
+    public void ShowTemaPSocial()
+    {
+        ShowUI(m_Tema_PSocialUI);
+    }
+    public void ShowTemaScience()
+    {
+        ShowUI(m_Tema_ScienceUI);
+    }
     public void ShowNivelesCompletos(){
         ShowUI(m_NivelesCompletosUI);
     }
@@ -816,6 +837,14 @@ public class SceneUIManager : MonoBehaviour
     }
     public void ShowChooselvlComm(){
         ShowUI(m_Chooselvl_CommUI);
+    }
+    public void ShowChooselvlPSocial()
+    {
+        ShowUI(m_Chooselvl_PSocialUI);
+    }
+    public void ShowChooselvlScience()
+    {
+        ShowUI(m_Chooselvl_ScienceUI);
     }
     public void ShowTematica(){
         ShowUI(m_SeleccionarTematicaUI);
