@@ -6,12 +6,14 @@ using UnityEngine.UI;
 
 public class ConfirmPopupComponent : MonoBehaviour
 {
-	public Text text;
+	[SerializeField] public Text TextOnScreen;
     public UnityEvent OnAccept;
     public UnityEvent OnDecline;
 
 	public void ExecuteOnAccept() { OnAccept.Invoke(); gameObject.SetActive(false); }
 	public void ExecuteOnDecline() { OnDecline.Invoke(); gameObject.SetActive(false); }
+
+	public void SetConfirmationText(string text) { TextOnScreen.text = text; }
 
 	public void ClearAllEvents()
 	{

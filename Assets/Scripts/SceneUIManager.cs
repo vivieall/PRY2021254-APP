@@ -43,6 +43,10 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private GameObject m_Chooselvl_ScienceUI;
 
     [SerializeField] private GameObject m_FiltroUI;
+    [SerializeField] private GameObject m_ResetPasswordWindow;
+    [SerializeField] private GameObject m_PremiumPaymentWindow;
+    [SerializeField] private GameObject m_MessageWindowResponse;
+    [SerializeField] private GameObject m_CodigoNinoWindow;
     private ArrayList AllUIs;
     GuardianData datosUsuarioLogeado = new GuardianData();
 
@@ -92,7 +96,9 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_ConfirmPassword;
     [SerializeField] private Text m_ErrorText;
     
-
+    [SerializeField] private InputField m_ResetPasswordEmail;
+    [SerializeField] private Text m_ErrorTextResetPassword;
+    [SerializeField] private Text m_MessageWindowResponseText;
 
 
     #endregion
@@ -103,10 +109,13 @@ public class SceneUIManager : MonoBehaviour
     public string[] Emails;
     public bool cuentaRegistradaConExito;
     public int MaxLenght;
-    public GameObject[] sintomasCheckbox;
 
     public GameObject[] botonesNinos;
     public Text[] nombresNinos;
+    public Text m_BienvenidaNino;
+
+    public Toggle[] checkBoxSintomas;
+    public Toggle[] checkBoxSintomasUpdate;
 
     #region Register Child
     [Header("Register Child Inputs")]
@@ -115,10 +124,29 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_InputFechaDiaChild;
     [SerializeField] private InputField m_InputFechaMesChild;
     [SerializeField] private InputField m_InputFechaAnioChild;
-    [SerializeField] private InputField m_GeneroChild;
 
     #endregion
 
+    #region Perfil Guardian
+    [Header("Perfil Guardian Text")]
+    [SerializeField] private Text m_NombreGuardian;
+    [SerializeField] private Text m_ApellidoGuardian;
+    [SerializeField] private Text m_FechaNacimientoGuardian;
+    [SerializeField] private Text m_EmailGuardian;
+    #endregion
+
+
+    #region Perfil Child
+    [Header("Perfil Child Text")]
+    [SerializeField] private Text m_NombreChild;
+    [SerializeField] private Text m_IApellidoChild;
+    [SerializeField] private Text m_FechaDiaChild;
+    [SerializeField] private Text m_FechaMesChild;
+    [SerializeField] private Text m_FechaAnioChild;
+    [SerializeField] private Text m_GeneroChild;
+    [SerializeField] private Text m_GradoChild;
+    [SerializeField] private Text m_SintomasChild;
+    #endregion
 
     #region Update Child
     [Header("Register Child Inputs")]
@@ -131,19 +159,26 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private Text m_ErrorTextLogin;
     #endregion
 
+    #region Specialist Data
+    [Header("Specialist Data")]
+    [SerializeField] private InputField m_UsernameSpecialist;
+    [SerializeField] private InputField m_PasswordSpecialist;
+    #endregion
+
     private bool sesionIniciada;
     private string id_guardian;
     private string nivelAutismoChild;
     private string generoChild;
     private string avatarChild;
+    private bool premiumOn;
     private string nivelAutismoChildUpdate;
     private string generoChildUpdate;
     private string avatarChildUpdate;
     private bool[] sintomas = new bool[] { false, false, false, false, false, false, false };
     private bool[] sintomasUpdate = new bool[] { false, false, false, false, false, false, false };
     private int cantNinos;
-    private ChildData[] ninosGuardian = { };
-    private ChildData loggedChild;
+    private ChildDataResponse[] ninosGuardian = { };
+    private ChildDataResponse loggedChild;
 
     
 
@@ -188,6 +223,7 @@ public class SceneUIManager : MonoBehaviour
         }
 
         sesionIniciada = false;
+        premiumOn = false;
         m_NetworkManager = FindObjectOfType<NetworkManager>();
         Debug.Log("test");
 
@@ -272,7 +308,7 @@ public class SceneUIManager : MonoBehaviour
 
     public void setSintomaUpdate(int idx)
     {
-        sintomasUpdate[idx] = !sintomas[idx];
+        sintomasUpdate[idx] = !sintomasUpdate[idx];
     }
 
     public void setAvatarUpdate(string avatarCode)
@@ -280,6 +316,54 @@ public class SceneUIManager : MonoBehaviour
         avatarChildUpdate = avatarCode;
     }
 
+    public void submitResetPassword()
+    {
+
+        if (m_ResetPasswordEmail.text == "")
+        {
+            m_ErrorTextResetPassword.text = "Error 444: Ingrese un correo electronico";
+            return;
+        }
+
+        CallGetRequestPasswordReset(m_ResetPasswordEmail.text, delegate (DefaultResponse response)
+        {
+            m_ErrorTextResetPassword.text = response.message;
+
+            if (response.idResponse == 1)
+            {
+                //Correcto
+            }
+        });   
+    }
+
+    public void submitPayment(bool pago){
+        if(pago == true){
+            m_MessageWindowResponseText.text = "Bienvenid@ a la versión premium";
+            premiumOn = true;
+        }
+        else if(pago == false){
+            m_MessageWindowResponseText.text = "Debe completar el proceso para poder adquirir la versión premium";
+        }
+        ClosePremiumPayment();
+        ShowMessageWindow();
+    }
+
+    public void getCodigoNino(){
+        if(premiumOn == true){
+            CallGetRequestSpecialistFromChild(loggedChild.idChild, delegate (Specialist response)
+            {
+                if(response.idSpecialist > 0){
+                    m_UsernameSpecialist.text = response.username;
+                    m_PasswordSpecialist.text = response.password;
+                    ShowCodigoNinoWindow();
+                }
+            });
+        }
+        else if(premiumOn == false){
+            m_MessageWindowResponseText.text = "Debe adquirir la versión premium";
+            ShowMessageWindow();
+        }
+    }
 
     //<summary>
     //Orden para enviar datos
@@ -320,14 +404,34 @@ public class SceneUIManager : MonoBehaviour
         //m_PerfilNiñoUI.SetActive(true);
     }
 
-    public void logout()
+	#region Logout
+
+    [Header("Confirm Logout")]
+    [SerializeField] private GameObject ConfirmPopup;
+    public void PromptLogout()
+	{
+        ConfirmPopupComponent confirmComp = ConfirmPopup.GetComponent<ConfirmPopupComponent>();
+        confirmComp.ClearAllEvents();
+        confirmComp.OnAccept.AddListener(OnLogoutConfirm);
+        confirmComp.OnDecline.AddListener(OnLogoutDeny);
+        confirmComp.SetConfirmationText("¿Desea cerrar sesión?");
+        ConfirmPopup.SetActive(true);
+	}
+
+    public void OnLogoutConfirm() { ConfirmPopup.SetActive(false); logout(); }
+
+    public void OnLogoutDeny() { ConfirmPopup.SetActive(false); }
+
+	public void logout()
     {
         id_guardian = null;
         sesionIniciada = false;
+        premiumOn = false;
         resetChildren();
         ShowLoguin();
     }
 
+    #endregion
 
     public void submitLogin2()
     {
@@ -443,7 +547,7 @@ public class SceneUIManager : MonoBehaviour
 
     public void DeleteChild()
     {
-        CallGetRequestDeleteChildApi(loggedChild.idChild, delegate (DeleteResponse response)
+        CallGetRequestDeleteChildApi(loggedChild.idChild, delegate (DefaultResponse response)
         { 
             if(response.idResponse == 1)
             {
@@ -517,15 +621,21 @@ public class SceneUIManager : MonoBehaviour
     public void loginChild(int idx)
     {
         loggedChild = ninosGuardian[idx];
+        m_BienvenidaNino.text = "Hola, " + loggedChild.names + "!";
+        for(int i = 0; i < loggedChild.symptoms.Length; i++){
+            checkBoxSintomasUpdate[loggedChild.symptoms[i].idSymptom - 1].isOn = true;
+            sintomasUpdate[loggedChild.symptoms[i].idSymptom - 1] = true;
+        }
+
         ShowCategoria();
     }
 
     public void getChildren()
     {
-        CallGetRequestChildrenApi(id_guardian, delegate (ChildData[] response)
+        CallGetRequestChildrenApi(id_guardian, delegate (ChildDataResponse[] response)
         {
 
-            foreach (ChildData c in response){
+            foreach (ChildDataResponse c in response){
                 Debug.Log(c.idChild);
             }
             ninosGuardian = response;
@@ -546,6 +656,14 @@ public class SceneUIManager : MonoBehaviour
         {
             botonesNinos[i].SetActive(false);
             nombresNinos[i].gameObject.SetActive(false);
+        }
+
+        for(int i = 0; i < 7; i++)
+        {
+            checkBoxSintomas[i].isOn = false;
+            checkBoxSintomasUpdate[i].isOn = false;
+            sintomasUpdate[i] = false;
+            sintomas[i] = false;
         }
     }
 
@@ -629,6 +747,34 @@ public class SceneUIManager : MonoBehaviour
 	public void ShowLoguin(){
         ShowUI(m_LoguinUI);
     }
+    public void ShowResetPassword(){
+        m_ResetPasswordWindow.SetActive(true);
+    }
+    public void CloseResetPassword(){
+        m_ResetPasswordWindow.SetActive(false);
+    }
+
+
+    public void ShowPremiumPayment(){
+        m_PremiumPaymentWindow.SetActive(true);
+    }
+    public void ClosePremiumPayment(){
+        m_PremiumPaymentWindow.SetActive(false);
+    }
+
+    public void ShowMessageWindow(){
+        m_MessageWindowResponse.SetActive(true);
+    }
+    public void CloseMessageWindow(){
+        m_MessageWindowResponse.SetActive(false);
+    }
+
+    public void ShowCodigoNinoWindow(){
+        m_CodigoNinoWindow.SetActive(true);
+    }
+    public void CloseCodigoNinoWindow(){
+        m_CodigoNinoWindow.SetActive(false);
+    }
     public void ShowRegister(){
         ShowUI(m_RegisterUI);
     }
@@ -646,6 +792,7 @@ public class SceneUIManager : MonoBehaviour
         ShowUI(m_ActualizarDatosUI);
     }
     public void ShowVerDatosCuidador(){
+        setGuardianProfileData();
         ShowUI(m_VerDatosCuidadorUI);
     }
     public void ShowCategoria(){
@@ -669,6 +816,7 @@ public class SceneUIManager : MonoBehaviour
         ShowUI(m_NivelesCompletosUI);
     }
     public void ShowNinoVistaDatos(){
+        setChildProfileData();
         ShowUI(m_PerfilNinoVistaDatosUI);
     }
     public void ShowPerfilNinoModificar(){
@@ -831,12 +979,12 @@ public class SceneUIManager : MonoBehaviour
         }
     }
 
-    private void CallGetRequestDeleteChildApi(string id, Action<DeleteResponse> response)
+    private void CallGetRequestDeleteChildApi(string id, Action<DefaultResponse> response)
     {
         StartCoroutine(GetRequestDeleteChild("https://teapprendo.herokuapp.com/children/delete?idChild=" + loggedChild.idChild, response));
     }
 
-    IEnumerator GetRequestDeleteChild(string url, Action<DeleteResponse> response)
+    IEnumerator GetRequestDeleteChild(string url, Action<DefaultResponse> response)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(url);
         yield return uwr.SendWebRequest();
@@ -848,7 +996,7 @@ public class SceneUIManager : MonoBehaviour
         else
         {
             Debug.Log("Received: " + uwr.downloadHandler.text);
-            response(JsonUtility.FromJson<DeleteResponse>(uwr.downloadHandler.text));
+            response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
         }
     }
 
@@ -915,7 +1063,7 @@ public class SceneUIManager : MonoBehaviour
             }
         }
         CallRegisterChildApi(id_guardian, m_InputNombreChild.text, m_InputApellidoChild.text, m_InputFechaAnioChild.text + "-" + m_InputFechaMesChild.text + "-" + m_InputFechaDiaChild.text, generoChild, nivelAutismoChild, sintomas2,
-            delegate (ChildData response)
+            delegate (ChildDataResponse response)
             {
 
                 Debug.Log(response);
@@ -944,7 +1092,7 @@ public class SceneUIManager : MonoBehaviour
             }
         }
         CallUpdateChildApi(loggedChild.idChild, m_InputNombreChildUpdate.text, m_InputApellidoChildUpdate.text, m_InputFechaAnioChildUpdate.text + "-" + m_InputFechaMesChildUpdate.text + "-" + m_InputFechaDiaChildUpdate.text, generoChildUpdate, nivelAutismoChildUpdate, sintomas2,
-            delegate (ChildData response)
+            delegate (ChildDataResponse response)
             {
 
                 Debug.Log(response);
@@ -1008,7 +1156,26 @@ public class SceneUIManager : MonoBehaviour
             response(JsonUtility.FromJson<LoginResponse>(uwr.downloadHandler.text));
         }
     }
+    public void setChildProfileData() {
+        m_NombreChild.text = loggedChild.names;
+        m_IApellidoChild.text = loggedChild.lastNames;
+        m_FechaDiaChild.text = loggedChild.birthday.Substring(8, 2);
+        m_FechaMesChild.text = loggedChild.birthday.Substring(5, 2);
+        m_FechaAnioChild.text = loggedChild.birthday.Substring(0, 4);
+        m_GeneroChild.text = loggedChild.gender;
+        m_GradoChild.text = loggedChild.asdLevel;
+        m_SintomasChild.text = "";
+        foreach (Symptom c in loggedChild.symptoms){
+            m_SintomasChild.text += c.description + " ";
+        }
+    }
 
+    public void setGuardianProfileData() {
+        m_NombreGuardian.text = datosUsuarioLogeado.names;
+        m_ApellidoGuardian.text = datosUsuarioLogeado.lastNames;
+        m_FechaNacimientoGuardian.text = datosUsuarioLogeado.birthday.Substring(8, 2) + "/" + datosUsuarioLogeado.birthday.Substring(5, 2) + "/" + datosUsuarioLogeado.birthday.Substring(0, 4);
+        m_EmailGuardian.text = datosUsuarioLogeado.email;
+    }
     private class LoginData
     {
         public string username;
@@ -1029,7 +1196,7 @@ public class SceneUIManager : MonoBehaviour
         public string birthday;
     }
 
-    private class DeleteResponse
+    private class DefaultResponse
     {
         public int idResponse;
         public string message;
@@ -1088,13 +1255,41 @@ public class SceneUIManager : MonoBehaviour
         public int[] symptoms;
         public string password;
     }
+    [Serializable]
+    private class ChildDataResponse
+    {
+        public string idChild;
+        public string asdLevel;
+        public string avatar;
+        public string gender;
+        public int idGuardian;
+        public string lastNames;
+        public string names;
+        public string birthday;
+        public string password;
+        public Symptom[] symptoms;
+    }
 
+    [Serializable]
+    private class Symptom {
+        public int idSymptom;
+        public string description;
+    }
     private class Children
     {
         public ChildData[] children;
     }
 
-    private void CallRegisterChildApi(string guardian_id, string names, string lastnames, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildData> response)
+    private class Specialist 
+    {
+        public int idSpecialist;
+        public string names;
+        public string lastNames;
+        public string username;
+        public string password;
+    }
+
+    private void CallRegisterChildApi(string guardian_id, string names, string lastnames, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildDataResponse> response)
     {
         ChildData cd = new ChildData();
         cd.idGuardian = Int32.Parse(guardian_id);
@@ -1110,7 +1305,7 @@ public class SceneUIManager : MonoBehaviour
         StartCoroutine(PostRequestRegisterChild("https://teapprendo.herokuapp.com/children/create", json, response));
     }
 
-    IEnumerator PostRequestRegisterChild(string url, string json, Action<ChildData> response)
+    IEnumerator PostRequestRegisterChild(string url, string json, Action<ChildDataResponse> response)
     {
         var uwr = new UnityWebRequest(url, "POST");
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
@@ -1127,12 +1322,12 @@ public class SceneUIManager : MonoBehaviour
         else
         {
             Debug.Log("Received: " + uwr.downloadHandler.text);
-            response(JsonUtility.FromJson<ChildData>(uwr.downloadHandler.text));
+            response(JsonUtility.FromJson<ChildDataResponse>(uwr.downloadHandler.text));
         }
     }
 
 
-    private void CallUpdateChildApi(string id, string names, string lastnames, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildData> response)
+    private void CallUpdateChildApi(string id, string names, string lastnames, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildDataResponse> response)
     {
         ChildData cd = new ChildData();
         cd.idChild = id;
@@ -1148,7 +1343,7 @@ public class SceneUIManager : MonoBehaviour
         StartCoroutine(PutRequestUpdateChild("https://teapprendo.herokuapp.com/children/update", json, response));
     }
 
-    IEnumerator PutRequestUpdateChild(string url, string json, Action<ChildData> response)
+    IEnumerator PutRequestUpdateChild(string url, string json, Action<ChildDataResponse> response)
     {
         var uwr = new UnityWebRequest(url, "PUT");
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
@@ -1165,15 +1360,15 @@ public class SceneUIManager : MonoBehaviour
         else
         {
             Debug.Log("Received: " + uwr.downloadHandler.text);
-            response(JsonUtility.FromJson<ChildData>(uwr.downloadHandler.text));
+            response(JsonUtility.FromJson<ChildDataResponse>(uwr.downloadHandler.text));
         }
     }
-    private void CallGetRequestChildrenApi(string id, Action<ChildData[]> response)
+    private void CallGetRequestChildrenApi(string id, Action<ChildDataResponse[]> response)
     {
         StartCoroutine(GetRequestChildren("https://teapprendo.herokuapp.com/children/listByIdGuardian?idGuardian=" + id, response));
     }
 
-    IEnumerator GetRequestChildren(string url, Action<ChildData[]> response)
+    IEnumerator GetRequestChildren(string url, Action<ChildDataResponse[]> response)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(url);
         yield return uwr.SendWebRequest();
@@ -1184,9 +1379,50 @@ public class SceneUIManager : MonoBehaviour
         }
         else
         {
-            response(JsonHelper.FromJson<ChildData>(fixJson(uwr.downloadHandler.text)));
+            response(JsonHelper.FromJson<ChildDataResponse>(fixJson(uwr.downloadHandler.text)));
         }
     }
+
+    private void CallGetRequestPasswordReset(string email, Action<DefaultResponse> response)
+    {
+        StartCoroutine(GetRequestPasswordReset("https://teapprendo.herokuapp.com/guardians/restorePassword?email=" + email, response));
+    }
+
+    IEnumerator GetRequestPasswordReset(string url, Action<DefaultResponse> response)
+    {
+        UnityWebRequest uwr = UnityWebRequest.Get(url);
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
+        }
+    }
+
+    private void CallGetRequestSpecialistFromChild(string idChild, Action<Specialist> response)
+    {
+        StartCoroutine(GetRequestSpecialistFromChild("https://teapprendo.herokuapp.com/children/activateSpecialist?idChild=" + idChild, response));
+    }
+
+    IEnumerator GetRequestSpecialistFromChild(string url, Action<Specialist> response)
+    {
+        UnityWebRequest uwr = UnityWebRequest.Get(url);
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            response(JsonUtility.FromJson<Specialist>(uwr.downloadHandler.text));
+        }
+    }
+    
     string fixJson(string value)
     {
         value = "{\"Items\":" + value + "}";
