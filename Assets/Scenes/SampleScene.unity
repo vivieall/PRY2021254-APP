@@ -37158,7 +37158,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1006610608
 Transform:
   m_ObjectHideFlags: 0
@@ -45152,7 +45152,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SelectFilterScreenRoot: {fileID: 1516274235}
   NextFilterButton: {fileID: 1907557154}
-  FacePrefab: {fileID: 7765100736414676002, guid: 90a1c5af597cb8a4ea12efceabf35fca,
+  FacePrefab: {fileID: 7765100736414676002, guid: 68674e026a22723438fb4c771e8d9901,
     type: 3}
 --- !u!114 &1176671617
 MonoBehaviour:
@@ -68712,7 +68712,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   SelectFilterScreenRoot: {fileID: 1516274235}
   NextFilterButton: {fileID: 1907557154}
-  FacePrefab: {fileID: 7765100736414676002, guid: d92f7f9002f05c3409193574e0a799ef,
+  FacePrefab: {fileID: 7765100736414676002, guid: 90a1c5af597cb8a4ea12efceabf35fca,
     type: 3}
 --- !u!1001 &1865680814
 PrefabInstance:
