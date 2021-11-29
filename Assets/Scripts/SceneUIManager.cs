@@ -170,6 +170,7 @@ public class SceneUIManager : MonoBehaviour
     private string nivelAutismoChild;
     private string generoChild;
     private string avatarChild;
+    private int nivelSeleccionado;
     private bool premiumOn;
     private string nivelAutismoChildUpdate;
     private string generoChildUpdate;
@@ -272,6 +273,10 @@ public class SceneUIManager : MonoBehaviour
     }
 
 
+    public void setNivel(int nivel){
+        nivelSeleccionado = nivel;
+    }
+
     public void setGenero(string genero)
     {
         generoChild = genero;
@@ -365,6 +370,13 @@ public class SceneUIManager : MonoBehaviour
         }
     }
 
+    public string getIdChild(){
+        return loggedChild.idChild;
+    }
+
+    public int getNivel(){
+        return nivelSeleccionado;
+    }
     //<summary>
     //Orden para enviar datos
     //user
@@ -427,6 +439,7 @@ public class SceneUIManager : MonoBehaviour
         id_guardian = null;
         sesionIniciada = false;
         premiumOn = false;
+        m_ErrorTextLogin.text = "";
         resetChildren();
         ShowLoguin();
     }
@@ -741,6 +754,8 @@ public class SceneUIManager : MonoBehaviour
         currentUI = UIToShow;
         print(currentUI);
     }
+
+    
 
 	//Se puede mejorar estas funciones creando una que solo reciba la funcion especifica y que solo cambie el que se ponga true 
     //D.L.: Si se pudo mejorar

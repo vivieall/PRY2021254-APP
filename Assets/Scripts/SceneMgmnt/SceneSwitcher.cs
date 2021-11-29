@@ -19,8 +19,16 @@ public class SceneSwitcher : MonoBehaviour
         int scenenum = int.Parse(temp);
         temp = parameters.Substring(1, 1);
         int activitynum = int.Parse(temp);
+        
         Handler.PlayActivity(scenenum, activitynum);
     }
+
+    public void setInfo(GameObject obj)
+    {
+        SceneUIManager sn = gameObject.GetComponent<SceneUIManager>();
+        Handler.SetInfo(sn.getNivel(),sn.getIdChild());
+    }
+
     //SceneType
     //1->Math 2->Comm 3->PerSoc 4->C&T
     public void Back(int scenType)
