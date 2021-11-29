@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 7765100736414676012}
   - component: {fileID: 7765100736414676003}
   m_Layer: 0
-  m_Name: ARFace
+  m_Name: CartoonFacePrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
