@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 using System.Text;
-using System;
 using System.Linq; 
 
 
@@ -118,6 +117,7 @@ public class ActivityManager : MonoBehaviour
         public int idLevel;
         public bool successful;
     }
+    
     private void CallRecordLevelApi(int idChild, int idLevel, Action<levelRecord> response)
     {
         levelRecord lr = new levelRecord();

@@ -34,7 +34,7 @@ public class ListManager : MonoBehaviour
     [SerializeField] private ArrayList ListItems = null;
     [SerializeField] private GameObject ContentPanel = null;
 	[SerializeField] private GameObject ConfirmPopup = null;
-    [SerializeField] private GameObject ListItemPrefab = null;
+    //[SerializeField] private GameObject ListItemPrefab = null;
 	[SerializeField] private string ListName = "Lista Personalizada";
 	[SerializeField] private bool allowDuplicates = false;
 	[SerializeField] private bool bConfirmCreateList = false;

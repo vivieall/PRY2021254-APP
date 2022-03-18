@@ -153,7 +153,7 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_PasswordSpecialist;
     #endregion
 
-    private bool sesionIniciada;
+    //private bool sesionIniciada;
     private string id_guardian;
     private string nivelAutismoChild;
     private string generoChild;
@@ -204,7 +204,7 @@ public class SceneUIManager : MonoBehaviour
             ui.SetActive(false);
         }
 
-        sesionIniciada = false;
+        //sesionIniciada = false;
         premiumOn = false;
         Debug.Log("test");
 
@@ -377,7 +377,7 @@ public class SceneUIManager : MonoBehaviour
 	public void logout()
     {
         id_guardian = null;
-        sesionIniciada = false;
+        //sesionIniciada = false;
         premiumOn = false;
         m_ErrorTextLogin.text = "";
         resetChildren();
@@ -407,7 +407,7 @@ public class SceneUIManager : MonoBehaviour
                 }
 
                 id_guardian = response.idGuardian;
-                sesionIniciada = true;
+                //sesionIniciada = true;
 
                 PlayerPrefs.SetString("token", response.token);
                 PlayerPrefs.Save();
