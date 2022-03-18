@@ -382,7 +382,7 @@ public class SceneUIManager : MonoBehaviour
             m_ErrorTextLogin.text = "Validando, espere un momento";
             Debug.Log("Validando...");
 
-            if (response.idGuardian != null) // if (response.token != null)
+            if (response.idGuardian != null) 
             {
                 if (toggleSesion.isOn)
                 {
@@ -394,7 +394,10 @@ public class SceneUIManager : MonoBehaviour
 
                 id_guardian = response.idGuardian;
                 sesionIniciada = true;
-                //PlayerPrefs.SetString("SaveToken", token);
+
+                PlayerPrefs.SetString("token", response.token);
+                PlayerPrefs.Save();
+
                 datosUsuarioLogeado.token = response.token;
                 datosUsuarioLogeado.username = response.username;
                 datosUsuarioLogeado.password = response.password;
@@ -757,6 +760,9 @@ public class SceneUIManager : MonoBehaviour
         uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
         uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         uwr.SetRequestHeader("Content-Type", "application/json");
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
 
         yield return uwr.SendWebRequest();
 
@@ -793,6 +799,9 @@ public class SceneUIManager : MonoBehaviour
         uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
         uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         uwr.SetRequestHeader("Content-Type", "application/json");
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
 
         yield return uwr.SendWebRequest();
 
@@ -814,6 +823,10 @@ public class SceneUIManager : MonoBehaviour
     IEnumerator GetRequestGuardian(string url, Action<GuardianData> response)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(url);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
         yield return uwr.SendWebRequest();
 
         if (uwr.isNetworkError)
@@ -835,6 +848,10 @@ public class SceneUIManager : MonoBehaviour
     IEnumerator GetRequestDeleteChild(string url, Action<DefaultResponse> response)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(url);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
         yield return uwr.SendWebRequest();
 
         if (uwr.isNetworkError)
@@ -959,14 +976,15 @@ public class SceneUIManager : MonoBehaviour
 
     IEnumerator PostRequestLogin(string url, string json, Action<LoginResponse> response)
     {
-        //string token = "Bearer eyJhbGciOiJIUzUxMiJ9.eyJqdGkiOiJ0ZWFwcHJlbmRvIiwic3ViIjoidml2aWUiLCJhdXRob3JpdGllcyI6WyJST0xFX1VTRVIiXSwiaWF0IjoxNjQ3NDEwMjQ3LCJleHAiOjE2NDc0NzAyNDd9.euayCnwmDA23CqtRhWsOy1EavdDqqpl2oThZ5695Ri0LAJY8wTswUos01X5nl9oHWuU5VDleJd1BpRjLAx5jxQ";
         var uwr = new UnityWebRequest(url, "POST");
         byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
         uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
         uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         uwr.SetRequestHeader("Content-Type", "application/json");
-        //uwr.SetRequestHeader("Authorization",  token);
-        //Debug.Log("TOKEN:", token);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
         yield return uwr.SendWebRequest();
 
         if (uwr.isNetworkError)
@@ -1100,6 +1118,9 @@ public class SceneUIManager : MonoBehaviour
         uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
         uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         uwr.SetRequestHeader("Content-Type", "application/json");
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
 
         yield return uwr.SendWebRequest();
 
@@ -1138,6 +1159,9 @@ public class SceneUIManager : MonoBehaviour
         uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
         uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
         uwr.SetRequestHeader("Content-Type", "application/json");
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
 
         yield return uwr.SendWebRequest();
 
@@ -1159,6 +1183,10 @@ public class SceneUIManager : MonoBehaviour
     IEnumerator GetRequestChildren(string url, Action<ChildDataResponse[]> response)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(url);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
         yield return uwr.SendWebRequest();
 
         if (uwr.isNetworkError)
@@ -1179,6 +1207,10 @@ public class SceneUIManager : MonoBehaviour
     IEnumerator GetRequestPasswordReset(string url, Action<DefaultResponse> response)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(url);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
         yield return uwr.SendWebRequest();
 
         if (uwr.isNetworkError)
@@ -1199,6 +1231,10 @@ public class SceneUIManager : MonoBehaviour
     IEnumerator GetRequestSpecialistFromChild(string url, Action<Specialist> response)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(url);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
         yield return uwr.SendWebRequest();
 
         if (uwr.isNetworkError)
