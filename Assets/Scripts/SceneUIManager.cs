@@ -357,45 +357,7 @@ public class SceneUIManager : MonoBehaviour
     public int getNivel(){
         return nivelSeleccionado;
     }
-    //<summary>
-    //Orden para enviar datos
-    //user
-    //email
-    //pass
-    //<summary>
-
-    public void submitLogin()
-    {
-
-        if (m_PasswordInputLogin.text == "" || m_UserInputLogin.text == "")
-        {
-            m_ErrorText.text = "Error 444: Verifica que ningun campo este vacio";
-            return;
-        }
-
-        m_NetworkManager.LoginUser(m_UserInputLogin.text, m_PasswordInputLogin.text, delegate (Response response)
-        {
-            m_ErrorText.text = "Logueando espere un momento";
-            m_ErrorText.text = response.message;
-
-            if (response.done)
-            {
-                if (toggleSesion.isOn)
-                {
-                    PlayerPrefs.SetString("SavePasswordToggle_Data", m_PasswordInputLogin.text);
-                    PlayerPrefs.SetString("SaveUserToggle_Data", m_UserInputLogin.text);
-                    var valueSave = Convert.ToInt32(toggleSesion.isOn);
-                    PlayerPrefs.SetInt("toggleIsOn", valueSave);
-                }
-
-                        // m_LoguinUI.SetActive(false);
-                        //m_PerfilNiñoUI.SetActive(true);
-                    }
-        });
-        //m_LoguinUI.SetActive(false);
-        //m_PerfilNiñoUI.SetActive(true);
-    }
-
+    
 	#region Logout
     [Header("Confirm Logout")]
     [SerializeField] private GameObject ConfirmPopup;
