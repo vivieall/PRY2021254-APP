@@ -7,6 +7,8 @@ public class PersistanceHandler : MonoBehaviour {
     private static PersistanceHandler handlerInstance;
     private int UIState;
     private int ActivityNum;
+    private int Nivel;
+    private string IdChild;
     void Start() {
         /*UIStates:
          * 0 -> Login Screen
@@ -26,10 +28,16 @@ public class PersistanceHandler : MonoBehaviour {
         }
     }
     void Update() { }
+    
     public void PlayActivity(int scenenum,int activitynum){
         ActivityNum = activitynum;
         SceneManager.LoadScene(scenenum);
     }
+    public void SetInfo(int nivel, string idChild){
+        Nivel = nivel;
+        IdChild = idChild;
+    }
+
     public void ReturnToUI(int NUM){
         UIState = NUM;
         SceneManager.LoadScene(0);
@@ -44,5 +52,13 @@ public class PersistanceHandler : MonoBehaviour {
     public int GetActivityNum()
     {
         return ActivityNum;
+    }
+
+    public int GetNivel(){
+        return Nivel;
+    }
+    public string GetIdChild()
+    {
+        return IdChild;
     }
 }

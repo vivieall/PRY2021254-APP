@@ -1,6 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Networking;
+using System;
+using System.Text;
+using System;
+using System.Linq; 
+
 
 public class ActivityManager : MonoBehaviour
 {
@@ -21,6 +28,7 @@ public class ActivityManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(ActivityNum);
         //Handler is searched when the scene is loads, PersistantObject is an object that carries on from the master scene
         Handler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
         ActivityNum = Handler.GetActivityNum();
@@ -74,6 +82,10 @@ public class ActivityManager : MonoBehaviour
     public void TriggerSuccess()
     {
         print("Activity is done");
+        CallRecordLevelApi(Int32.Parse(Handler.GetIdChild()), Handler.GetNivel(), delegate (levelRecord response)
+        {
+            //correcto
+        });   
         ActivityHandler(ActivityNum).SetActive(false);
         CompletelvlScreen.SetActive(true);
     }
@@ -98,5 +110,42 @@ public class ActivityManager : MonoBehaviour
     public int GetCurrActivityNum()
     {
         return ActivityNum;
+    }
+
+    private class levelRecord
+    {
+        public int idChild;
+        public int idLevel;
+        public bool successful;
+    }
+    private void CallRecordLevelApi(int idChild, int idLevel, Action<levelRecord> response)
+    {
+        levelRecord lr = new levelRecord();
+        lr.idChild = idChild;
+        lr.idLevel = idLevel;
+        lr.successful = true;
+        string json = JsonUtility.ToJson(lr);
+        StartCoroutine(PostRecordLevel("https://teapprendo.herokuapp.com/levelRecords/create", json, response));
+    }
+
+    IEnumerator PostRecordLevel(string url, string json, Action<levelRecord> response)
+    {
+        var uwr = new UnityWebRequest(url, "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
+        uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        uwr.SetRequestHeader("Content-Type", "application/json");
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + uwr.downloadHandler.text);
+            response(JsonUtility.FromJson<levelRecord>(uwr.downloadHandler.text));
+        }
     }
 }
