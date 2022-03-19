@@ -1,6 +1,5 @@
 {
-  "dependencies": {
-    "com.google.external-dependency-manager": "file:../GooglePackages/com.google.external-dependency-manager-1.2.167.tgz",
+  "dependencies": { 
     "com.ptc.vuforia.engine": "8.5.9",
     "com.unity.2d.animation": "3.2.14",
     "com.unity.2d.pixel-perfect": "2.1.0",
