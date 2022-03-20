@@ -878,7 +878,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.31300002}
-  m_AnchoredPosition: {x: 0, y: 7.1512}
+  m_AnchoredPosition: {x: 0, y: -0.000045776367}
   m_SizeDelta: {x: -71.18628, y: 14.302391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &233101958
@@ -913,7 +913,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Coloca en la pizarra cu\xE1ntas botellas hay"
+  m_Text: "Coloca en la pizarra el n\xFAmero de botellas"
 --- !u!222 &233101959
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2129,8 +2129,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.15200001, y: 0.40150616}
   m_AnchorMax: {x: 0.846, y: 0.90800005}
-  m_AnchoredPosition: {x: 35, y: 0.000019073486}
-  m_SizeDelta: {x: -0.000061035156, y: 0.000076293945}
+  m_AnchoredPosition: {x: 27, y: -8.0228}
+  m_SizeDelta: {x: -72.39377, y: -16.045593}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &838684020
 MonoBehaviour:
@@ -2164,7 +2164,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xBFCu\xE1ntas vemos?"
+  m_Text: "\xBFCu\xE1ntas botellas hay?"
 --- !u!222 &838684021
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2372,8 +2372,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.021000002, y: 0.40150616}
   m_AnchorMax: {x: 0.102000006, y: 0.90800005}
-  m_AnchoredPosition: {x: 27, y: -0.000011444092}
-  m_SizeDelta: {x: 34.50486, y: 0.00012207031}
+  m_AnchoredPosition: {x: 43.1, y: -4}
+  m_SizeDelta: {x: 2.3298416, y: -8.045532}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &949453450
 MonoBehaviour:
@@ -2461,7 +2461,7 @@ MonoBehaviour:
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -4763,7 +4763,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1893823144
 RectTransform:
   m_ObjectHideFlags: 0

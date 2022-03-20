@@ -1440,8 +1440,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.021000002, y: 0.40150616}
   m_AnchorMax: {x: 0.102000006, y: 0.90800005}
-  m_AnchoredPosition: {x: 27, y: -0.000011444092}
-  m_SizeDelta: {x: 34.50486, y: 0.00012207031}
+  m_AnchoredPosition: {x: 42.071, y: -0.000011444092}
+  m_SizeDelta: {x: 4.3624344, y: 0.00012207031}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!61 &590171991
 BoxCollider2D:
@@ -1934,7 +1934,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xBFQue planeta es?"
+  m_Text: Identifica la imagen con la palabra correcta
 --- !u!222 &929354307
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2362,7 +2362,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1011337805
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3227,7 +3227,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.17, y: 0.40150616}
   m_AnchorMax: {x: 0.846, y: 0.90800005}
-  m_AnchoredPosition: {x: 5.626007, y: 0.000019073486}
+  m_AnchoredPosition: {x: 24, y: 0.000019073486}
   m_SizeDelta: {x: -11.252014, y: 0.000076293945}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1432818167
@@ -3262,7 +3262,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Ciencia
+  m_Text: Conociendo el Sistema Solar
 --- !u!222 &1432818168
 CanvasRenderer:
   m_ObjectHideFlags: 0

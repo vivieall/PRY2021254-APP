@@ -399,8 +399,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.021000002, y: 0.40150616}
   m_AnchorMax: {x: 0.102000006, y: 0.90800005}
-  m_AnchoredPosition: {x: 27, y: -0.000011444092}
-  m_SizeDelta: {x: 34.50486, y: 0.00012207031}
+  m_AnchoredPosition: {x: 42.071, y: -4}
+  m_SizeDelta: {x: 4.3624344, y: -21.454967}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!61 &217000020
 BoxCollider2D:
@@ -1275,8 +1275,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.15200001, y: 0.40150616}
   m_AnchorMax: {x: 0.846, y: 0.90800005}
-  m_AnchoredPosition: {x: 26.1, y: 0.000019073486}
-  m_SizeDelta: {x: -0.000061035156, y: 0.000076293945}
+  m_AnchoredPosition: {x: 38.7, y: -7.3637}
+  m_SizeDelta: {x: -41.559418, y: -14.727486}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &567771989
 MonoBehaviour:
@@ -1310,7 +1310,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Personal Social
+  m_Text: Identificando emociones
 --- !u!222 &567771990
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2437,8 +2437,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.31300002}
-  m_AnchoredPosition: {x: 0, y: 4.4693985}
-  m_SizeDelta: {x: -110.01996, y: 8.938808}
+  m_AnchoredPosition: {x: 15.600006, y: -0.000030517578}
+  m_SizeDelta: {x: -178.39185, y: -0.00004196167}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1297045709
 MonoBehaviour:
@@ -2472,7 +2472,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xBFC\xF3mo se siente el ni\xF1o?"
+  m_Text: "Se\xF1ala ni\xF1o hasta la palabra correcta"
 --- !u!222 &1297045710
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3957,7 +3957,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.39800003, y: 0}
   m_AnchorMax: {x: 0.5991663, y: 1}
-  m_AnchoredPosition: {x: 0.000015258789, y: 0.000007867813}
+  m_AnchoredPosition: {x: 0.000015258789, y: 0.0000076293945}
   m_SizeDelta: {x: -0.000030517578, y: -10.167603}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1885704273
@@ -4366,7 +4366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1946337583
 RectTransform:
   m_ObjectHideFlags: 0
