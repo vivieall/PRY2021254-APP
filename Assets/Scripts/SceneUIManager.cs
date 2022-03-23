@@ -394,6 +394,7 @@ public class SceneUIManager : MonoBehaviour
         CallLoginApi(m_InputUsuarioLogin.text, m_InputContrasenaLogin.text, delegate (LoginResponse response)
         {
             m_ErrorTextLogin.text = "Validando, espere un momento";
+            //PlayerPrefs.DeleteAll();
             Debug.Log("Validando...");
 
             if (response.idGuardian != null) 
