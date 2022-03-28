@@ -35,6 +35,13 @@ public class SceneSwitcher : MonoBehaviour
     {
         Handler.ReturnToUI(scenType);
     }
+
+    public void levelCompleted(int scenType)
+    {
+        //AGREGAR
+        Handler.ReturnToUI(scenType);
+    }
+
     public void BackHome()
     {
         Handler.MainMenu();
