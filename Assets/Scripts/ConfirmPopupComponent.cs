@@ -10,8 +10,16 @@ public class ConfirmPopupComponent : MonoBehaviour
     public UnityEvent OnAccept;
     public UnityEvent OnDecline;
 
-	public void ExecuteOnAccept() { OnAccept.Invoke(); gameObject.SetActive(false); }
-	public void ExecuteOnDecline() { OnDecline.Invoke(); gameObject.SetActive(false); }
+	public void ExecuteOnAccept() {
+		Debug.Log("HERE ACCEPT");
+		OnAccept.Invoke();
+		gameObject.SetActive(false);
+	}
+	public void ExecuteOnDecline() {
+		Debug.Log("HERE DECLINE");
+		OnDecline.Invoke();
+		gameObject.SetActive(false);
+	}
 
 	public void SetConfirmationText(string text) { TextOnScreen.text = text; }
 

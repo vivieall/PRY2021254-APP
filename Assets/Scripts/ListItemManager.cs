@@ -12,6 +12,7 @@ public class ListItemManager : MonoBehaviour
 	[SerializeField] public Text text;
 	[SerializeField] public Color inListAddColor;
 	private Color originalAddColor;
+	public GameObject itemToAdd;
 
 	private void Awake() {
 		// Id = Random.Range(int.MinValue, int.MaxValue);
@@ -39,12 +40,20 @@ public class ListItemManager : MonoBehaviour
 
 	public void ResetButtons()
 	{
-		if (ListManager)
+		/*if (ListManager)
 		{
 			bool inList = ListManager.ListContains(gameObject);
 			AddButton.GetComponent<Button>().image.color = inList ? inListAddColor : originalAddColor;
 			SetEditMode(false);
 		}
-		else Debug.Log(name + " does not have a ListManager");
+		else Debug.Log(name + " does not have a ListManager");*/
+	}
+
+	public void setRemoveButtonActiveStatus(bool statusActive) {
+		RemoveButton.SetActive(statusActive);
+	}
+
+	public void setAddButtonActiveStatus(bool statusActive) {
+		AddButton.SetActive(statusActive);
 	}
 }

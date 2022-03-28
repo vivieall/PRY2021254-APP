@@ -34,6 +34,7 @@ public class ListManager : MonoBehaviour
     [SerializeField] private ArrayList ListItems = null;
     [SerializeField] private GameObject ContentPanel = null;
 	[SerializeField] private GameObject ConfirmPopup = null;
+		[SerializeField] private GameObject informationPopup = null;
     //[SerializeField] private GameObject ListItemPrefab = null;
 	[SerializeField] private string ListName = "Lista Personalizada";
 	[SerializeField] private bool allowDuplicates = false;
@@ -60,7 +61,7 @@ public class ListManager : MonoBehaviour
 			confirmComp.OnDecline.AddListener(DenyCreateList);
 			ConfirmPopup.SetActive(true); 
 		}
-		else SceneManager.ShowUI(ListUI);
+		SceneManager.ShowUI(ListUI);
 	}
 
 	public void ConfirmCreateList() { 
@@ -103,6 +104,7 @@ public class ListManager : MonoBehaviour
 		{
 			RemoveItem(PendingItem);
 			SetEditMode(false);
+			informationPopup.SetActive(true);
 		}
 	} 
 
@@ -125,18 +127,30 @@ public class ListManager : MonoBehaviour
 		if (!item)
 			return false;
 
-        if (allowDuplicates || !ListItems.Contains(item)) {
-			GameObject newItem = Instantiate(go);
-			ListItemManager lim = GetItemManager(newItem);
+        if (allowDuplicates || !ListContains(go)) {
+			GameObject newItem = Instantiate(item.itemToAdd);
+			ListItemManager lim = GetItemManager(go);
 			if (lim.ListManager == null)
 				Debug.Log("LIM LIST MANAGER NULL");
 			lim.ListManager = this;
+
+			foreach(Transform child in newItem.transform) {
+				ListItemManager childLim = GetItemManager(child.gameObject);
+				if (childLim != null) {
+					childLim.ListManager = this;
+					childLim.setRemoveButtonActiveStatus(true);
+					childLim.setAddButtonActiveStatus(false);
+				} 
+			}
+
 			newItem.transform.SetParent(ContentPanel.transform);
-			newItem.transform.localScale = Vector3.one;
+			newItem.transform.localScale = 1.3F * Vector3.one;
 			ListItems.Add(new ItemStruct(lim, newItem));
-			item.ResetButtons();
-			return true;
+
+			SceneUIManager sceneUIManager = Camera.main.GetComponent<SceneUIManager>();
+			sceneUIManager.AddFavoriteLevel();
 		}
+
 		return false;
 	}
 	#endregion
@@ -147,10 +161,13 @@ public class ListManager : MonoBehaviour
 
     public bool RemoveItem_internal(ListItemManager item)
 	{
-        if (item && ListItems.Contains(item)) {
-			int i = ListItems.IndexOf(item);
-			Destroy(item.gameObject);
+        if (item && ListContains(item.gameObject)) {
+			int i = ListIndexOf(item.gameObject);
+			Destroy(GetItemManager(item.gameObject).itemToAdd);
 			ListItems.RemoveAt(i);
+			SceneUIManager sceneUIManager = Camera.main.GetComponent<SceneUIManager>();
+			sceneUIManager.DeleteFavoriteLevel(item.Id);
+
 			return true;
 		}
 		return false;
@@ -169,12 +186,25 @@ public class ListManager : MonoBehaviour
 		if (ListItems == null)
 			ListItems = new ArrayList();
 		ListItemManager lim = GetItemManager(item);
+
 		foreach(ItemStruct itemStruct in ListItems)
 		{
-			if (itemStruct.item.Id == lim.Id)
+			if (itemStruct.button.GetComponentInChildren<BotonNivel>().id == lim.itemToAdd.GetComponentInChildren<BotonNivel>().id)
 				return true;
 		}
 		return false;
+	}
+	public int ListIndexOf(GameObject item) {
+		if (ListItems == null)
+			ListItems = new ArrayList();
+		ListItemManager lim = GetItemManager(item);
+
+		for (int i = 0; i < ListItems.Count; i++) {
+			if (((ItemStruct) ListItems[i]).button == lim.itemToAdd)
+				return i;
+		}
+
+		return -1;
 	}
 	#endregion
 

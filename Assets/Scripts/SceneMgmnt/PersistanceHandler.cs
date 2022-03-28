@@ -8,6 +8,7 @@ public class PersistanceHandler : MonoBehaviour {
     private int UIState;
     private int ActivityNum;
     private int Nivel;
+    private GameObject NivelGameObject;
     private string IdChild;
     void Start() {
         /*UIStates:

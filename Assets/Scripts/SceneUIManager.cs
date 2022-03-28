@@ -153,6 +153,11 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_PasswordSpecialist;
     #endregion
 
+    #region Lists
+    [Header("Lists Managers")]
+    [SerializeField] private ListManager favoritesListManager;
+    #endregion
+
     //private bool sesionIniciada;
     private string id_guardian;
     private string nivelAutismoChild;
@@ -168,7 +173,7 @@ public class SceneUIManager : MonoBehaviour
     private int cantNinos;
     private ChildDataResponse[] ninosGuardian = { };
     private ChildDataResponse loggedChild;
-
+    private Level[] loggedChildFavoriteLevels;
     void Start()
     {
         AllUIs = new ArrayList();
@@ -522,6 +527,14 @@ public class SceneUIManager : MonoBehaviour
     {
         loggedChild = ninosGuardian[idx];
         m_BienvenidaNino.text = "Hola, " + loggedChild.names + "!";
+
+        CallGetChildrenFavoriteLevelsApi(Int32.Parse(loggedChild.idChild), delegate (Level[] response)
+        {
+            Debug.Log(response);
+            loggedChildFavoriteLevels = response;
+            PopulateFavoriteLevels();
+        });
+
         for(int i = 0; i < loggedChild.symptoms.Length; i++){
             checkBoxSintomasUpdate[loggedChild.symptoms[i].idSymptom - 1].isOn = true;
             sintomasUpdate[loggedChild.symptoms[i].idSymptom - 1] = true;
@@ -1092,6 +1105,33 @@ public class SceneUIManager : MonoBehaviour
     }
 
     [Serializable]
+    private class AddLevelDto {
+        public int idChild;
+        public int idLevel; 
+    }
+
+    [Serializable]
+    private class Level {
+        public int idLevel;
+        public string description;
+        public Topic topic;
+        public string video;
+    }
+
+    [Serializable]
+    private class Topic {
+        public int idTopic;
+        public string description;
+        public Category category;
+    }
+
+    [Serializable]
+    private class Category {
+        public int idCategory;
+        public string description;
+    }
+
+    [Serializable]
     private class Symptom {
         public int idSymptom;
         public string description;
@@ -1108,6 +1148,125 @@ public class SceneUIManager : MonoBehaviour
         public string lastNames;
         public string username;
         public string password;
+    }
+
+    private void PopulateFavoriteLevels() {
+        BotonNivel[] botonesNiveles = Resources.FindObjectsOfTypeAll<BotonNivel>();
+        //ListItemManager[] listItemManagers = Resources.FindObjectsOfTypeAll<ListItemManager>();
+        IEnumerable<int> childFavoriteLevelsIds = loggedChildFavoriteLevels.Select(nivel => nivel.idLevel);
+
+        foreach(BotonNivel botonNivel in botonesNiveles) {
+            if (childFavoriteLevelsIds.Contains(botonNivel.id)) {
+                ListItemManager listItemManager = botonNivel.gameObject.GetComponent<ListItemManager>();
+                favoritesListManager.AddItem(listItemManager);
+            }
+        }
+    }
+
+    public void AddFavoriteLevel()
+    {
+        CallAddFavoriteLevelApi(Int32.Parse(loggedChild.idChild), nivelSeleccionado, delegate (DefaultResponse response)
+        {
+            Debug.Log(response);
+        });
+    }
+
+    public void DeleteFavoriteLevel(int levelId)
+    {
+        CallDeleteFavoriteLevelApi(Int32.Parse(loggedChild.idChild), levelId, delegate (DefaultResponse response)
+        {
+            Debug.Log(response);
+        });
+    }
+
+    private void CallAddFavoriteLevelApi(int idChild, int idLevel, Action<DefaultResponse> response)
+    {
+        AddLevelDto addLevelDto = new AddLevelDto();
+        addLevelDto.idChild = idChild;
+        addLevelDto.idLevel = idLevel;
+        string json = JsonUtility.ToJson(addLevelDto);
+        Debug.Log(json);
+        StartCoroutine(AddFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/addFavoriteLevel", json, response));
+    }
+
+    private void CallDeleteFavoriteLevelApi(int idChild, int idLevel, Action<DefaultResponse> response)
+    {
+        AddLevelDto addLevelDto = new AddLevelDto();
+        addLevelDto.idChild = idChild;
+        addLevelDto.idLevel = idLevel;
+        string json = JsonUtility.ToJson(addLevelDto);
+        Debug.Log(json);
+        StartCoroutine(DeleteFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/deleteFavoriteLevel", json, response));
+    }
+
+    private void CallGetChildrenFavoriteLevelsApi(int idChild, Action<Level[]> response)
+    {
+        StartCoroutine(GetChildrenFavoriteLevels("https://teapprendo.herokuapp.com/children/listFavoriteLevels?idChild=" + idChild, response));
+    }
+
+    IEnumerator AddFavoriteLevelRequest(string url, string json, Action<DefaultResponse> response)
+    {
+        var uwr = new UnityWebRequest(url, "POST");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
+        uwr.uploadHandler = (UploadHandler) new UploadHandlerRaw(jsonToSend);
+        uwr.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+        uwr.SetRequestHeader("Content-Type", "application/json");
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + uwr.downloadHandler.text);
+            response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
+        }
+    }
+
+    IEnumerator DeleteFavoriteLevelRequest(string url, string json, Action<DefaultResponse> response)
+    {
+        var uwr = new UnityWebRequest(url, "DELETE");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
+        uwr.uploadHandler = (UploadHandler) new UploadHandlerRaw(jsonToSend);
+        uwr.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+        uwr.SetRequestHeader("Content-Type", "application/json");
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + uwr.downloadHandler.text);
+            response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
+        }
+    }
+
+    IEnumerator GetChildrenFavoriteLevels(string url, Action<Level[]> response)
+    {
+        UnityWebRequest uwr = UnityWebRequest.Get(url);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            response(JsonHelper.FromJson<Level>(fixJson(uwr.downloadHandler.text)));
+        }
     }
 
     private void CallRegisterChildApi(string guardian_id, string names, string lastnames, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildDataResponse> response)
@@ -1268,6 +1427,9 @@ public class SceneUIManager : MonoBehaviour
         return value;
     }
 
+    private void testDC() {
+        Console.WriteLine("THIS IS A TEST");
+    }
 }
 
 public static class JsonHelper
