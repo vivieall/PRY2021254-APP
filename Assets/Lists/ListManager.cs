@@ -1,76 +1,65 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class ListManager : MonoBehaviour
 {
-	public struct ItemStruct
-	{
-		public ListItemManager item;
-		public GameObject button;
-
-		public ItemStruct(GameObject _button)
-		{
-			this.item = GetItemManager(_button);
-			this.button = _button;
-		}
-		public ItemStruct(ListItemManager _item, GameObject _button)
-		{
-			this.item = _item;
-			this.button = _button;
-		}
-
-		public override bool Equals(object obj)
-		{
-			ListItemManager other = obj as ListItemManager;
-			return other ? (item.Id == other.Id) : false;
-		}
-		public override int GetHashCode() { return item.Id; }
-	};
-
 	[SerializeField] private GameObject ListUI;
 	[SerializeField] private SceneUIManager SceneManager;
-    [SerializeField] private ArrayList ListItems = null;
+    [SerializeField] private List<ListItem> items = new List<ListItem>();
     [SerializeField] private GameObject ContentPanel = null;
-	[SerializeField] private GameObject ConfirmPopup = null;
-		[SerializeField] private GameObject informationPopup = null;
-    //[SerializeField] private GameObject ListItemPrefab = null;
-	[SerializeField] private string ListName = "Lista Personalizada";
+	[SerializeField] private GameObject InformationPopup = null;
+	[SerializeField] public string Name = "Lista Personalizada";
 	[SerializeField] private bool allowDuplicates = false;
 	[SerializeField] private bool bConfirmCreateList = false;
 
-	private ListItemManager PendingItem = null;
 	private bool PendingOperationType; // true for add, false for delete
-	private bool bIsInEditMode = false; 
+	private bool bIsInEditMode = false;
 	private bool bWasListCreated = false;
 
-	public static ListItemManager GetItemManager(GameObject go) { return go ? go.GetComponent<ListItemManager>() : null; }
-	private void Awake() { if (ListItems == null) ListItems = new ArrayList(); }
-	public void OnEnable() { SetEditMode(false); }
+	public void OnEnable() { /*SetEditMode(false);*/ }
 
-	#region UI_Interactions_CreateList
+	public ListItem Add(ListItem listItem)
+	{
+		ListItem listItemInstance = Instantiate(listItem);
+		listItemInstance.transform.SetParent(ContentPanel.transform);
+		listItemInstance.transform.localScale = 1.3F * Vector3.one;
+		listItemInstance.listManager = this;
+		listItemInstance.ProcessAdditionToList(SceneManager);
+		items.Add(listItemInstance);
+		return listItemInstance;
+	}
+
+	public void Remove(ListItem listItem) {
+		items.Remove(listItem);
+		Destroy(listItem.gameObject);
+	}
+
+	/*#region UI_Interactions_CreateList
 	public void PromptCreateList()
 	{
 		if (bConfirmCreateList && !bWasListCreated)
 		{
 			ConfirmPopupComponent confirmComp = ConfirmPopup.GetComponent<ConfirmPopupComponent>();
-			confirmComp.SetConfirmationText("¿Desea crear una " + ListName + "?");
+			confirmComp.SetConfirmationText("¿Desea crear una " + Name + "?");
 			confirmComp.ClearAllEvents();
 			confirmComp.OnAccept.AddListener(ConfirmCreateList);
 			confirmComp.OnDecline.AddListener(DenyCreateList);
-			ConfirmPopup.SetActive(true); 
+			ConfirmPopup.gameObject.SetActive(true); 
 		}
 		SceneManager.ShowUI(ListUI);
 	}
 
 	public void ConfirmCreateList() { 
 		bWasListCreated = true; 
-		ConfirmPopup.SetActive(false); 
+		ConfirmPopup.gameObject.SetActive(false); 
 		SceneManager.ShowUI(ListUI); 
 	}
 
-	public void DenyCreateList() { ConfirmPopup.SetActive(false); }
+	public void DenyCreateList() { ConfirmPopup.gameObject.SetActive(false); }
 	#endregion
 
 	#region UI_Interactions_Main
@@ -104,7 +93,7 @@ public class ListManager : MonoBehaviour
 		{
 			RemoveItem(PendingItem);
 			SetEditMode(false);
-			informationPopup.SetActive(true);
+			InformationPopup.SetActive(true);
 		}
 	} 
 
@@ -206,6 +195,6 @@ public class ListManager : MonoBehaviour
 
 		return -1;
 	}
-	#endregion
+	#endregion*/
 
 }

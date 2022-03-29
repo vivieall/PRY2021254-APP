@@ -3469,7 +3469,16 @@ MonoBehaviour:
   RemoveButton: {fileID: 1138464015}
   Id: 7
   text: {fileID: 0}
-  inListAddColor: {r: 0, g: 0, b: 0, a: 0}
+  inListAddColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
+  originalAddColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
   itemToAdd: {fileID: 2025357479}
 --- !u!114 &112123165
 MonoBehaviour:
@@ -13413,6 +13422,32 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 358602512}
   m_CullTransparentMesh: 0
+--- !u!1 &362489744 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3775268806279506220, guid: 820317a245c05ac4188c77fe8d94f8bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 722328736}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &362489745
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 362489744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdf4423b5255bad4dbea26fb278b4335, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ListUI: {fileID: 383662997}
+  SceneManager: {fileID: 519420030}
+  items: []
+  ContentPanel: {fileID: 1182581914}
+  InformationPopup: {fileID: 0}
+  Name: Lista Personalizada
+  allowDuplicates: 0
+  bConfirmCreateList: 0
 --- !u!1 &364918842
 GameObject:
   m_ObjectHideFlags: 0
@@ -17271,12 +17306,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 588562888}
-        m_MethodName: PromptCreateList
-        m_Mode: 1
+      - m_Target: {fileID: 519420030}
+        m_MethodName: ShowUI
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 383662997}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -18993,8 +19028,8 @@ MonoBehaviour:
   m_ErrorTextLogin: {fileID: 2122040142}
   m_UsernameSpecialist: {fileID: 157224647}
   m_PasswordSpecialist: {fileID: 982685811}
-  favoritesListManager: {fileID: 588562888}
-  ConfirmPopup: {fileID: 1141556384}
+  favoritesListManager: {fileID: 362489745}
+  ConfirmPopup: {fileID: 1141556386}
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -22021,18 +22056,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 588486798}
   m_CullTransparentMesh: 0
---- !u!114 &588562888 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3775268806279506221, guid: 820317a245c05ac4188c77fe8d94f8bd,
-    type: 3}
-  m_PrefabInstance: {fileID: 722328736}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d09d638b671be44fb1559b1a920ddaa, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &590707927
 GameObject:
   m_ObjectHideFlags: 0
@@ -23777,7 +23800,7 @@ PrefabInstance:
         type: 3}
       propertyPath: ListManager
       value: 
-      objectReference: {fileID: 588562888}
+      objectReference: {fileID: 0}
     - target: {fileID: 6449769716926678935, guid: 11f42efc442760b47a0b4fb97bac5165,
         type: 3}
       propertyPath: m_IsActive
@@ -27430,7 +27453,7 @@ PrefabInstance:
     - target: {fileID: 201326631713898229, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: -822.5328
+      value: -867.1763
       objectReference: {fileID: 0}
     - target: {fileID: 201326631713898229, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
@@ -27455,7 +27478,7 @@ PrefabInstance:
     - target: {fileID: 201326631713898229, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 411.3
+      value: 0.0064086914
       objectReference: {fileID: 0}
     - target: {fileID: 2469689278269062976, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
@@ -27745,7 +27768,8 @@ PrefabInstance:
       propertyPath: m_PreserveAspect
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3775268806279506221, guid: 820317a245c05ac4188c77fe8d94f8bd, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 820317a245c05ac4188c77fe8d94f8bd, type: 3}
 --- !u!1 &722545855
 GameObject:
@@ -31137,11 +31161,41 @@ PrefabInstance:
         type: 3}
       propertyPath: ListManager
       value: 
-      objectReference: {fileID: 588562888}
+      objectReference: {fileID: 0}
     - target: {fileID: 6449769716926678935, guid: 11f42efc442760b47a0b4fb97bac5165,
         type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244322046376201920, guid: 11f42efc442760b47a0b4fb97bac5165,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244322046376201920, guid: 11f42efc442760b47a0b4fb97bac5165,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 519420030}
+    - target: {fileID: 7244322046376201920, guid: 11f42efc442760b47a0b4fb97bac5165,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244322046376201920, guid: 11f42efc442760b47a0b4fb97bac5165,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: AddFavoriteLevel
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244322046376201920, guid: 11f42efc442760b47a0b4fb97bac5165,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgument
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7244322046376201920, guid: 11f42efc442760b47a0b4fb97bac5165,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 8186913263904711102, guid: 11f42efc442760b47a0b4fb97bac5165,
         type: 3}
@@ -33777,7 +33831,7 @@ PrefabInstance:
         type: 3}
       propertyPath: ListManager
       value: 
-      objectReference: {fileID: 588562888}
+      objectReference: {fileID: 0}
     - target: {fileID: 6449769716926678935, guid: 11f42efc442760b47a0b4fb97bac5165,
         type: 3}
       propertyPath: m_IsActive
@@ -35393,7 +35447,6 @@ GameObject:
   - component: {fileID: 948244343}
   - component: {fileID: 948244342}
   - component: {fileID: 948244345}
-  - component: {fileID: 948244346}
   m_Layer: 5
   m_Name: SumasBotton
   m_TagString: Untagged
@@ -35537,25 +35590,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   id: 1
---- !u!114 &948244346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948244340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ded5c7d4b96234db79f81ed3243761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ListManager: {fileID: 2068912406}
-  AddButton: {fileID: 973705705}
-  RemoveButton: {fileID: 1322383910}
-  Id: 1
-  text: {fileID: 0}
-  inListAddColor: {r: 0, g: 0, b: 0, a: 0}
-  itemToAdd: {fileID: 1419334322}
 --- !u!1 &950671983
 GameObject:
   m_ObjectHideFlags: 0
@@ -36596,7 +36630,16 @@ MonoBehaviour:
   RemoveButton: {fileID: 1594615056}
   Id: 10
   text: {fileID: 0}
-  inListAddColor: {r: 0, g: 0, b: 0, a: 0}
+  inListAddColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
+  originalAddColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
   itemToAdd: {fileID: 1014423193}
 --- !u!114 &971669715
 MonoBehaviour:
@@ -36692,7 +36735,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 948244346}
+      - m_Target: {fileID: 0}
         m_MethodName: PromptAddToList
         m_Mode: 1
         m_Arguments:
@@ -42589,7 +42632,7 @@ PrefabInstance:
         type: 3}
       propertyPath: ListManager
       value: 
-      objectReference: {fileID: 588562888}
+      objectReference: {fileID: 0}
     - target: {fileID: 6449769716926678935, guid: 11f42efc442760b47a0b4fb97bac5165,
         type: 3}
       propertyPath: m_IsActive
@@ -43709,6 +43752,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4702679399685376019}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1141556386 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4702679400691371185, guid: 964506ef45e98cf478ab5f85b4c043f4,
+    type: 3}
+  m_PrefabInstance: {fileID: 4702679399685376019}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1141556384}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e44c5ba5574098143bffe16be80a0567, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1146354639
 GameObject:
   m_ObjectHideFlags: 0
@@ -44376,7 +44431,16 @@ MonoBehaviour:
   RemoveButton: {fileID: 172647615}
   Id: 4
   text: {fileID: 0}
-  inListAddColor: {r: 0, g: 0, b: 0, a: 0}
+  inListAddColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
+  originalAddColor:
+    r: 0
+    g: 0
+    b: 0
+    a: 0
   itemToAdd: {fileID: 2099236865}
 --- !u!114 &1150302845
 MonoBehaviour:
@@ -49413,7 +49477,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 948244346}
+      - m_Target: {fileID: 0}
         m_MethodName: PromptRemoveFromList
         m_Mode: 1
         m_Arguments:
@@ -52423,6 +52487,8 @@ GameObject:
   - component: {fileID: 1419334323}
   - component: {fileID: 1419334325}
   - component: {fileID: 1419334324}
+  - component: {fileID: 1419334327}
+  - component: {fileID: 1419334326}
   m_Layer: 5
   m_Name: ZonaFillasBotton (1)
   m_TagString: Untagged
@@ -52487,6 +52553,37 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419334322}
   m_CullTransparentMesh: 0
+--- !u!114 &1419334326
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419334322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49fcb5c295c18f34aa38d2fc83da01ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  listManager: {fileID: 0}
+  addButton: {fileID: 973705705}
+  removeButton: {fileID: 1322383910}
+  text: {fileID: 0}
+  inListAddColor: {r: 0, g: 0, b: 0, a: 0}
+--- !u!114 &1419334327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419334322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 700547202e35c7647b5c513a915e150f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  levelId: 1
+  listItem: {fileID: 1419334326}
 --- !u!1 &1426385868
 GameObject:
   m_ObjectHideFlags: 0

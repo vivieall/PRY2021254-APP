@@ -174,6 +174,8 @@ public class SceneUIManager : MonoBehaviour
     private ChildDataResponse[] ninosGuardian = { };
     private ChildDataResponse loggedChild;
     private Level[] loggedChildFavoriteLevels;
+    private LevelButtonListItem[] levelButtonListItems;
+
     void Start()
     {
         AllUIs = new ArrayList();
@@ -255,6 +257,8 @@ public class SceneUIManager : MonoBehaviour
                 ShowUI(m_Chooselvl_ScienceUI);
                 break;
         }
+
+        levelButtonListItems = Resources.FindObjectsOfTypeAll<LevelButtonListItem>();
     }
 
 
@@ -365,19 +369,18 @@ public class SceneUIManager : MonoBehaviour
     
 	#region Logout
     [Header("Confirm Logout")]
-    [SerializeField] private GameObject ConfirmPopup;
+    [SerializeField] private ConfirmPopupComponent ConfirmPopup;
     public void PromptLogout()
 	{
-        ConfirmPopupComponent confirmComp = ConfirmPopup.GetComponent<ConfirmPopupComponent>();
-        confirmComp.ClearAllEvents();
-        confirmComp.OnAccept.AddListener(OnLogoutConfirm);
-        confirmComp.OnDecline.AddListener(OnLogoutDeny);
-        confirmComp.SetConfirmationText("¿Desea cerrar sesión?");
-        ConfirmPopup.SetActive(true);
+        ConfirmPopup.ClearAllEvents();
+        ConfirmPopup.OnAccept.AddListener(OnLogoutConfirm);
+        ConfirmPopup.OnDecline.AddListener(OnLogoutDeny);
+        ConfirmPopup.SetConfirmationText("¿Desea cerrar sesión?");
+        ConfirmPopup.gameObject.SetActive(true);
 	}
 
-    public void OnLogoutConfirm() { ConfirmPopup.SetActive(false); logout(); }
-    public void OnLogoutDeny() { ConfirmPopup.SetActive(false); }
+    public void OnLogoutConfirm() { ConfirmPopup.gameObject.SetActive(false); logout(); }
+    public void OnLogoutDeny() { ConfirmPopup.gameObject.SetActive(false); }
 
 	public void logout()
     {
@@ -1155,28 +1158,31 @@ public class SceneUIManager : MonoBehaviour
         //ListItemManager[] listItemManagers = Resources.FindObjectsOfTypeAll<ListItemManager>();
         IEnumerable<int> childFavoriteLevelsIds = loggedChildFavoriteLevels.Select(nivel => nivel.idLevel);
 
-        foreach(BotonNivel botonNivel in botonesNiveles) {
+        /*foreach(BotonNivel botonNivel in botonesNiveles) {
             if (childFavoriteLevelsIds.Contains(botonNivel.id)) {
                 ListItemManager listItemManager = botonNivel.gameObject.GetComponent<ListItemManager>();
                 favoritesListManager.AddItem(listItemManager);
             }
-        }
+        }*/
     }
 
     public void AddFavoriteLevel()
     {
-        CallAddFavoriteLevelApi(Int32.Parse(loggedChild.idChild), nivelSeleccionado, delegate (DefaultResponse response)
-        {
-            Debug.Log(response);
-        });
+        ConfirmPopup.ConfirmOperation("¿Desea añadir este nivel a " + favoritesListManager.Name + "?", () => {
+            CallAddFavoriteLevelApi(Int32.Parse(loggedChild.idChild), nivelSeleccionado, delegate (DefaultResponse response){
+                LevelButtonListItem addedButtonListItem = favoritesListManager.Add(levelButtonListItems.Where(e => e.levelId == nivelSeleccionado).First().listItem).GetComponent<LevelButtonListItem>();
+                addedButtonListItem.listItem.SetRemoveButtonAction(() => DeleteFavoriteLevel(addedButtonListItem));
+            });
+        }, () => {});
     }
 
-    public void DeleteFavoriteLevel(int levelId)
+    public void DeleteFavoriteLevel(LevelButtonListItem levelButtonListItem)
     {
-        CallDeleteFavoriteLevelApi(Int32.Parse(loggedChild.idChild), levelId, delegate (DefaultResponse response)
-        {
-            Debug.Log(response);
-        });
+        ConfirmPopup.ConfirmOperation("¿Desea eliminar este nivel de " + favoritesListManager.Name + "?", () => {
+            CallDeleteFavoriteLevelApi(Int32.Parse(loggedChild.idChild), levelButtonListItem.levelId, delegate (DefaultResponse response){
+                favoritesListManager.Remove(levelButtonListItem.listItem);
+            });
+        }, () => {});
     }
 
     private void CallAddFavoriteLevelApi(int idChild, int idLevel, Action<DefaultResponse> response)
