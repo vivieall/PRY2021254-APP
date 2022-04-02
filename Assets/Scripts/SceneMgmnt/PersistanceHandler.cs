@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using static SceneUIManager;
 
 public class PersistanceHandler : MonoBehaviour {
     private static PersistanceHandler handlerInstance;
@@ -10,6 +11,10 @@ public class PersistanceHandler : MonoBehaviour {
     private int Nivel;
     private GameObject NivelGameObject;
     private string IdChild;
+    private int childIdx;
+    public int ChildIdx { get; set; }
+    private LoginResponse loginResponse;
+    public LoginResponse LoginResponse { get; set; }
     void Start() {
         /*UIStates:
          * 0 -> Login Screen

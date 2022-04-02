@@ -9,6 +9,7 @@ public class ConfirmPopupComponent : MonoBehaviour
 	[SerializeField] public Text TextOnScreen;
     public UnityEvent OnAccept;
     public UnityEvent OnDecline;
+	private bool waitingForRemoteResponse = false;
 
 	public void ConfirmOperation(string text, UnityAction confirm, UnityAction decline) {
 		this.SetConfirmationText(text);
@@ -20,13 +21,17 @@ public class ConfirmPopupComponent : MonoBehaviour
 
 	public void ExecuteOnAccept() {
 		OnAccept.Invoke();
-		gameObject.SetActive(false);
+		if (!waitingForRemoteResponse) {
+			gameObject.SetActive(false);
+		}
 	}
 
 
 	public void ExecuteOnDecline() {
 		OnDecline.Invoke();
-		gameObject.SetActive(false);
+		if (!waitingForRemoteResponse) {
+			gameObject.SetActive(false);
+		}
 	}
 
 	public void SetConfirmationText(string text) {
@@ -36,5 +41,23 @@ public class ConfirmPopupComponent : MonoBehaviour
 	public void ClearAllEvents() {
 		OnAccept.RemoveAllListeners();
 		OnDecline.RemoveAllListeners();
+	}
+
+	public void SetLoadingState(bool state) {
+		waitingForRemoteResponse = state;
+
+		if (state) {
+            TextOnScreen.text = "Cargando...";
+		}
+
+		Button[] buttons = this.GetComponentsInChildren<Button>(true);
+
+		foreach(Button button in buttons) {
+			button.gameObject.SetActive(!state);
+		}
+
+		if (!waitingForRemoteResponse) {
+			gameObject.SetActive(false);
+		}
 	}
 }

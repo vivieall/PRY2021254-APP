@@ -7,20 +7,31 @@ using UnityEngine.Events;
 
 public class ListManager : MonoBehaviour
 {
-	[SerializeField] private GameObject ListUI;
-	[SerializeField] private SceneUIManager SceneManager;
+	[SerializeField] public GameObject ListUI;
+	[SerializeField] public SceneUIManager SceneManager;
     [SerializeField] private List<ListItem> items = new List<ListItem>();
-    [SerializeField] private GameObject ContentPanel = null;
-	[SerializeField] private GameObject InformationPopup = null;
+    [SerializeField] public GameObject ContentPanel = null;
+	[SerializeField] public GameObject InformationPopup = null;
 	[SerializeField] public string Name = "Lista Personalizada";
 	[SerializeField] private bool allowDuplicates = false;
 	[SerializeField] private bool bConfirmCreateList = false;
+	[SerializeField] private bool isFavoritesList; // true for add, false for delete
+	private bool isEditing = false;
+    private int id;
+    public int Id { get; set; }
 
-	private bool PendingOperationType; // true for add, false for delete
-	private bool bIsInEditMode = false;
-	private bool bWasListCreated = false;
+	private void OnEnable() {
+		if (isEditing) {
+			SwitchEditMode();
+		}
+	}
 
-	public void OnEnable() { /*SetEditMode(false);*/ }
+	public void SwitchEditMode() {
+		isEditing = !isEditing;
+		foreach(ListItem listItem in ContentPanel.GetComponentsInChildren<ListItem>()) {
+			listItem.setRemoveButtonActiveStatus(isEditing);
+		}
+	}
 
 	public ListItem Add(ListItem listItem)
 	{
@@ -28,14 +39,58 @@ public class ListManager : MonoBehaviour
 		listItemInstance.transform.SetParent(ContentPanel.transform);
 		listItemInstance.transform.localScale = 1.3F * Vector3.one;
 		listItemInstance.listManager = this;
-		listItemInstance.ProcessAdditionToList(SceneManager);
+		listItemInstance.setAddButtonActiveStatus(false);
+		listItemInstance.setRemoveButtonActiveStatus(isEditing);
 		items.Add(listItemInstance);
 		return listItemInstance;
+	}
+
+	public ListItem Add(LevelButtonListItem levelButtonListItem)
+	{
+		ListItem listItem = Add(levelButtonListItem.listItem);
+		if (isFavoritesList && levelButtonListItem.levelUIComponent != null) {
+			levelButtonListItem.levelUIComponent.LikeButton.interactable = false;
+			levelButtonListItem.levelUIComponent.LikeLabel.text = "¡Agregado a favoritos!";
+		}
+		if (isFavoritesList) {
+			listItem.SetRemoveButtonAction(() => SceneManager.DeleteFavoriteLevel(listItem.GetComponentInParent<LevelButtonListItem>()));
+		} else {
+			listItem.SetRemoveButtonAction(() => SceneManager.DeleteLevelFromCustomList(this, listItem.GetComponentInParent<LevelButtonListItem>()));
+		}
+		return listItem;
+	}
+
+	public void Refresh() {
+		foreach(ListItem listItem in ContentPanel.GetComponentsInChildren<ListItem>()) {
+			listItem.gameObject.SetActive(false);
+		}
+
+		foreach(ListItem listItem in items) {
+			listItem.gameObject.SetActive(true);
+		}
 	}
 
 	public void Remove(ListItem listItem) {
 		items.Remove(listItem);
 		Destroy(listItem.gameObject);
+	}
+
+	public void Remove(LevelButtonListItem levelButtonListItem) {
+		if (isFavoritesList && levelButtonListItem.levelUIComponent != null) {
+			levelButtonListItem.levelUIComponent.LikeButton.interactable = true;
+			levelButtonListItem.levelUIComponent.LikeLabel.text = "¿Te gusta el nivel? ¡Agrégalo a favoritos!";
+		}
+
+		Remove(levelButtonListItem.listItem);
+	}
+
+	public void RemoveAll() {
+		ListItem[] children = ContentPanel.GetComponentsInChildren<ListItem>(true);
+		foreach(ListItem listItem in children) {
+			Destroy(listItem.gameObject);
+		}
+
+		items.Clear();
 	}
 
 	/*#region UI_Interactions_CreateList

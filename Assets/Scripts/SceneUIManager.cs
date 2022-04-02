@@ -27,7 +27,7 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private GameObject m_VariedadesFiltroUI = null;
     [SerializeField] private GameObject m_NivelesCompletosUI = null;
     [SerializeField] private GameObject m_PerfilNinoModificarsUI = null;
-    [SerializeField] private GameObject m_ListaPersonalizadaUI = null;
+    [SerializeField] public GameObject m_ListaPersonalizadaUI = null;
     [SerializeField] private GameObject m_ListaLikesUI = null;
     [SerializeField] private GameObject m_PerfilNinoVistaDatosUI;
     [SerializeField] private GameObject m_ModificarListaPersonalizUI;
@@ -156,7 +156,10 @@ public class SceneUIManager : MonoBehaviour
     #region Lists
     [Header("Lists Managers")]
     [SerializeField] private ListManager favoritesListManager;
+    [SerializeField] private ListManager customListManager;
+    [SerializeField] private Text customListManagerLabel;
     #endregion
+    [SerializeField] private CustomListList customListList;
 
     //private bool sesionIniciada;
     private string id_guardian;
@@ -174,6 +177,7 @@ public class SceneUIManager : MonoBehaviour
     private ChildDataResponse[] ninosGuardian = { };
     private ChildDataResponse loggedChild;
     private Level[] loggedChildFavoriteLevels;
+    private CustomList[] loggedChildCustomLists;
     private LevelButtonListItem[] levelButtonListItems;
 
     void Start()
@@ -234,9 +238,11 @@ public class SceneUIManager : MonoBehaviour
         }
         */
         //Display Reqired Screen on Scene Load depending on State
-        var state = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().GetState();
+
+        PersistanceHandler persistanceHandler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
+
         currentUI = startingUI;
-        switch (state)
+        switch (persistanceHandler.GetState())
         {
             case 0:
                 ShowUI(startingUI);
@@ -259,8 +265,11 @@ public class SceneUIManager : MonoBehaviour
         }
 
         levelButtonListItems = Resources.FindObjectsOfTypeAll<LevelButtonListItem>();
-    }
 
+        if (persistanceHandler.GetState() != 0) {
+            processLoginResponse(persistanceHandler.LoginResponse, false);
+        }
+    }
 
     public void setNivel(int nivel){
         nivelSeleccionado = nivel;
@@ -370,6 +379,7 @@ public class SceneUIManager : MonoBehaviour
 	#region Logout
     [Header("Confirm Logout")]
     [SerializeField] private ConfirmPopupComponent ConfirmPopup;
+    [SerializeField] private InformationPopupComponent InformationPopup;
     public void PromptLogout()
 	{
         ConfirmPopup.ClearAllEvents();
@@ -395,48 +405,60 @@ public class SceneUIManager : MonoBehaviour
 
     public void submitLogin2()
     {
+        PersistanceHandler persistanceHandler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
+
         if (m_InputContrasenaLogin.text == "" || m_InputUsuarioLogin.text == "")
         {
               m_ErrorText.text = "Verifique que ningun campo este vacío";
         }
         CallLoginApi(m_InputUsuarioLogin.text, m_InputContrasenaLogin.text, delegate (LoginResponse response)
         {
-            m_ErrorTextLogin.text = "Validando, espere un momento";
-            PlayerPrefs.DeleteAll();
-            Debug.Log("Validando...");
-
-            if (response.idGuardian != null) 
-            {
-                if (toggleSesion.isOn)
-                {
-                    PlayerPrefs.SetString("SavePasswordToggle_Data", m_InputContrasenaLogin.text);
-                    PlayerPrefs.SetString("SaveUserToggle_Data", m_InputUsuarioLogin.text);
-                    var valueSave = Convert.ToInt32(toggleSesion.isOn);
-                    PlayerPrefs.SetInt("toggleIsOn", valueSave);
-                }
-
-                id_guardian = response.idGuardian;
-                //sesionIniciada = true;
-
-                PlayerPrefs.SetString("token", response.token);
-                PlayerPrefs.Save();
-
-                datosUsuarioLogeado.token = response.token;
-                datosUsuarioLogeado.username = response.username;
-                datosUsuarioLogeado.password = response.password;
-                datosUsuarioLogeado.email = response.email;
-                datosUsuarioLogeado.names = response.names;
-                datosUsuarioLogeado.lastNames = response.lastNames;
-                datosUsuarioLogeado.birthday = response.birthday;
-
-                ShowPerfilsGuardados();
-            }
-            else
-            {
-                m_ErrorTextLogin.text = response.message;
-                Debug.Log("Llamada a la API no válida...");
-            }
+            persistanceHandler.LoginResponse = response;
+            processLoginResponse(response, true);
         });
+    }
+
+    public void processLoginResponse(LoginResponse response, bool showSavedProfiles) {
+        m_ErrorTextLogin.text = "Validando, espere un momento";
+        PlayerPrefs.DeleteAll();
+        Debug.Log("Validando...");
+
+        if (response.idGuardian != null) 
+        {
+            if (toggleSesion.isOn)
+            {
+                PlayerPrefs.SetString("SavePasswordToggle_Data", m_InputContrasenaLogin.text);
+                PlayerPrefs.SetString("SaveUserToggle_Data", m_InputUsuarioLogin.text);
+                var valueSave = Convert.ToInt32(toggleSesion.isOn);
+                PlayerPrefs.SetInt("toggleIsOn", valueSave);
+            }
+
+            id_guardian = response.idGuardian;
+            //sesionIniciada = true;
+
+            PlayerPrefs.SetString("token", response.token);
+            PlayerPrefs.Save();
+
+            datosUsuarioLogeado.token = response.token;
+            datosUsuarioLogeado.username = response.username;
+            datosUsuarioLogeado.password = response.password;
+            datosUsuarioLogeado.email = response.email;
+            datosUsuarioLogeado.names = response.names;
+            datosUsuarioLogeado.lastNames = response.lastNames;
+            datosUsuarioLogeado.birthday = response.birthday;
+
+            if (showSavedProfiles) {
+                ShowPerfilsGuardados();
+            } else {
+                resetChildren();
+                getChildren(() => loginChild(GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().ChildIdx));
+            }
+        }
+        else
+        {
+            m_ErrorTextLogin.text = response.message;
+            Debug.Log("Llamada a la API no válida...");
+        }
     }
 
     void blankRegisterSpace()
@@ -528,6 +550,12 @@ public class SceneUIManager : MonoBehaviour
 
     public void loginChild(int idx)
     {
+        loginChild(idx, true);
+    }
+
+    public void loginChild(int idx, bool showCategory)
+    {
+        GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().ChildIdx = idx;
         loggedChild = ninosGuardian[idx];
         m_BienvenidaNino.text = "Hola, " + loggedChild.names + "!";
 
@@ -538,15 +566,30 @@ public class SceneUIManager : MonoBehaviour
             PopulateFavoriteLevels();
         });
 
+        CallGetChildrenCustomLevelListsApi(Int32.Parse(loggedChild.idChild), delegate (CustomList[] response)
+        {
+            Debug.Log(response);
+            loggedChildCustomLists = response;
+            PopulateCustomLists();
+        });
+
         for(int i = 0; i < loggedChild.symptoms.Length; i++){
             checkBoxSintomasUpdate[loggedChild.symptoms[i].idSymptom - 1].isOn = true;
             sintomasUpdate[loggedChild.symptoms[i].idSymptom - 1] = true;
         }
 
-        ShowCategoria();
+        if (showCategory) {
+            ShowCategoria();
+        }
     }
 
+
     public void getChildren()
+    {
+        getChildren(null);
+    }
+
+    public void getChildren(Action callback)
     {
         CallGetRequestChildrenApi(id_guardian, delegate (ChildDataResponse[] response)
         {
@@ -562,8 +605,13 @@ public class SceneUIManager : MonoBehaviour
                 nombresNinos[i].text = response[i].names;
                 nombresNinos[i].gameObject.SetActive(true);
             }
+
+            if (callback != null) {
+                callback();
+            }
         });
     }
+
 
     public void resetChildren()
     {
@@ -1049,14 +1097,14 @@ public class SceneUIManager : MonoBehaviour
         m_FechaNacimientoGuardian.text = datosUsuarioLogeado.birthday.Substring(8, 2) + "/" + datosUsuarioLogeado.birthday.Substring(5, 2) + "/" + datosUsuarioLogeado.birthday.Substring(0, 4);
         m_EmailGuardian.text = datosUsuarioLogeado.email;
     }
-    private class LoginData
+    public class LoginData
     {
         public string username;
         public string password;
         public string token;
     }
 
-    private class LoginResponse
+    public class LoginResponse
     {
         public int idResponse;
         public string token;
@@ -1072,14 +1120,14 @@ public class SceneUIManager : MonoBehaviour
         public string birthday;
     }
 
-    private class DefaultResponse
+    public class DefaultResponse
     {
         public int idResponse;
         public string message;
     }
 
     [Serializable]
-    private class ChildData
+    public class ChildData
     {
         public string idChild;
         public string asdLevel;
@@ -1093,7 +1141,7 @@ public class SceneUIManager : MonoBehaviour
         public string password;
     }
     [Serializable]
-    private class ChildDataResponse
+    public class ChildDataResponse
     {
         public string idChild;
         public string asdLevel;
@@ -1108,13 +1156,25 @@ public class SceneUIManager : MonoBehaviour
     }
 
     [Serializable]
-    private class AddLevelDto {
+    public class AddLevelDto {
         public int idChild;
         public int idLevel; 
     }
 
     [Serializable]
-    private class Level {
+    public class AddCustomLevelListDto {
+        public int idChild;
+        public string name; 
+    }
+
+    [Serializable]
+    public class AddLevelToCustomListDto {
+        public int idCustomLevelList;
+        public int idLevel;
+    }
+
+    [Serializable]
+    public class Level {
         public int idLevel;
         public string description;
         public Topic topic;
@@ -1122,29 +1182,36 @@ public class SceneUIManager : MonoBehaviour
     }
 
     [Serializable]
-    private class Topic {
+    public class Topic {
         public int idTopic;
         public string description;
         public Category category;
     }
 
     [Serializable]
-    private class Category {
+    public class Category {
         public int idCategory;
         public string description;
     }
 
     [Serializable]
-    private class Symptom {
+    public class Symptom {
         public int idSymptom;
         public string description;
     }
-    private class Children
+
+    [Serializable]
+    public class CustomList {
+        public int idCustomLevelList;
+        public string name;
+        public Level[] levels;
+    }
+    public class Children
     {
         public ChildData[] children;
     }
 
-    private class Specialist 
+    public class Specialist 
     {
         public int idSpecialist;
         public string names;
@@ -1154,24 +1221,111 @@ public class SceneUIManager : MonoBehaviour
     }
 
     private void PopulateFavoriteLevels() {
-        BotonNivel[] botonesNiveles = Resources.FindObjectsOfTypeAll<BotonNivel>();
-        //ListItemManager[] listItemManagers = Resources.FindObjectsOfTypeAll<ListItemManager>();
+        favoritesListManager.RemoveAll();
+
         IEnumerable<int> childFavoriteLevelsIds = loggedChildFavoriteLevels.Select(nivel => nivel.idLevel);
 
-        /*foreach(BotonNivel botonNivel in botonesNiveles) {
-            if (childFavoriteLevelsIds.Contains(botonNivel.id)) {
-                ListItemManager listItemManager = botonNivel.gameObject.GetComponent<ListItemManager>();
-                favoritesListManager.AddItem(listItemManager);
+        foreach(LevelButtonListItem levelButtonListItem in levelButtonListItems) {
+            if (childFavoriteLevelsIds.Contains(levelButtonListItem.levelId)) {
+                favoritesListManager.Add(levelButtonListItem);
             }
-        }*/
+        }
+    }
+
+    private void PopulateCustomLists() {
+        customListList.RemoveAll();
+
+        foreach(CustomList customList in loggedChildCustomLists) {
+            customListList.CreateList(customList.name, customListManager);
+            ListManager listManager = customListList.getLists().Last();
+            listManager.Id = customList.idCustomLevelList;
+
+            IEnumerable<int> childFavoriteLevelsIds = customList.levels.Select(nivel => nivel.idLevel);
+
+            foreach(LevelButtonListItem levelButtonListItem in levelButtonListItems) {
+                if (childFavoriteLevelsIds.Contains(levelButtonListItem.levelId)) {
+                    listManager.Add(levelButtonListItem);
+                }
+            }
+
+        }
+    }
+
+    public void AddCustomList(string name)
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea crear la lista " + name + "?", () => {
+            ConfirmPopup.SetLoadingState(true);
+            CallAddCustomListApi(Int32.Parse(loggedChild.idChild), name, delegate (DefaultResponse response){
+                if (response.idResponse >= 0) {
+                    customListList.CreateList(name, customListManager);
+                }
+                InformationPopup.PopupMessage(response.message);
+                ConfirmPopup.SetLoadingState(false);
+            });
+        }, () => {});
+    }
+
+    public void SetCustomListActive(ListManager listManager)
+    {
+        listManager.Refresh();
+        customListManagerLabel.text = listManager.Name;
+        customListManager = listManager;
+    }
+
+    private void CallAddCustomListApi(int idChild, string name, Action<DefaultResponse> response)
+    {
+        AddCustomLevelListDto addCustomLevelListDto = new AddCustomLevelListDto();
+        addCustomLevelListDto.idChild = idChild;
+        addCustomLevelListDto.name = name;
+        string json = JsonUtility.ToJson(addCustomLevelListDto);
+        Debug.Log(json);
+        StartCoroutine(AddFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/addCustomLevelList", json, response));
+    }
+
+    public void AddLevelToCustomList(ListManager listManager, LevelButtonListItem levelButtonListItem)
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea añadir este nivel a " + listManager.Name + "?", () => {
+            ConfirmPopup.SetLoadingState(true);
+            CallAddCustomLevelApi(listManager.Id, levelButtonListItem.levelId, delegate (DefaultResponse response){
+                if (response.idResponse >= 0) {
+                    listManager.Add(levelButtonListItem);
+                    SetCustomListActive(listManager);
+                    ShowUI(m_ListaPersonalizadaUI);
+                } else {
+                    InformationPopup.PopupMessage(response.message);
+                }
+                ConfirmPopup.SetLoadingState(false);
+            });
+        }, () => {});
+    }
+
+    public void DeleteLevelFromCustomList(ListManager listManager, LevelButtonListItem levelButtonListItem)
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea eliminar este nivel de " + listManager.Name + "?", () => {
+            ConfirmPopup.SetLoadingState(true);
+            CallDeleteLevelFromCustomListApi(listManager.Id, levelButtonListItem.levelId, delegate (DefaultResponse response){
+                if (response.idResponse >= 0) {
+                    listManager.Remove(levelButtonListItem);
+                }
+                InformationPopup.PopupMessage(response.message);
+                ConfirmPopup.SetLoadingState(false);
+            });
+        }, () => {});
     }
 
     public void AddFavoriteLevel()
     {
         ConfirmPopup.ConfirmOperation("¿Desea añadir este nivel a " + favoritesListManager.Name + "?", () => {
+            ConfirmPopup.SetLoadingState(true);
             CallAddFavoriteLevelApi(Int32.Parse(loggedChild.idChild), nivelSeleccionado, delegate (DefaultResponse response){
-                LevelButtonListItem addedButtonListItem = favoritesListManager.Add(levelButtonListItems.Where(e => e.levelId == nivelSeleccionado).First().listItem).GetComponent<LevelButtonListItem>();
-                addedButtonListItem.listItem.SetRemoveButtonAction(() => DeleteFavoriteLevel(addedButtonListItem));
+                if (response.idResponse >= 0) {
+                    LevelButtonListItem levelListItemToAdd = levelButtonListItems.Where(e => e.levelId == nivelSeleccionado).First();
+                    favoritesListManager.Add(levelListItemToAdd);
+                    ShowUI(m_ListaLikesUI);
+                } else {
+                    InformationPopup.PopupMessage(response.message);
+                }
+                ConfirmPopup.SetLoadingState(false);
             });
         }, () => {});
     }
@@ -1179,10 +1333,35 @@ public class SceneUIManager : MonoBehaviour
     public void DeleteFavoriteLevel(LevelButtonListItem levelButtonListItem)
     {
         ConfirmPopup.ConfirmOperation("¿Desea eliminar este nivel de " + favoritesListManager.Name + "?", () => {
+            ConfirmPopup.SetLoadingState(true);
             CallDeleteFavoriteLevelApi(Int32.Parse(loggedChild.idChild), levelButtonListItem.levelId, delegate (DefaultResponse response){
-                favoritesListManager.Remove(levelButtonListItem.listItem);
+                if (response.idResponse >= 0) {
+                    favoritesListManager.Remove(levelButtonListItem);
+                }
+                InformationPopup.PopupMessage(response.message);
+                ConfirmPopup.SetLoadingState(false);
             });
         }, () => {});
+    }
+
+    private void CallAddCustomLevelApi(int idCustomLevelList, int idLevel, Action<DefaultResponse> response)
+    {
+        AddLevelToCustomListDto addLevelToCustomListDto = new AddLevelToCustomListDto();
+        addLevelToCustomListDto.idCustomLevelList = idCustomLevelList;
+        addLevelToCustomListDto.idLevel = idLevel;
+        string json = JsonUtility.ToJson(addLevelToCustomListDto);
+        Debug.Log(json);
+        StartCoroutine(AddFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/addLevelToCustomLevelList", json, response));
+    }
+
+    private void CallDeleteLevelFromCustomListApi(int idCustomLevelList, int idLevel, Action<DefaultResponse> response)
+    {
+        AddLevelToCustomListDto addLevelToCustomListDto = new AddLevelToCustomListDto();
+        addLevelToCustomListDto.idCustomLevelList = idCustomLevelList;
+        addLevelToCustomListDto.idLevel = idLevel;
+        string json = JsonUtility.ToJson(addLevelToCustomListDto);
+        Debug.Log(json);
+        StartCoroutine(DeleteFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/deleteLevelinCustomLevelList", json, response));
     }
 
     private void CallAddFavoriteLevelApi(int idChild, int idLevel, Action<DefaultResponse> response)
@@ -1210,6 +1389,10 @@ public class SceneUIManager : MonoBehaviour
         StartCoroutine(GetChildrenFavoriteLevels("https://teapprendo.herokuapp.com/children/listFavoriteLevels?idChild=" + idChild, response));
     }
 
+    private void CallGetChildrenCustomLevelListsApi(int idChild, Action<CustomList[]> response)
+    {
+        StartCoroutine(GetChildrenCustomLevelLists("https://teapprendo.herokuapp.com/children/listCustomLevelLists?idChild=" + idChild, response));
+    }
     IEnumerator AddFavoriteLevelRequest(string url, string json, Action<DefaultResponse> response)
     {
         var uwr = new UnityWebRequest(url, "POST");
@@ -1272,6 +1455,25 @@ public class SceneUIManager : MonoBehaviour
         else
         {
             response(JsonHelper.FromJson<Level>(fixJson(uwr.downloadHandler.text)));
+        }
+    }
+
+    IEnumerator GetChildrenCustomLevelLists(string url, Action<CustomList[]> response)
+    {
+        UnityWebRequest uwr = UnityWebRequest.Get(url);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            response(JsonHelper.FromJson<CustomList>(fixJson(uwr.downloadHandler.text)));
         }
     }
 
