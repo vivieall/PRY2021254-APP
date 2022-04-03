@@ -18,6 +18,7 @@ public class RecordManager : MonoBehaviour
     [Serializable]
 	private class Level
 	{
+        public int idLevel;
 		public string description;
 	}
 
@@ -42,9 +43,13 @@ public class RecordManager : MonoBehaviour
         GameObject ButtonTemplate = transform.GetChild(0).gameObject;
         GameObject g;
         int N = allLevels.Length;
-        for(int i = 0; i < N; i++) {
-            g = Instantiate(ButtonTemplate, transform);
-            g.transform.GetChild(0).GetChild(0).GetComponent<Text>().text = allLevels[i].level.description;
+        if(N > 0)
+        {
+            for(int i = 0; i < N; i++) 
+            {
+                g = Instantiate(ButtonTemplate, transform);
+                g.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Levels/" + allLevels[i].level.idLevel.ToString());
+            }
         }
 
         Destroy(ButtonTemplate);
@@ -58,7 +63,8 @@ public class RecordManager : MonoBehaviour
         request.SetRequestHeader("Authorization", token);
         yield return request.SendWebRequest();
 
-        if (request.isNetworkError) {
+        if (request.isNetworkError) 
+        {
 			Debug.Log("Error While Sending: " + request.error);
 		} 
         else 
