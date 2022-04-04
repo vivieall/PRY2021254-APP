@@ -154,6 +154,13 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_PasswordSpecialist;
     #endregion
 
+    #region Specialist Data
+    [SerializeField] public Sprite avatar1;
+    [SerializeField] public Sprite avatar2;
+    [SerializeField] public Sprite avatar3;
+    #endregion
+
+
     //private bool sesionIniciada;
     private string id_guardian;
     private string nivelAutismoChild;
@@ -546,6 +553,20 @@ public class SceneUIManager : MonoBehaviour
                 botonesNinos[i].SetActive(true);
                 nombresNinos[i].text = response[i].names;
                 nombresNinos[i].gameObject.SetActive(true);
+                Debug.Log(response[i].avatar);
+                if (response[i].avatar=="avatar1")
+                {
+                    botonesNinos[i].GetComponent<Image>().sprite = avatar1;
+                }
+                else if(response[i].avatar == "avatar2")
+                {
+                    botonesNinos[i].GetComponent<Image>().sprite = avatar2;
+                }
+                else if (response[i].avatar == "avatar3")
+                {
+                    botonesNinos[i].GetComponent<Image>().sprite = avatar3;
+                }
+                Debug.Log(response[i].avatar);
             }
         });
     }

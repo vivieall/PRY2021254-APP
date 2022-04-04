@@ -21,6 +21,8 @@ public class ActivityManager : MonoBehaviour
     [SerializeField] private GameObject gameobj03;
 
     private int ActivityNum;
+    private int Fails=0;
+
     private GameObject CurrActivity;
     private ArrayList CurrGameobjs;
     PersistanceHandler Handler;
@@ -72,6 +74,12 @@ public class ActivityManager : MonoBehaviour
         {
             if (!gombj.GetComponent<DragToUIObj>().GetDone())
             {
+                Fails += 1;
+                Debug.Log(Fails);
+                if (Fails >= 3)
+                {
+                    TriggerFail();
+                }
                 return;
             };
         }
