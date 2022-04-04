@@ -132,16 +132,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 2455810694115523086}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3d09d638b671be44fb1559b1a920ddaa, type: 3}
+  m_Script: {fileID: 11500000, guid: ed849682f8378c54c9494c46b43449ee, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ListUI: {fileID: 0}
   SceneManager: {fileID: 0}
   ContentPanel: {fileID: 2455810695499651349}
   ConfirmPopup: {fileID: 0}
-  ListItemPrefab: {fileID: 8186913263904711102, guid: 11f42efc442760b47a0b4fb97bac5165,
-    type: 3}
+  ListName: Lista Personalizada
   allowDuplicates: 1
+  bConfirmCreateList: 0
 --- !u!1 &2455810695499651349
 GameObject:
   m_ObjectHideFlags: 0
