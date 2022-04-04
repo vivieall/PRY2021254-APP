@@ -10,11 +10,11 @@ public class ListItemSearcher : MonoBehaviour
 	public void SearchTerm(string search)
 	{
 		string lowerSearch = search.ToLower();
-		ListItemManager[] items = ScreenToSearch.GetComponentsInChildren<ListItemManager>(true);
+		/*ListItemManager[] items = ScreenToSearch.GetComponentsInChildren<ListItemManager>(true);
 		foreach (ListItemManager lim in items)
 		{
 			lim.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive((lim.text.text).ToLower().Contains(lowerSearch));
-		}
+		}*/
 	}
 
 	public void OnEnable() { SearchTerm(""); }
