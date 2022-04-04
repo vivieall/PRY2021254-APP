@@ -89,6 +89,7 @@ public class ActivityManager : MonoBehaviour
     public void TriggerSuccess()
     {
         print("Activity is done");
+        print("El nivel es: "+ Handler.GetNivel());
         CallRecordLevelApi(Int32.Parse(Handler.GetIdChild()), Handler.GetNivel(), delegate (levelRecord response)
         {
             //correcto

@@ -24,6 +24,9 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     private Vector3 UR;
     private bool done = false;
     private ActivityManager evSys;
+
+    private SoundManager soundManager;
+
     public void OnBeginDrag(PointerEventData eventData)
     {
         return;
@@ -138,6 +141,7 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
         GoalObject = VuforiaObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
         DL = new Vector3(GoalObject.transform.position.x - rectTransform.rect.width / 2, GoalObject.transform.position.y - rectTransform.rect.height / 2, GoalObject.transform.position.z);
         UR = new Vector3(GoalObject.transform.position.x + rectTransform.rect.width / 2, GoalObject.transform.position.y + rectTransform.rect.height / 2, GoalObject.transform.position.z);
+        soundManager = FindObjectOfType<SoundManager>();
         InitializeResource(1,1);
     }
 
@@ -162,9 +166,11 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
         if (result) {
             //Instantiates new 3d object with the prev object transform properties
             Instantiate(robj, rendobj);
+            soundManager.SelectAudio(0, 0.5f);//correct?
         } else
         {
             Instantiate(wobj, rendobj);
+            soundManager.SelectAudio(1, 0.5f);//incorrect?
         }
     }
 

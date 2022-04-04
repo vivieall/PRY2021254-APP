@@ -1688,6 +1688,13 @@ public static class JsonHelper
         return JsonUtility.ToJson(wrapper, prettyPrint);
     }
 
+    public static T[] GetArray<T> (string json)
+	{
+		string newJson = "{\"data\":" + json + "}";
+		Wrapper<T> w = JsonUtility.FromJson<Wrapper<T>> (newJson);
+		return w.Items;
+	}
+
     [Serializable]
     private class Wrapper<T>
     {
