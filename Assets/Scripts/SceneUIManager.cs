@@ -1228,6 +1228,9 @@ public class SceneUIManager : MonoBehaviour
         foreach(LevelButtonListItem levelButtonListItem in levelButtonListItems) {
             if (childFavoriteLevelsIds.Contains(levelButtonListItem.levelId)) {
                 favoritesListManager.Add(levelButtonListItem);
+            } else if (levelButtonListItem.levelUIComponent != null) {
+                levelButtonListItem.levelUIComponent.LikeButton.interactable = true;
+			    levelButtonListItem.levelUIComponent.LikeLabel.text = "¿Te gusta el nivel? Agregálo a favoritos";
             }
         }
     }
