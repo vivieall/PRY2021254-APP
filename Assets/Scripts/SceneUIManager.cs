@@ -132,6 +132,7 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private Text m_FechaMesChild;
     [SerializeField] private Text m_FechaAnioChild;
     [SerializeField] private Text m_GeneroChild;
+    //[SerializeField] private Text m_AvatarChild;
     [SerializeField] private Text m_GradoChild;
     [SerializeField] private Text m_SintomasChild;
     #endregion
@@ -159,7 +160,14 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private ListManager customListManager;
     [SerializeField] private Text customListManagerLabel;
     #endregion
+    
     [SerializeField] private CustomListList customListList;
+    #region Specialist Data
+    [SerializeField] public Sprite avatar1;
+    [SerializeField] public Sprite avatar2;
+    [SerializeField] public Sprite avatar3;
+    #endregion
+
 
     //private bool sesionIniciada;
     private string id_guardian;
@@ -604,6 +612,20 @@ public class SceneUIManager : MonoBehaviour
                 botonesNinos[i].SetActive(true);
                 nombresNinos[i].text = response[i].names;
                 nombresNinos[i].gameObject.SetActive(true);
+                Debug.Log(response[i].avatar);
+                if (response[i].avatar=="avatar1")
+                {
+                    botonesNinos[i].GetComponent<Image>().sprite = avatar1;
+                }
+                else if(response[i].avatar == "avatar2")
+                {
+                    botonesNinos[i].GetComponent<Image>().sprite = avatar2;
+                }
+                else if (response[i].avatar == "avatar3")
+                {
+                    botonesNinos[i].GetComponent<Image>().sprite = avatar3;
+                }
+                Debug.Log(response[i].avatar);
             }
 
             if (callback != null) {
@@ -998,7 +1020,7 @@ public class SceneUIManager : MonoBehaviour
                 sintomas2 = sintomas2.Concat(new int[] { i+1 }).ToArray();
             }
         }
-        CallRegisterChildApi(id_guardian, m_InputNombreChild.text, m_InputApellidoChild.text, m_InputFechaAnioChild.text + "-" + m_InputFechaMesChild.text + "-" + m_InputFechaDiaChild.text, generoChild, nivelAutismoChild, sintomas2,
+        CallRegisterChildApi(id_guardian, m_InputNombreChild.text, m_InputApellidoChild.text, avatarChild, m_InputFechaAnioChild.text + "-" + m_InputFechaMesChild.text + "-" + m_InputFechaDiaChild.text, generoChild, nivelAutismoChild, sintomas2,
             delegate (ChildDataResponse response)
             {
 
@@ -1027,7 +1049,7 @@ public class SceneUIManager : MonoBehaviour
                 sintomas2 = sintomas2.Concat(new int[] { i + 1 }).ToArray();
             }
         }
-        CallUpdateChildApi(loggedChild.idChild, m_InputNombreChildUpdate.text, m_InputApellidoChildUpdate.text, m_InputFechaAnioChildUpdate.text + "-" + m_InputFechaMesChildUpdate.text + "-" + m_InputFechaDiaChildUpdate.text, generoChildUpdate, nivelAutismoChildUpdate, sintomas2,
+        CallUpdateChildApi(loggedChild.idChild, m_InputNombreChildUpdate.text, m_InputApellidoChildUpdate.text, avatarChildUpdate, m_InputFechaAnioChildUpdate.text + "-" + m_InputFechaMesChildUpdate.text + "-" + m_InputFechaDiaChildUpdate.text, generoChildUpdate, nivelAutismoChildUpdate, sintomas2,
             delegate (ChildDataResponse response)
             {
 
@@ -1084,6 +1106,7 @@ public class SceneUIManager : MonoBehaviour
         m_FechaMesChild.text = loggedChild.birthday.Substring(5, 2);
         m_FechaAnioChild.text = loggedChild.birthday.Substring(0, 4);
         m_GeneroChild.text = loggedChild.gender;
+        //m_AvatarChild.text = loggedChild.avatar;
         m_GradoChild.text = loggedChild.asdLevel;
         m_SintomasChild.text = "";
         foreach (Symptom c in loggedChild.symptoms){
@@ -1521,7 +1544,7 @@ public class SceneUIManager : MonoBehaviour
     }
 
 
-    private void CallUpdateChildApi(string id, string names, string lastnames, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildDataResponse> response)
+    private void CallUpdateChildApi(string id, string names, string lastnames,string avatarChild, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildDataResponse> response)
     {
         ChildData cd = new ChildData();
         cd.idChild = id;
