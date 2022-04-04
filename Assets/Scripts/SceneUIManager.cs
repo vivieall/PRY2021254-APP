@@ -1503,7 +1503,7 @@ public class SceneUIManager : MonoBehaviour
         }
     }
 
-    private void CallRegisterChildApi(string guardian_id, string names, string lastnames, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildDataResponse> response)
+    private void CallRegisterChildApi(string guardian_id, string names, string lastnames,string avatarChild, string birthday, string gender, string asdlevel, int[] symptoms, Action<ChildDataResponse> response)
     {
         ChildData cd = new ChildData();
         cd.idGuardian = Int32.Parse(guardian_id);
