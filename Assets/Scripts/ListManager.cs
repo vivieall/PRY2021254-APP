@@ -35,6 +35,7 @@ public class ListManager : MonoBehaviour
 	{
 		ListItemManager listItemInstance = Instantiate(listItem);
 		listItemInstance.transform.SetParent(ContentPanel.transform);
+		listItemInstance.GetComponent<RectTransform>().sizeDelta = listItem.GetComponent<RectTransform>().sizeDelta;
 		listItemInstance.transform.localScale = 1.3F * Vector3.one;
 		listItemInstance.listManager = this;
 		listItemInstance.setAddButtonActiveStatus(false);
