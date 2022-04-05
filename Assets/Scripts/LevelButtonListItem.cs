@@ -1,7 +1,6 @@
 using UnityEngine;
 
-public class LevelButtonListItem : MonoBehaviour {
+public class LevelButtonListItem : ListItemManager {
     public int levelId;
-    public ListItem listItem;
     [SerializeField] public LevelUIComponent levelUIComponent;
 }

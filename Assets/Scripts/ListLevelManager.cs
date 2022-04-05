@@ -8,8 +8,8 @@ public class ListLevelManager : MonoBehaviour
 
     void Start()
     {
-        ListLevels = new List<GameObject>();
-        GetLevels();
+        //ListLevels = new List<GameObject>();
+        //GetLevels();
     }
 
     public void GetLevels()
