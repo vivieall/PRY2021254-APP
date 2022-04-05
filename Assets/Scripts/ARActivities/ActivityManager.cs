@@ -22,6 +22,8 @@ public class ActivityManager : MonoBehaviour
 
     private int ActivityNum;
     private int Fails=0;
+    private int Success= 0;
+
 
     private GameObject CurrActivity;
     private ArrayList CurrGameobjs;
@@ -86,6 +88,26 @@ public class ActivityManager : MonoBehaviour
         TriggerSuccess();
     }
 
+    public void AddFail()
+    {
+        Fails += 1;
+        Debug.Log(Fails);
+        if (Fails>=3)
+        {
+            TriggerFail();
+        }
+    }
+
+    public void AddSuccess()
+    {
+        Success += 1;
+        Debug.Log(Success);
+        if (Success >= 3)
+        {
+            TriggerSuccess();
+        }
+    }
+
     public void TriggerSuccess()
     {
         print("Activity is done");
@@ -113,6 +135,8 @@ public class ActivityManager : MonoBehaviour
         {
             FailedlvlScreen.SetActive(false);
         }
+        Fails = 0;
+        Success = 0;
     }
 
     public int GetCurrActivityNum()
