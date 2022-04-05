@@ -23,19 +23,12 @@ public class RecordManager : MonoBehaviour
 	}
 
     private LevelRecord[] allLevels;
-    
-    private string ChildId;
-    PersistanceHandler Handler;
+    private string IdChild;
 
     void Start()
     {
-        StartCoroutine(GetRecord());
-        
-        /*Handler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
-        ChildId = "1"; //Handler.GetIdChild();
-        Debug.Log("Este ID: "+ ChildId);*/
-
-        //ShowRecord();
+        IdChild = GameObject.Find("UICamera").GetComponent<SceneUIManager>().getIdChild();
+        StartCoroutine(GetRecord(IdChild));
     }
 
     public void ShowRecord()
@@ -55,9 +48,9 @@ public class RecordManager : MonoBehaviour
         Destroy(ButtonTemplate);
     }
 
-    IEnumerator GetRecord()
+    IEnumerator GetRecord(string IdChild)
     {
-        string url = "https://teapprendo.herokuapp.com/levelRecords/listByIdChild?idChild=1";
+        string url = "https://teapprendo.herokuapp.com/levelRecords/listByIdChild?idChild=" + IdChild;
         UnityWebRequest request = UnityWebRequest.Get(url);
         string token = PlayerPrefs.GetString("token");
         request.SetRequestHeader("Authorization", token);
