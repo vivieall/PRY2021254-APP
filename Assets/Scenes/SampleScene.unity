@@ -3240,8 +3240,6 @@ GameObject:
   - component: {fileID: 112123163}
   - component: {fileID: 112123162}
   - component: {fileID: 112123161}
-  - component: {fileID: 112123164}
-  - component: {fileID: 112123165}
   m_Layer: 5
   m_Name: SumasBotton
   m_TagString: Untagged
@@ -3373,31 +3371,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 112123159}
   m_CullTransparentMesh: 0
---- !u!114 &112123164
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 112123159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ded5c7d4b96234db79f81ed3243761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &112123165
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 112123159}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdc7d822854d8ad4b9f471817aab3412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 7
 --- !u!1 &112123645
 GameObject:
   m_ObjectHideFlags: 0
@@ -5220,7 +5193,6 @@ GameObject:
   - component: {fileID: 158254210}
   - component: {fileID: 158254209}
   - component: {fileID: 158254208}
-  - component: {fileID: 158254211}
   m_Layer: 5
   m_Name: ContarBotton
   m_TagString: Untagged
@@ -5341,19 +5313,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 158254206}
   m_CullTransparentMesh: 0
---- !u!114 &158254211
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 158254206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdc7d822854d8ad4b9f471817aab3412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 2
 --- !u!1 &159000771
 GameObject:
   m_ObjectHideFlags: 0
@@ -6148,7 +6107,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1150302844}
+      - m_Target: {fileID: 0}
         m_MethodName: PromptRemoveFromList
         m_Mode: 1
         m_Arguments:
@@ -19100,6 +19059,31 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 865723683}
     m_Modifications:
+    - target: {fileID: 170625988907232971, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 170625988907232971, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 170625988907232971, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 170625988907232971, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 151
+      objectReference: {fileID: 0}
+    - target: {fileID: 170625988907232971, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 211
+      objectReference: {fileID: 0}
     - target: {fileID: 201326631713898229, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -19155,6 +19139,11 @@ PrefabInstance:
       propertyPath: SceneManager
       value: 
       objectReference: {fileID: 519420030}
+    - target: {fileID: 1890521909164603696, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: deleteButton
+      value: 
+      objectReference: {fileID: 806008184}
     - target: {fileID: 1890521909164603696, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
       propertyPath: InformationPopup
@@ -19412,6 +19401,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4726946502118141438, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4726946502118141438, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
       propertyPath: m_SizeDelta.x
       value: 60
       objectReference: {fileID: 0}
@@ -19495,6 +19489,11 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -49
       objectReference: {fileID: 0}
+    - target: {fileID: 6402113841461152380, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7033219885310438996, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
       propertyPath: m_IsActive
@@ -19511,10 +19510,15 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 7f0a65941b7a04fa3b2193b99ea5e363,
         type: 3}
+    - target: {fileID: 8565810525658951837, guid: 820317a245c05ac4188c77fe8d94f8bd,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DeleteList
+      objectReference: {fileID: 0}
     - target: {fileID: 8848264220214202501, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 0
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 8848264220214202501, guid: 820317a245c05ac4188c77fe8d94f8bd,
         type: 3}
@@ -23399,7 +23403,6 @@ GameObject:
   - component: {fileID: 591543813}
   - component: {fileID: 591543812}
   - component: {fileID: 591543811}
-  - component: {fileID: 591543814}
   m_Layer: 5
   m_Name: RestasBotton
   m_TagString: Untagged
@@ -23520,19 +23523,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 591543809}
   m_CullTransparentMesh: 0
---- !u!114 &591543814
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 591543809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdc7d822854d8ad4b9f471817aab3412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 3
 --- !u!1 &596585446
 GameObject:
   m_ObjectHideFlags: 0
@@ -31844,6 +31834,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 802643744}
   m_CullTransparentMesh: 0
+--- !u!114 &806008184 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8565810525658951837, guid: 820317a245c05ac4188c77fe8d94f8bd,
+    type: 3}
+  m_PrefabInstance: {fileID: 506522196}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &807372177
 GameObject:
   m_ObjectHideFlags: 0
@@ -36783,7 +36785,6 @@ GameObject:
   - component: {fileID: 948244344}
   - component: {fileID: 948244343}
   - component: {fileID: 948244342}
-  - component: {fileID: 948244345}
   m_Layer: 5
   m_Name: SumasBotton
   m_TagString: Untagged
@@ -36915,19 +36916,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 948244340}
   m_CullTransparentMesh: 0
---- !u!114 &948244345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 948244340}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdc7d822854d8ad4b9f471817aab3412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 1
 --- !u!1 &950671983
 GameObject:
   m_ObjectHideFlags: 0
@@ -37819,8 +37807,6 @@ GameObject:
   - component: {fileID: 971669713}
   - component: {fileID: 971669712}
   - component: {fileID: 971669711}
-  - component: {fileID: 971669714}
-  - component: {fileID: 971669715}
   m_Layer: 5
   m_Name: SumasBotton
   m_TagString: Untagged
@@ -37952,31 +37938,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 971669709}
   m_CullTransparentMesh: 0
---- !u!114 &971669714
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971669709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ded5c7d4b96234db79f81ed3243761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &971669715
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 971669709}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdc7d822854d8ad4b9f471817aab3412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 10
 --- !u!1 &973705705
 GameObject:
   m_ObjectHideFlags: 0
@@ -45154,7 +45115,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 112123164}
+      - m_Target: {fileID: 0}
         m_MethodName: PromptRemoveFromList
         m_Mode: 1
         m_Arguments:
@@ -45900,8 +45861,6 @@ GameObject:
   - component: {fileID: 1150302843}
   - component: {fileID: 1150302842}
   - component: {fileID: 1150302841}
-  - component: {fileID: 1150302844}
-  - component: {fileID: 1150302845}
   m_Layer: 5
   m_Name: SumasBotton
   m_TagString: Untagged
@@ -46033,31 +45992,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1150302839}
   m_CullTransparentMesh: 0
---- !u!114 &1150302844
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150302839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ded5c7d4b96234db79f81ed3243761, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1150302845
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150302839}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdc7d822854d8ad4b9f471817aab3412, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  id: 4
 --- !u!1 &1150867183
 GameObject:
   m_ObjectHideFlags: 0
@@ -48978,8 +48912,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.3, y: 4.4}
-  m_SizeDelta: {x: 190, y: 30}
+  m_AnchoredPosition: {x: -0.07, y: 4.507}
+  m_SizeDelta: {x: 164.70673, y: 42.84117}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1239008122
 MonoBehaviour:
@@ -49004,10 +48938,10 @@ MonoBehaviour:
     m_Font: {fileID: 12800000, guid: 6ca538294674641108f429b80bd7b354, type: 3}
     m_FontSize: 17
     m_FontStyle: 0
-    m_BestFit: 0
+    m_BestFit: 1
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 0
+    m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -62430,7 +62364,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 971669714}
+      - m_Target: {fileID: 0}
         m_MethodName: PromptRemoveFromList
         m_Mode: 1
         m_Arguments:

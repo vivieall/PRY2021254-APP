@@ -1296,6 +1296,12 @@ public class SceneUIManager : MonoBehaviour
         listManager.Refresh();
         customListManagerLabel.text = listManager.Name;
         customListManager = listManager;
+        if (customListManager.deleteButton != null) {
+            customListManager.deleteButton.onClick.RemoveAllListeners();
+            customListManager.deleteButton.onClick.AddListener(() => {
+                DeleteCustomList(listManager);
+            });
+        }
     }
 
     private void CallAddCustomListApi(int idChild, string name, Action<DefaultResponse> response)
@@ -1320,6 +1326,21 @@ public class SceneUIManager : MonoBehaviour
                 } else {
                     InformationPopup.PopupMessage(response.message);
                 }
+                ConfirmPopup.SetLoadingState(false);
+            });
+        }, () => {});
+    }
+
+    public void DeleteCustomList(ListManager listManager)
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea eliminar la lista " + listManager.Name + "?", () => {
+            ConfirmPopup.SetLoadingState(true);
+            CallDeleteCustomListApi(Int32.Parse(loggedChild.idChild), listManager.Id, delegate (DefaultResponse response){
+                if (response.idResponse >= 0) {
+                    customListList.RemoveList(listManager);
+                    ShowUI(m_SeleccionarCategoriaUI);
+                }
+                InformationPopup.PopupMessage(response.message);
                 ConfirmPopup.SetLoadingState(false);
             });
         }, () => {});
@@ -1388,6 +1409,11 @@ public class SceneUIManager : MonoBehaviour
         string json = JsonUtility.ToJson(addLevelToCustomListDto);
         Debug.Log(json);
         StartCoroutine(DeleteFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/deleteLevelinCustomLevelList", json, response));
+    }
+
+    private void CallDeleteCustomListApi(int idChild, int idCustomLevelList, Action<DefaultResponse> response)
+    {
+        StartCoroutine(DeleteFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/deleteCustomLevelList?idChild=" + idChild + "&idCustomLevelList=" + idCustomLevelList, "{}", response));
     }
 
     private void CallAddFavoriteLevelApi(int idChild, int idLevel, Action<DefaultResponse> response)

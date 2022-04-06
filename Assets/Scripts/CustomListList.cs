@@ -63,6 +63,7 @@ public class CustomListList : MonoBehaviour
             listManager.ListUI = lM.ListUI;
             listManager.SceneManager = lM.SceneManager;
             listManager.InformationPopup = lM.InformationPopup;
+            listManager.deleteButton = lM.deleteButton;
 
             lists.Add(listManager);
 
@@ -89,6 +90,45 @@ public class CustomListList : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void RemoveList(ListManager listManager) {
+        listManager.RemoveAll();
+        lists.Remove(listManager);
+
+        ReorderButtons();
+    }
+
+    private void ReorderButtons() {
+        for(int i = 0; i < 3; i++) {
+            Button listButton;
+            switch (i) {
+                case 0:
+                    listButton = List1Button;
+                    break;
+                case 1:
+                    listButton = List2Button;
+                    break;
+                default:
+                    listButton = List3Button;
+                    break;
+            }
+
+            listButton.GetComponentInChildren<Text>().text = "";
+            listButton.onClick.RemoveAllListeners();
+            listButton.interactable = false;
+
+            if (i < lists.Count) {
+                ListManager listManager = lists[i];
+                listButton.GetComponentInChildren<Text>().text = listManager.Name;
+                listButton.onClick.AddListener(() => {
+                    sceneUIManager.SetCustomListActive(listManager);
+                    sceneUIManager.ShowUI(sceneUIManager.m_ListaPersonalizadaUI);
+                    gameObject.SetActive(false);
+                });
+                listButton.interactable = true;
+            }
+        }
     }
 
     public List<ListManager> getLists()

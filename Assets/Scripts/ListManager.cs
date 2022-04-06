@@ -12,6 +12,7 @@ public class ListManager : MonoBehaviour
     [SerializeField] private List<ListItemManager> items = new List<ListItemManager>();
     [SerializeField] public GameObject ContentPanel = null;
 	[SerializeField] public GameObject InformationPopup = null;
+	[SerializeField] public Button deleteButton = null;
 	[SerializeField] public string Name = "Lista Personalizada";
 	[SerializeField] private bool isFavoritesList;
 	private bool isEditing = false;
@@ -67,6 +68,10 @@ public class ListManager : MonoBehaviour
 		foreach(ListItemManager listItem in items) {
 			listItem.gameObject.SetActive(true);
 		}
+	}
+
+	public void DeleteList() {
+		Debug.Log("DELETING LIST");
 	}
 
 	public void Remove(ListItemManager listItem) {

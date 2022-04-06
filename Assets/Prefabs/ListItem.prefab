@@ -118,7 +118,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5822743797550702644}
+      - m_Target: {fileID: 0}
         m_MethodName: PromptAddToList
         m_Mode: 1
         m_Arguments:
@@ -247,7 +247,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5822743797550702644}
+      - m_Target: {fileID: 0}
         m_MethodName: PromptRemoveFromList
         m_Mode: 1
         m_Arguments:
@@ -346,7 +346,6 @@ GameObject:
   m_Component:
   - component: {fileID: 47019125491455483}
   - component: {fileID: -1232771727787212976}
-  - component: {fileID: 5822743797550702644}
   - component: {fileID: 1599716918555686212}
   - component: {fileID: 646469734383154993}
   - component: {fileID: 250224903099744499}
@@ -399,24 +398,6 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
---- !u!114 &5822743797550702644
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8186913263904711102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2d9d37b115ae9f4183c1ca1efceb442, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ListManager: {fileID: 0}
-  AddButton: {fileID: 4557027025615481488}
-  RemoveButton: {fileID: 6449769716926678935}
-  Id: 0
-  text: {fileID: 5001920317677257738}
-  inListAddColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!222 &1599716918555686212
 CanvasRenderer:
   m_ObjectHideFlags: 0
