@@ -46339,9 +46339,9 @@ VideoPlayer:
   m_AspectRatio: 2
   m_DataSource: 0
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
+  m_AudioOutputMode: 1
   m_TargetAudioSources:
-  - {fileID: 0}
+  - {fileID: 519420033}
   m_DirectAudioVolumes:
   - 1
   m_Url: 
@@ -46446,9 +46446,9 @@ VideoPlayer:
   m_AspectRatio: 2
   m_DataSource: 0
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
+  m_AudioOutputMode: 1
   m_TargetAudioSources:
-  - {fileID: 0}
+  - {fileID: 519420033}
   m_DirectAudioVolumes:
   - 1
   m_Url: 
@@ -55076,9 +55076,9 @@ VideoPlayer:
   m_AspectRatio: 2
   m_DataSource: 0
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
+  m_AudioOutputMode: 1
   m_TargetAudioSources:
-  - {fileID: 0}
+  - {fileID: 519420033}
   m_DirectAudioVolumes:
   - 1
   m_Url: 
@@ -66245,9 +66245,9 @@ VideoPlayer:
   m_AspectRatio: 2
   m_DataSource: 0
   m_PlaybackSpeed: 1
-  m_AudioOutputMode: 2
+  m_AudioOutputMode: 1
   m_TargetAudioSources:
-  - {fileID: 0}
+  - {fileID: 519420033}
   m_DirectAudioVolumes:
   - 1
   m_Url: 
@@ -84844,6 +84844,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: ce4a3317670864eaa851aad35a4a4980,
         type: 3}
+    - target: {fileID: 8350442129140005071, guid: ff0030a81fe3e094583334239f3c9473,
+        type: 3}
+      propertyPath: Audio_Listener
+      value: 
+      objectReference: {fileID: 519420029}
     - target: {fileID: 8350442129140005071, guid: ff0030a81fe3e094583334239f3c9473,
         type: 3}
       propertyPath: IsPlayingImage

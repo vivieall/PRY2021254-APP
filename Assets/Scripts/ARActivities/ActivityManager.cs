@@ -23,10 +23,12 @@ public class ActivityManager : MonoBehaviour
     private int ActivityNum;
     private int Fails=0;
     private int Success= 0;
+    private Transform OverlayChildren;
 
 
     private GameObject CurrActivity;
     private ArrayList CurrGameobjs;
+    private SoundManager soundManager;
     PersistanceHandler Handler;
     // Start is called before the first frame update
     void Start()
@@ -38,7 +40,7 @@ public class ActivityManager : MonoBehaviour
         CurrActivity = ActivityHandler(ActivityNum);
         CurrGameobjs = ActivityObjectsHandler(ActivityNum);
         CurrActivity.SetActive(true);
-        
+        soundManager = FindObjectOfType<SoundManager>();
     }
     // Update is called once per frame
     void Update(){}
@@ -92,9 +94,14 @@ public class ActivityManager : MonoBehaviour
     {
         Fails += 1;
         Debug.Log(Fails);
+
         if (Fails>=3)
         {
             TriggerFail();
+        }
+        else
+        {
+            soundManager.SelectAudio(1, 0.5f);//incorrect?
         }
     }
 
@@ -105,6 +112,10 @@ public class ActivityManager : MonoBehaviour
         if (Success >= 3)
         {
             TriggerSuccess();
+        }
+        else
+        {
+            soundManager.SelectAudio(0, 0.5f);//correct?
         }
     }
 
@@ -118,6 +129,7 @@ public class ActivityManager : MonoBehaviour
         });   
         ActivityHandler(ActivityNum).SetActive(false);
         CompletelvlScreen.SetActive(true);
+        soundManager.SelectAudio(2, 0.5f);//victory?
     }
 
     public void TriggerFail()
@@ -125,6 +137,7 @@ public class ActivityManager : MonoBehaviour
         print("Activity has failed");
         ActivityHandler(ActivityNum).SetActive(false);
         FailedlvlScreen.SetActive(true);
+        soundManager.SelectAudio(3, 0.5f);//try_again?
     }
 
     public void ResetActivity()
@@ -137,6 +150,11 @@ public class ActivityManager : MonoBehaviour
         }
         Fails = 0;
         Success = 0;
+        OverlayChildren= OverlayOne.transform.Find("GameObjects");
+        for (int i = 0; i < OverlayOne.transform.Find("GameObjects").transform.childCount; i++)
+        {
+            OverlayChildren.transform.GetChild(i).GetComponent<DragToUIObj>().Reset();
+        }
     }
 
     public int GetCurrActivityNum()

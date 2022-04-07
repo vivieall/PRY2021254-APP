@@ -62,14 +62,12 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
                     {
                         SetDone(true);
                         SwitchState(true);
-                        //evSys.CheckCompletion();
                         evSys.AddSuccess();
                     }
                     else
                     {
                         SwitchState(false);
                         Debug.Log("not found!");
-                        //evSys.CheckCompletion();
                         evSys.AddFail();
                     }
                 }
@@ -103,49 +101,40 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
         Debug.Log(correct.name);
         CurrentObject2 = correct;
     }
+
+    public GameObject GetAnswer()
+    {
+        return CurrentObject;
+    }
+
     private void SwitchState(bool result)
     {
-        //var rendobj = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).gameObject.transform;
-        rendobj = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).gameObject.transform;
+        rendobj = CurrentObject.gameObject.transform.GetChild(0).gameObject.transform;
 
         //if true, show 3d checkmark, else show 3d activity object
         if (result) {
             //Instantiates new 3d object with the prev object transform properties
-            //Destroy(rendobj.GetChild(0).gameObject);
             rendobj.GetChild(0).gameObject.SetActive(false);
-
-            //var rendobj2 = CurrentObject2.transform.GetChild(0).gameObject.transform;
             rendobj2 = CurrentObject2.transform.GetChild(0).gameObject.transform;
-
-
-            //var fluff = Instantiate(robj, rendobj2);
             fluff = Instantiate(robj, rendobj2);
-            //Instantiate(robj, rendobj);
-            soundManager.SelectAudio(0, 0.5f);//correct?
+            //soundManager.SelectAudio(0, 0.5f);//correct?
+
             this.gameObject.SetActive(false);
         } else
         {
             Debug.Log(rendobj.name);
             StartCoroutine(Fade());
-            soundManager.SelectAudio(1, 0.5f);//incorrect?
+            //soundManager.SelectAudio(1, 0.5f);//incorrect?
         }
     }
 
     IEnumerator Fade()
     {
         rendobj2 = CurrentObject2.transform.GetChild(0).gameObject.transform;
-        //var rendobj2 = CurrentObject2.transform.GetChild(0).gameObject.transform;
-
         CurrentObject2.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
-
         fluff=Instantiate(wobj, rendobj2);
-        //var fluff=Instantiate(wobj, rendobj2);
-
         rectTransform.anchoredPosition = zeroArea;
-
         Destroy(fluff, 3);
-        //fluff = null;
-
         yield return new WaitForSeconds(3.0f);  
         Debug.Log("Bai");
         CurrentObject2.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(true);
@@ -161,12 +150,15 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
             default:
                 break;
         }
+        Destroy(fluff);
+        SetDone(false);
     }
 
     public bool GetDone()
     {
         return done;
     }
+
 
     /// <summary>
     /// Pone la variable done como el valor dado

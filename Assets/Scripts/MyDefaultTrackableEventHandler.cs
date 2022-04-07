@@ -16,6 +16,10 @@ public class MyDefaultTrackableEventHandler : DefaultTrackableEventHandler
         for (int i = 0; i < PointObj.transform.childCount; i++)
         {
             PointObj.transform.GetChild(i).GetComponent<DragToUIObj>().SetAnswer(this.gameObject);
+            if (this.gameObject== PointObj.transform.GetChild(i).GetComponent<DragToUIObj>().GetAnswer() && PointObj.transform.GetChild(i).GetComponent<DragToUIObj>().GetDone())
+            {
+                this.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
+            }        
         }
         
     }

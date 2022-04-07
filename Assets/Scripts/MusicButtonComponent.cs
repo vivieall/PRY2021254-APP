@@ -9,6 +9,7 @@ public class MusicButtonComponent : MonoBehaviour
     [SerializeField] public Image ImageComponent;
     [SerializeField] public Sprite IsPausedImage;
     [SerializeField] public Sprite IsPlayingImage;
+    [SerializeField] public AudioListener Audio_Listener;
 
     // Start is called before the first frame update
     void Start()
@@ -22,25 +23,26 @@ public class MusicButtonComponent : MonoBehaviour
             return;
 		}
         UpdateButtonState();
+        Audio_Listener = Camera.main.GetComponent<AudioListener>();
     }
 
     public void UpdateButtonState()
 	{
-        ImageComponent.overrideSprite = AudioPlayer.isPlaying ? IsPlayingImage : IsPausedImage;
+        ImageComponent.overrideSprite = (AudioListener.volume != 0.0f) ? IsPlayingImage : IsPausedImage;
 	}
 
     public void Toggle()
 	{
-        if (AudioPlayer.isPlaying)
-		{
-            AudioPlayer.Pause();
-		}
+        if (AudioListener.volume == 1.0f)
+        {
+            AudioListener.volume = 0.0f;
+        }
         else
-		{
-            AudioPlayer.Play();
-		}
+        {
+            AudioListener.volume = 1.0f;
+        }
         UpdateButtonState();
-	}
+    }
 
     // Update proper button image when changing windows / views
 	void OnEnable()
