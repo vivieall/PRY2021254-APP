@@ -13,6 +13,9 @@ public class ListManager : MonoBehaviour
     [SerializeField] public GameObject ContentPanel = null;
 	[SerializeField] public GameObject InformationPopup = null;
 	[SerializeField] public Button deleteButton = null;
+	[SerializeField] public Button editButton = null;
+	[SerializeField] public Button saveButton = null;
+	[SerializeField] public InputField editNameInputField = null;
 	[SerializeField] public string Name = "Lista Personalizada";
 	[SerializeField] private bool isFavoritesList;
 	private bool isEditing = false;
@@ -29,6 +32,29 @@ public class ListManager : MonoBehaviour
 		isEditing = !isEditing;
 		foreach(ListItemManager listItem in ContentPanel.GetComponentsInChildren<ListItemManager>()) {
 			listItem.setRemoveButtonActiveStatus(isEditing);
+		}
+
+		if (!isFavoritesList) {
+			float offset = editNameInputField.gameObject.GetComponent<RectTransform>().rect.height + 10;
+			RectTransform rect = gameObject.GetComponent<RectTransform>();
+			rect.offsetMax = new Vector2(rect.offsetMax.x, rect.offsetMax.y + (isEditing ? -offset : offset));
+		}
+
+		if (isEditing) {
+			if (!isFavoritesList) {
+				editNameInputField.gameObject.SetActive(true);
+			}
+
+			editButton.gameObject.SetActive(false);
+			saveButton.gameObject.SetActive(true);
+		} else {
+			if (!isFavoritesList) {
+				editNameInputField.gameObject.SetActive(false);
+				editNameInputField.text = "";
+			}
+
+			editButton.gameObject.SetActive(true);
+			saveButton.gameObject.SetActive(false);
 		}
 	}
 
