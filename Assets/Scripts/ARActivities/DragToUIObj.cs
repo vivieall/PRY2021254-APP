@@ -10,9 +10,9 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     //1 -> Objeto 3D a mostrar/modificar DENTRO DEL RENDEROBJECT
     [SerializeField] public GameObject VuforiaObject;
     [SerializeField] private int GameObjectNumber;
-    [SerializeField] private string CorrectAnswer;
 
     public GameObject CurrentObject;
+    private GameObject CurrentObject2;
 
     private GameObject GoalObject;
     private string nombre;
@@ -24,6 +24,11 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     private Vector3 UR;
     private bool done = false;
     private ActivityManager evSys;
+
+    private Object fluff;
+    private Transform rendobj;
+    private Transform rendobj2;
+
 
     private SoundManager soundManager;
 
@@ -38,40 +43,9 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     }
     public void OnEndDrag(PointerEventData eventData)
     {
-        //nombre = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).name;
         EvaluateOverlap();
         rectTransform.anchoredPosition = zeroArea;
     }
-
-    //public void EvaluateOverlap()
-    //{
-    //    Debug.Log(GoalCanvas.isActiveAndEnabled);
-    //    if (GoalCanvas.isActiveAndEnabled)
-    //    {
-    //        if (rectTransform.position.x >= DL.x && rectTransform.position.x <= UR.x)
-    //        {
-    //            if (rectTransform.position.y >= DL.y && rectTransform.position.y <= UR.y)
-    //            {
-    //                SetDone(true);
-    //                SwitchState();
-    //                //gameObject.SetActive(false);
-    //                evSys.CheckCompletion();
-    //            }
-    //        }
-    //    }
-    //    else
-    //    {
-    //        if (rectTransform.position.x >= DL.x && rectTransform.position.x <= UR.x)
-    //        {
-    //            if (rectTransform.position.y >= DL.y && rectTransform.position.y <= UR.y)
-    //            {
-    //                SwitchState();
-    //                //gameObject.SetActive(false);
-    //                evSys.CheckCompletion();
-    //            }
-    //        }
-    //    }
-    //}
 
     public void EvaluateOverlap()
     {
@@ -81,48 +55,22 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
             {
                 if (rectTransform.position.y >= DL.y && rectTransform.position.y <= UR.y)
                 {
-                    var renderers = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.GetComponentsInChildren<Renderer>(true);
-                    foreach (var item in renderers)
+                    Debug.Log(CurrentObject2.name);
+                    Debug.Log(CurrentObject.name);
+
+                    if (CurrentObject == CurrentObject2)
                     {
-                        Debug.Log(item.enabled);
+                        SetDone(true);
+                        SwitchState(true);
+                        //evSys.CheckCompletion();
+                        evSys.AddSuccess();
                     }
-                    if (renderers[0] == true)
+                    else
                     {
-                        nombre = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).name;
-                        Debug.Log(nombre);
-                        //if (nombre=="Bottle"+GameObjectNumber.ToString())
-                        //if (nombre != "CorrectAnswer" || nombre != "WrongAnser")
-                        if (nombre == CorrectAnswer)
-                        {
-                            SetDone(true);
-                            SwitchState(true);
-                            //gameObject.SetActive(false);
-                            evSys.CheckCompletion();
-                        }
-                        else
-                        {
-                            SetDone(false);
-                            SwitchState(false);
-                            Debug.Log("not found!");
-                        }
-
-
-                        //if (nombre == "RenderObject"+ GameObjectNumber.ToString())
-                        //{
-                        //    SetDone(true);
-                        //    SwitchState();
-                        //    //gameObject.SetActive(false);
-                        //    evSys.CheckCompletion();
-                        //}
-                        //else
-                        //{
-                        //    //.GetComponentsInChildren<Renderer>(true)
-                        //    //SwitchState();
-                        //    //gameObject.SetActive(false);
-                        //    //evSys.CheckCompletion();
-                        //    Debug.Log("not found!");
-                        //}
-
+                        SwitchState(false);
+                        Debug.Log("not found!");
+                        //evSys.CheckCompletion();
+                        evSys.AddFail();
                     }
                 }
 
@@ -132,12 +80,10 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
 
     void Start()
     {
-        CorrectAnswer= VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).gameObject.transform.GetChild(0).name;
         evSys = GameObject.Find("EventSystem").GetComponent<ActivityManager>();
         rectTransform = GetComponent<RectTransform>();
         zeroArea = GetComponent<RectTransform>().anchoredPosition;
         GoalCanvas = VuforiaObject.transform.GetChild(0).GetComponent<Canvas>();
-        Debug.Log(GoalCanvas);
         GoalObject = VuforiaObject.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject;
         DL = new Vector3(GoalObject.transform.position.x - rectTransform.rect.width / 2, GoalObject.transform.position.y - rectTransform.rect.height / 2, GoalObject.transform.position.z);
         UR = new Vector3(GoalObject.transform.position.x + rectTransform.rect.width / 2, GoalObject.transform.position.y + rectTransform.rect.height / 2, GoalObject.transform.position.z);
@@ -145,68 +91,71 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
         InitializeResource(1,1);
     }
 
-    void InitializeResource(int actnum,int objnum)
+    public void InitializeResource(int actnum,int objnum)
     {
         string aux = "Act" + actnum + "_Obj"+objnum;
         var ActivityObj = Resources.Load(aux);
         robj = Resources.Load("Prefabs/CorrectAnswer");
         wobj = Resources.Load("Prefabs/WrongAnswer");
     }
-
+    public void SetAnswer(GameObject correct)
+    {
+        Debug.Log(correct.name);
+        CurrentObject2 = correct;
+    }
     private void SwitchState(bool result)
     {
-
-        //var rendobj = VuforiaObject.transform.GetChild(1).gameObject.transform; //esto cambie por gameobjectnumber y que agarre a su hijo -hamill
-        var rendobj = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).gameObject.transform;
-
-        //Destroys current 3d object
-        Destroy(rendobj.GetChild(0).gameObject);
+        //var rendobj = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).gameObject.transform;
+        rendobj = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).gameObject.transform;
 
         //if true, show 3d checkmark, else show 3d activity object
         if (result) {
             //Instantiates new 3d object with the prev object transform properties
-            Instantiate(robj, rendobj);
+            //Destroy(rendobj.GetChild(0).gameObject);
+            rendobj.GetChild(0).gameObject.SetActive(false);
+
+            //var rendobj2 = CurrentObject2.transform.GetChild(0).gameObject.transform;
+            rendobj2 = CurrentObject2.transform.GetChild(0).gameObject.transform;
+
+
+            //var fluff = Instantiate(robj, rendobj2);
+            fluff = Instantiate(robj, rendobj2);
+            //Instantiate(robj, rendobj);
             soundManager.SelectAudio(0, 0.5f);//correct?
+            this.gameObject.SetActive(false);
         } else
         {
-            Instantiate(wobj, rendobj);
+            Debug.Log(rendobj.name);
+            StartCoroutine(Fade());
             soundManager.SelectAudio(1, 0.5f);//incorrect?
         }
     }
 
-    //private void SwitchState()
-    //{
-    //    //Switches done state of object
-    //    //done = !done;
-    //    //Switches the ImageTarget# UI
-    //    //VuforiaObject.transform.GetChild(0).gameObject.SetActive(!done);  //comentado para que no desaparesca
-    //    //Grabs current 3d object transform properties  
+    IEnumerator Fade()
+    {
+        rendobj2 = CurrentObject2.transform.GetChild(0).gameObject.transform;
+        //var rendobj2 = CurrentObject2.transform.GetChild(0).gameObject.transform;
 
-    //    //var rendobj = VuforiaObject.transform.GetChild(1).gameObject.transform; //esto cambie por gameobjectnumber y que agarre a su hijo -hamill
-    //    var rendobj = VuforiaObject.transform.GetChild(GameObjectNumber).gameObject.transform.GetChild(0).gameObject.transform;
+        CurrentObject2.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(false);
 
-    //    //Destroys current 3d object
-    //    Destroy(rendobj.GetChild(0).gameObject);
+        fluff=Instantiate(wobj, rendobj2);
+        //var fluff=Instantiate(wobj, rendobj2);
 
+        rectTransform.anchoredPosition = zeroArea;
 
-    //    //if true, show 3d checkmark, else show 3d activity object
-    //    if (done)
-    //    {
-    //        //Instantiates new 3d object with the prev object transform properties
-    //        Instantiate(robj, rendobj);
-    //    }
-    //    else
-    //    {
-    //        Instantiate(wobj, rendobj);
-    //    }
-    //}
+        Destroy(fluff, 3);
+        //fluff = null;
 
+        yield return new WaitForSeconds(3.0f);  
+        Debug.Log("Bai");
+        CurrentObject2.transform.GetChild(0).gameObject.transform.GetChild(0).gameObject.SetActive(true);
+    }
 
-    // Update is called once per frame
     void Update(){}
 
     public void Reset()
     {
+        this.gameObject.SetActive(true);
         switch (evSys.GetCurrActivityNum())
         {
             default:
