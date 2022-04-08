@@ -53,7 +53,7 @@ public class RecreacionManager : MonoBehaviour
 
     void Update()
     {
-        Debug.Log("Esperando Cambios");
+        //Debug.Log("Esperando Cambios");
         IdChild = GameObject.Find("UICamera").GetComponent<SceneUIManager>().getIdChild();
         StartCoroutine(GetChild(IdChild));
     }

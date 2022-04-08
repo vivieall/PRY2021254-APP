@@ -123,5 +123,12 @@ public class CustomListList : MonoBehaviour
         }
 
         lists.Clear();
+
+        Button[] buttons = ContentPanel.GetComponentsInChildren<Button>();
+
+        foreach(Button button in buttons) {
+            Destroy(button.gameObject);
+        }
+        
     }
 }

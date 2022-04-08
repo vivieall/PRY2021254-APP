@@ -971,10 +971,11 @@ public class SceneUIManager : MonoBehaviour
 
     IEnumerator GetRequestDeleteChild(string url, Action<DefaultResponse> response)
     {
-        UnityWebRequest uwr = UnityWebRequest.Get(url);
+        var uwr = new UnityWebRequest(url, "DELETE");
+        uwr.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+        uwr.SetRequestHeader("Content-Type", "application/json");
         string token = PlayerPrefs.GetString("token");
         uwr.SetRequestHeader("Authorization", token);
-        Debug.Log("Token: " + token);
 
         yield return uwr.SendWebRequest();
 
