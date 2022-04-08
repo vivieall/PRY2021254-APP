@@ -168,7 +168,6 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] public Sprite avatar3;
     #endregion
 
-
     //private bool sesionIniciada;
     private string id_guardian;
     private string nivelAutismoChild;
