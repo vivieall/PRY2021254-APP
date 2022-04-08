@@ -9,9 +9,10 @@ public class CustomListList : MonoBehaviour
 	private List<ListManager> lists = new List<ListManager>();
 	[SerializeField] private RenameListPopupComponent renameListPopupComponent;
 	[SerializeField] private SceneUIManager sceneUIManager;
-	[SerializeField] public Button List1Button;
-	[SerializeField] public Button List2Button;
-	[SerializeField] public Button List3Button;
+    [SerializeField] public GameObject ContentPanel;
+    [SerializeField] public Button BaseButton;
+    [SerializeField] public Button CancelButton;
+    [SerializeField] public Text NoElementsLabel;
     [SerializeField] public Button CreateNewButton;
 
     public void PromptCreateList()
@@ -34,61 +35,81 @@ public class CustomListList : MonoBehaviour
         this.gameObject.SetActive(false);
         customListList.CreateNewButton.gameObject.SetActive(false);
         customListList.gameObject.SetActive(true);
+		customListList.GetComponent<RectTransform>().sizeDelta = this.GetComponent<RectTransform>().sizeDelta;
 
-        customListList.List1Button.onClick.RemoveAllListeners();
-        customListList.List2Button.onClick.RemoveAllListeners();
-        customListList.List3Button.onClick.RemoveAllListeners();
-
-        customListList.List1Button.onClick.AddListener(() => {
-            sceneUIManager.AddLevelToCustomList(lists[0], levelButtonListItem);
+        customListList.CancelButton.onClick.RemoveAllListeners();
+        customListList.CancelButton.onClick.AddListener(() => {
             Destroy(customListList.gameObject);
         });
-        customListList.List2Button.onClick.AddListener(() => {
-            sceneUIManager.AddLevelToCustomList(lists[1], levelButtonListItem);
-            Destroy(customListList.gameObject);
-        });
-        customListList.List3Button.onClick.AddListener(() => {
-            sceneUIManager.AddLevelToCustomList(lists[2], levelButtonListItem);
-            Destroy(customListList.gameObject);
+
+        Button[] buttons = customListList.ContentPanel.GetComponentsInChildren<Button>();
+
+        for(int i = 0; i < lists.Count; i++) {
+            buttons[i].onClick.RemoveAllListeners();
+            ListManager listManager = lists[i];
+            buttons[i].onClick.AddListener(() => {
+                sceneUIManager.AddLevelToCustomList(listManager, levelButtonListItem);
+                Destroy(customListList.gameObject);
+            });
+        }
+    }
+
+    public void CreateList(int id, string name, ListManager lM)
+    {
+        ListManager listManager = lM.gameObject.AddComponent<ListManager>();
+
+        listManager.Name = name;
+        listManager.Id = id;
+        listManager.ContentPanel = lM.ContentPanel;
+        listManager.ListUI = lM.ListUI;
+        listManager.SceneManager = lM.SceneManager;
+        listManager.InformationPopup = lM.InformationPopup;
+        listManager.deleteButton = lM.deleteButton;
+        listManager.editButton = lM.editButton;
+        listManager.saveButton = lM.saveButton;
+        listManager.editNameInputField = lM.editNameInputField;
+
+        lists.Add(listManager);
+
+        CreateButton(listManager);
+
+        NoElementsLabel.gameObject.SetActive(false);
+    }
+
+    private void CreateButton(ListManager listManager) {
+        Button listButton = Instantiate(BaseButton);
+        listButton.transform.SetParent(ContentPanel.transform);
+        listButton.gameObject.SetActive(true);
+		listButton.transform.localScale = 1.66F * Vector3.one;
+        listButton.GetComponentInChildren<Text>().text = listManager.Name;
+        listButton.onClick.AddListener(() => {
+            sceneUIManager.SetCustomListActive(listManager);
+            sceneUIManager.ShowUI(sceneUIManager.m_ListaPersonalizadaUI);
+            gameObject.SetActive(false);
         });
     }
 
-    public bool CreateList(string name, ListManager lM)
-    {
-        if (lists.Count < 3) {
-            ListManager listManager = lM.gameObject.AddComponent<ListManager>();
+    public void RemoveList(ListManager listManager) {
+        listManager.RemoveAll();
+        lists.Remove(listManager);
 
-            listManager.Name = name;
-            listManager.ContentPanel = lM.ContentPanel;
-            listManager.ListUI = lM.ListUI;
-            listManager.SceneManager = lM.SceneManager;
-            listManager.InformationPopup = lM.InformationPopup;
+        ReorderButtons();
+    }
 
-            lists.Add(listManager);
+    public void ReorderButtons() {
+        Button[] buttons = ContentPanel.GetComponentsInChildren<Button>();
 
-            Button listButton;
-            switch (lists.Count) {
-                case 1:
-                    listButton = List1Button;
-                    break;
-                case 2:
-                    listButton = List2Button;
-                    break;
-                default:
-                    listButton = List3Button;
-                    break;
-            }
-            listButton.GetComponentInChildren<Text>().text = name;
-            listButton.onClick.AddListener(() => {
-                sceneUIManager.SetCustomListActive(listManager);
-                sceneUIManager.ShowUI(sceneUIManager.m_ListaPersonalizadaUI);
-                gameObject.SetActive(false);
-            });
-            listButton.interactable = true;
-            return true;
+        foreach(Button button in buttons) {
+            Destroy(button.gameObject);
         }
 
-        return false;
+        foreach(ListManager listManager in lists) {
+            CreateButton(listManager);
+        }
+
+        if (lists.Count == 0) {
+            NoElementsLabel.gameObject.SetActive(true);
+        }
     }
 
     public List<ListManager> getLists()

@@ -13,7 +13,7 @@ public class ListItemSearcher : MonoBehaviour
 		ListItemManager[] items = ScreenToSearch.GetComponentsInChildren<ListItemManager>(true);
 		foreach (ListItemManager lim in items)
 		{
-			lim.gameObject.transform.parent.gameObject.transform.parent.gameObject.SetActive((lim.text.text).ToLower().Contains(lowerSearch));
+			lim.gameObject.SetActive((lim.text.text).ToLower().Contains(lowerSearch));
 		}
 	}
 

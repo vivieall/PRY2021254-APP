@@ -916,6 +916,30 @@ public class SceneUIManager : MonoBehaviour
         }
     }
 
+    IEnumerator PutRequestUpdateCustomList(string url, string json, Action<DefaultResponse> response)
+    {
+        var uwr = new UnityWebRequest(url, "PUT");
+        byte[] jsonToSend = new System.Text.UTF8Encoding().GetBytes(json);
+        uwr.uploadHandler = (UploadHandler)new UploadHandlerRaw(jsonToSend);
+        uwr.downloadHandler = (DownloadHandler)new DownloadHandlerBuffer();
+        uwr.SetRequestHeader("Content-Type", "application/json");
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + uwr.downloadHandler.text);
+            response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
+        }
+    }
+
     private void CallGetRequestGuardianApi(string id, Action<GuardianData> response)
     {
         StartCoroutine(GetRequestGuardian("https://teapprendo.herokuapp.com/guardians/listByIdGuardian?idGuardian=" + id, response ));    }
@@ -1196,6 +1220,12 @@ public class SceneUIManager : MonoBehaviour
     }
 
     [Serializable]
+    public class EditCustomLevelListDto {
+        public int idCustomLevelList;
+        public string name;
+    }
+
+    [Serializable]
     public class Level {
         public int idLevel;
         public string description;
@@ -1261,9 +1291,8 @@ public class SceneUIManager : MonoBehaviour
         customListList.RemoveAll();
 
         foreach(CustomList customList in loggedChildCustomLists) {
-            customListList.CreateList(customList.name, customListManager);
+            customListList.CreateList(customList.idCustomLevelList, customList.name, customListManager);
             ListManager listManager = customListList.getLists().Last();
-            listManager.Id = customList.idCustomLevelList;
 
             IEnumerable<int> childFavoriteLevelsIds = customList.levels.Select(nivel => nivel.idLevel);
 
@@ -1276,13 +1305,37 @@ public class SceneUIManager : MonoBehaviour
         }
     }
 
+    public void EditCustomList(ListManager listManager)
+    {
+        string name = listManager.editNameInputField.text;
+
+        if (name.Length == 0) {
+            customListManager.SwitchEditMode();
+            return;
+        }
+
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar el nombre de la lista " + listManager.Name + " por " + name + "?", () => {
+            ConfirmPopup.SetLoadingState(true);
+            CallEditCustomListApi(listManager.Id, name, delegate (DefaultResponse response){
+                if (response.idResponse >= 0) {
+                    customListManagerLabel.text = name;
+                    customListManager.Name = name;
+                    customListManager.SwitchEditMode();
+                    customListList.ReorderButtons();
+                }
+                InformationPopup.PopupMessage(response.message);
+                ConfirmPopup.SetLoadingState(false);
+            });
+        }, () => {});
+    }
+
     public void AddCustomList(string name)
     {
         ConfirmPopup.ConfirmOperation("¿Desea crear la lista " + name + "?", () => {
             ConfirmPopup.SetLoadingState(true);
             CallAddCustomListApi(Int32.Parse(loggedChild.idChild), name, delegate (DefaultResponse response){
                 if (response.idResponse >= 0) {
-                    customListList.CreateList(name, customListManager);
+                    customListList.CreateList(response.idResponse, name, customListManager);
                 }
                 InformationPopup.PopupMessage(response.message);
                 ConfirmPopup.SetLoadingState(false);
@@ -1295,6 +1348,24 @@ public class SceneUIManager : MonoBehaviour
         listManager.Refresh();
         customListManagerLabel.text = listManager.Name;
         customListManager = listManager;
+        if (customListManager.deleteButton != null) {
+            customListManager.deleteButton.onClick.RemoveAllListeners();
+            customListManager.deleteButton.onClick.AddListener(() => {
+                DeleteCustomList(listManager);
+            });
+        }
+        if (customListManager.saveButton != null) {
+            customListManager.saveButton.onClick.RemoveAllListeners();
+            customListManager.saveButton.onClick.AddListener(() => {
+                EditCustomList(listManager);
+            });
+        }
+        if (customListManager.editButton != null) {
+            customListManager.editButton.onClick.RemoveAllListeners();
+            customListManager.editButton.onClick.AddListener(() => {
+                listManager.SwitchEditMode();
+            });
+        }
     }
 
     private void CallAddCustomListApi(int idChild, string name, Action<DefaultResponse> response)
@@ -1305,6 +1376,16 @@ public class SceneUIManager : MonoBehaviour
         string json = JsonUtility.ToJson(addCustomLevelListDto);
         Debug.Log(json);
         StartCoroutine(AddFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/addCustomLevelList", json, response));
+    }
+
+    private void CallEditCustomListApi(int idCustomLevelList, string name, Action<DefaultResponse> response)
+    {
+        EditCustomLevelListDto editCustomLevelListDto = new EditCustomLevelListDto();
+        editCustomLevelListDto.idCustomLevelList = idCustomLevelList;
+        editCustomLevelListDto.name = name;
+        string json = JsonUtility.ToJson(editCustomLevelListDto);
+        Debug.Log(json);
+        StartCoroutine(PutRequestUpdateCustomList("https://teapprendo.herokuapp.com/children/updateNameCustomLevelList", json, response));
     }
 
     public void AddLevelToCustomList(ListManager listManager, LevelButtonListItem levelButtonListItem)
@@ -1319,6 +1400,21 @@ public class SceneUIManager : MonoBehaviour
                 } else {
                     InformationPopup.PopupMessage(response.message);
                 }
+                ConfirmPopup.SetLoadingState(false);
+            });
+        }, () => {});
+    }
+
+    public void DeleteCustomList(ListManager listManager)
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea eliminar la lista " + listManager.Name + "?", () => {
+            ConfirmPopup.SetLoadingState(true);
+            CallDeleteCustomListApi(Int32.Parse(loggedChild.idChild), listManager.Id, delegate (DefaultResponse response){
+                if (response.idResponse >= 0) {
+                    customListList.RemoveList(listManager);
+                    ShowUI(m_SeleccionarCategoriaUI);
+                }
+                InformationPopup.PopupMessage(response.message);
                 ConfirmPopup.SetLoadingState(false);
             });
         }, () => {});
@@ -1387,6 +1483,11 @@ public class SceneUIManager : MonoBehaviour
         string json = JsonUtility.ToJson(addLevelToCustomListDto);
         Debug.Log(json);
         StartCoroutine(DeleteFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/deleteLevelinCustomLevelList", json, response));
+    }
+
+    private void CallDeleteCustomListApi(int idChild, int idCustomLevelList, Action<DefaultResponse> response)
+    {
+        StartCoroutine(DeleteFavoriteLevelRequest("https://teapprendo.herokuapp.com/children/deleteCustomLevelList?idChild=" + idChild + "&idCustomLevelList=" + idCustomLevelList, "{}", response));
     }
 
     private void CallAddFavoriteLevelApi(int idChild, int idLevel, Action<DefaultResponse> response)
@@ -1658,10 +1759,6 @@ public class SceneUIManager : MonoBehaviour
     {
         value = "{\"Items\":" + value + "}";
         return value;
-    }
-
-    private void testDC() {
-        Console.WriteLine("THIS IS A TEST");
     }
 }
 
