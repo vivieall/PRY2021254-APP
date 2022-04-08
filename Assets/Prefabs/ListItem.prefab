@@ -408,7 +408,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8186913263904711102}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 13ded5c7d4b96234db79f81ed3243761, type: 3}
+  m_Script: {fileID: 11500000, guid: c2d9d37b115ae9f4183c1ca1efceb442, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ListManager: {fileID: 0}
@@ -416,7 +416,7 @@ MonoBehaviour:
   RemoveButton: {fileID: 6449769716926678935}
   Id: 0
   text: {fileID: 5001920317677257738}
-  inListAddColor: {r: 0, g: 0, b: 0, a: 1}
+  inListAddColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!222 &1599716918555686212
 CanvasRenderer:
   m_ObjectHideFlags: 0
