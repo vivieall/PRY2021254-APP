@@ -24,28 +24,41 @@ public class RecordManager : MonoBehaviour
 
     private LevelRecord[] allLevels;
     private string IdChild;
+    private List<GameObject> buttonList;
 
-    void Start()
+    public void LoadRecord()
     {
         IdChild = GameObject.Find("UICamera").GetComponent<SceneUIManager>().getIdChild();
+        Debug.Log("ID BUSCADO: " + IdChild);
         StartCoroutine(GetRecord(IdChild));
     }
 
     public void ShowRecord()
     {
-        GameObject ButtonTemplate = transform.GetChild(0).gameObject;
+        buttonList = new List<GameObject>();
+        GameObject ButtonTemplate = gameObject.transform.Find("Panel").transform.Find("PanelMenu").transform.Find("ZonaVertical").transform.Find("ZonaFillasBotton").gameObject;
         GameObject g;
         int N = allLevels.Length;
         if(N > 0)
         {
             for(int i = 0; i < N; i++) 
             {
-                g = Instantiate(ButtonTemplate, transform);
+                g = Instantiate(ButtonTemplate, transform.Find("Panel").transform.Find("PanelMenu").transform.Find("ZonaVertical"));
                 g.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Levels/" + allLevels[i].level.idLevel.ToString());
+                buttonList.Add(g.gameObject);
             }
         }
+        ButtonTemplate.SetActive(false);
+    }
 
-        Destroy(ButtonTemplate);
+    public void DestroyRecord()
+    {
+        GameObject ButtonTemplate = gameObject.transform.Find("Panel").transform.Find("PanelMenu").transform.Find("ZonaVertical").transform.Find("ZonaFillasBotton").gameObject;
+        ButtonTemplate.SetActive(true);
+        foreach(GameObject go in buttonList){
+            Destroy(go);
+        }
+        buttonList.Clear();
     }
 
     IEnumerator GetRecord(string IdChild)

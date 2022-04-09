@@ -5,7 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.Networking;
 using System;
 using System.Text;
-using System.Linq; 
+using System.Linq;
+using System.Text.RegularExpressions; 
+using UnityEngine.SceneManagement;
 
 public class SceneUIManager : MonoBehaviour
 {
@@ -65,13 +67,14 @@ public class SceneUIManager : MonoBehaviour
     [Header("Update Guardian Inputs")]
     [SerializeField] private InputField m_InputCorreoUpdate;
     [SerializeField] private InputField m_InputContrasenaActualUpdate;
-    [SerializeField] private InputField m_InputContrasenaNuevaUpdate;
-    [SerializeField] private InputField m_InputContrasenaNuevaConfUpdate;
+    [SerializeField] private InputField m_InputContrasenaNuevaUpdate;//this
+    [SerializeField] private InputField m_InputContrasenaNuevaConfUpdate;//this
     [SerializeField] private InputField m_InputNombreUpdate;
     [SerializeField] private InputField m_InputApellidoUpdate;
     [SerializeField] private InputField m_InputFechaDiaUpdate;
     [SerializeField] private InputField m_InputFechaMesUpdate;
     [SerializeField] private InputField m_InputFechaAnioUpdate;
+    [SerializeField] private Text m_ErrorUpdateGuardianText;
     #endregion
 
     #region Login
@@ -113,6 +116,7 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_InputFechaDiaChild;
     [SerializeField] private InputField m_InputFechaMesChild;
     [SerializeField] private InputField m_InputFechaAnioChild;
+    [SerializeField] private Text m_ErrorCreateChildText;
     #endregion
 
     #region Perfil Guardian
@@ -170,9 +174,9 @@ public class SceneUIManager : MonoBehaviour
 
     //private bool sesionIniciada;
     private string id_guardian;
-    private string nivelAutismoChild;
-    private string generoChild;
-    private string avatarChild;
+    private string nivelAutismoChild = "";
+    private string generoChild = "";
+    private string avatarChild = "";
     private int nivelSeleccionado;
     private bool premiumOn;
     private string nivelAutismoChildUpdate;
@@ -326,12 +330,38 @@ public class SceneUIManager : MonoBehaviour
         avatarChildUpdate = avatarCode;
     }
 
+    public bool validateEmail(string Email)
+    {
+        String Format;
+        Format = "\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
+        if (Regex.IsMatch(Email, Format))
+        {
+            if (Regex.Replace(Email, Format, String.Empty).Length == 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        else
+        {
+            return false;
+        }
+    }
+
     public void submitResetPassword()
     {
 
         if (m_ResetPasswordEmail.text == "")
         {
             m_ErrorTextResetPassword.text = "Debe ingresar un correo electrónico";
+            return;
+        }
+        else if (!validateEmail(m_ResetPasswordEmail.text))
+        {
+            m_ErrorTextResetPassword.text = "Correo no válido";
             return;
         }
 
@@ -416,13 +446,16 @@ public class SceneUIManager : MonoBehaviour
 
         if (m_InputContrasenaLogin.text == "" || m_InputUsuarioLogin.text == "")
         {
-              m_ErrorText.text = "Verifique que ningun campo este vacío";
+              m_ErrorTextLogin.text = "Verifique no dejar campos vacíos";
         }
-        CallLoginApi(m_InputUsuarioLogin.text, m_InputContrasenaLogin.text, delegate (LoginResponse response)
+        else
         {
-            persistanceHandler.LoginResponse = response;
-            processLoginResponse(response, true);
-        });
+            CallLoginApi(m_InputUsuarioLogin.text, m_InputContrasenaLogin.text, delegate (LoginResponse response)
+            {
+                persistanceHandler.LoginResponse = response;
+                processLoginResponse(response, true);
+            });
+        }
     }
 
     public void processLoginResponse(LoginResponse response, bool showSavedProfiles) {
@@ -463,7 +496,11 @@ public class SceneUIManager : MonoBehaviour
         }
         else
         {
-            m_ErrorTextLogin.text = response.message;
+            if(response.message == "Contraseña incorrecta")
+                m_ErrorTextLogin.text = "Usuario o contraseña no válido";
+            else
+                m_ErrorTextLogin.text = response.message;
+
             Debug.Log("Llamada a la API no válida...");
         }
     }
@@ -543,7 +580,7 @@ public class SceneUIManager : MonoBehaviour
                 }
                 else
                 {
-                    m_ErrorText.text = "Verifique los datos ingresados";
+                    m_ErrorText.text = "Las contraseñas no coinciden";
                     return;
                 }
             }
@@ -564,6 +601,7 @@ public class SceneUIManager : MonoBehaviour
     {
         GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>().ChildIdx = idx;
         loggedChild = ninosGuardian[idx];
+        ///Debug.Log("ID BUSCADO: " + loggedChild.idChild);
         m_BienvenidaNino.text = "Hola, " + loggedChild.names + "!";
 
         CallGetChildrenFavoriteLevelsApi(Int32.Parse(loggedChild.idChild), delegate (Level[] response)
@@ -653,14 +691,19 @@ public class SceneUIManager : MonoBehaviour
 
     public void SubmitUpdateGuardian()
     {
+        PersistanceHandler persistanceHandler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
+
         foreach (string emailSet in Emails)
         {
             if (m_InputCorreoUpdate.text.Contains(emailSet))
             {
                 cuentaRegistradaConExito = true;
-                if ( m_InputCorreoUpdate.text == "" || m_InputContrasenaActualUpdate.text == "" || m_InputContrasenaNuevaUpdate.text == "" || m_InputContrasenaNuevaConfUpdate.text == "")
+                m_InputContrasenaNuevaUpdate.text = m_InputContrasenaActualUpdate.text;
+                m_InputContrasenaNuevaConfUpdate.text = m_InputContrasenaActualUpdate.text;
+
+                if ( m_InputNombreUpdate.text == "" || m_InputApellidoUpdate.text == "" || m_InputFechaAnioUpdate.text == "" || m_InputFechaMesUpdate.text == "" || m_InputFechaDiaUpdate.text == "" || m_InputCorreoUpdate.text == "" || m_InputContrasenaActualUpdate.text == "" || m_InputContrasenaNuevaUpdate.text == "" || m_InputContrasenaNuevaConfUpdate.text == "")
                 {
-                    m_ErrorText.text = "Verifica que ningún campo este vacío";
+                    m_ErrorUpdateGuardianText.text = "Verifica que ningún campo este vacío";
                     return;
                 }
 
@@ -668,7 +711,7 @@ public class SceneUIManager : MonoBehaviour
                 {
                     if (m_InputContrasena.text.Length >= MaxLenght)
                     {
-                        m_ErrorText.text = "Procesando informacion, espere un momento";
+                        m_ErrorUpdateGuardianText.text = "Cambios guardados con éxito";
                         CallUpdateGuardianApi(id_guardian, m_InputContrasenaActualUpdate.text, m_InputContrasenaNuevaUpdate.text, m_InputCorreoUpdate.text,
                             m_InputNombreUpdate.text, m_InputApellidoUpdate.text, m_InputFechaAnioUpdate.text + "-" + m_InputFechaMesUpdate.text + "-" + m_InputFechaDiaUpdate.text,
                             delegate (GuardianData response)
@@ -693,19 +736,19 @@ public class SceneUIManager : MonoBehaviour
                     }
                     else
                     {
-                        m_ErrorText.text = "Tu contraseña debe contener mínimo 8 caracteres";
+                        m_ErrorUpdateGuardianText.text = "Tu contraseña debe contener mínimo 8 caracteres";
                     }
                 }
                 else
                 {
-                    m_ErrorText.text = "Verifique los datos ingresados";
+                    m_ErrorUpdateGuardianText.text = "Verifique los datos ingresados";
                     return;
                 }
             }
 
             if (!m_InputCorreoUpdate.text.Contains(emailSet) && !cuentaRegistradaConExito)
             {
-                m_ErrorText.text = "Ingrese un correo válido";
+                m_ErrorUpdateGuardianText.text = "Ingrese un correo válido";
             }
         }
     }
@@ -732,6 +775,8 @@ public class SceneUIManager : MonoBehaviour
         m_ResetPasswordWindow.SetActive(true);
     }
     public void CloseResetPassword(){
+        m_ResetPasswordEmail.text = "";
+        m_ErrorTextResetPassword.text = "";
         m_ResetPasswordWindow.SetActive(false);
     }
 
@@ -760,6 +805,10 @@ public class SceneUIManager : MonoBehaviour
     }
     public void ShowPerfilNiño(){
         blankRegisterChildSpace();
+        nivelAutismoChild = "";
+        generoChild = "";
+        avatarChild = "";
+        m_ErrorCreateChildText.text = "";
         ShowUI(m_PerfilNiñoCrearUI);
     }
     public void ShowPerfilsGuardados(){
@@ -769,7 +818,15 @@ public class SceneUIManager : MonoBehaviour
     }
     public void ShowActualizarDatos(){
         setProfileData();
+        m_InputContrasenaActualUpdate.text = m_InputContrasenaLogin.text;
+        m_ErrorUpdateGuardianText.text = "";
         ShowUI(m_ActualizarDatosUI);
+    }
+    public void ShowPassword(){
+        if (m_InputContrasenaActualUpdate.GetComponent<InputField>().contentType == InputField.ContentType.Password)
+            m_InputContrasenaActualUpdate.GetComponent<InputField>().contentType = InputField.ContentType.Standard;
+        else
+            m_InputContrasenaActualUpdate.GetComponent<InputField>().contentType = InputField.ContentType.Password;
     }
     public void ShowVerDatosCuidador(){
         setGuardianProfileData();
@@ -1044,6 +1101,13 @@ public class SceneUIManager : MonoBehaviour
                 sintomas2 = sintomas2.Concat(new int[] { i+1 }).ToArray();
             }
         }
+
+        if (m_InputNombreChild.text == "" || m_InputApellidoChild.text == "" || m_InputFechaAnioChild.text == "" || m_InputFechaMesChild.text == "" || m_InputFechaDiaChild.text == "" || generoChild == "" || nivelAutismoChild == "" || avatarChild == "")
+        {
+            m_ErrorCreateChildText.text = "Debe completar todos los campos";
+            return;
+        }
+
         CallRegisterChildApi(id_guardian, m_InputNombreChild.text, m_InputApellidoChild.text, avatarChild, m_InputFechaAnioChild.text + "-" + m_InputFechaMesChild.text + "-" + m_InputFechaDiaChild.text, generoChild, nivelAutismoChild, sintomas2,
             delegate (ChildDataResponse response)
             {
