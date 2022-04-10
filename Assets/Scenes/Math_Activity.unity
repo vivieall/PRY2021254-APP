@@ -157,8 +157,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.17057197, y: 0}
   m_AnchorMax: {x: 0.8267954, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 35, y: -2}
+  m_SizeDelta: {x: -58.39395, y: -35.045044}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &21932762
 MonoBehaviour:
@@ -710,7 +710,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0.31300002}
-  m_AnchoredPosition: {x: 0, y: -0.000045776367}
+  m_AnchoredPosition: {x: 0, y: 7.1511993}
   m_SizeDelta: {x: -71.18628, y: 14.302391}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &233101958
@@ -745,7 +745,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Coloca en la pizarra el n\xFAmero de botellas"
+  m_Text: Coloca en la pizarra la cantidad de botellas
 --- !u!222 &233101959
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1369,8 +1369,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.06727496}
   m_AnchorMax: {x: 1, y: 0.93917507}
-  m_AnchoredPosition: {x: 0, y: -155.49}
-  m_SizeDelta: {x: 0, y: -264.14816}
+  m_AnchoredPosition: {x: 22.3, y: -281.1}
+  m_SizeDelta: {x: -196.57214, y: -538.6676}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &561972266
 MonoBehaviour:
@@ -1385,7 +1385,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.14901961, g: 0.17254902, b: 0.3254902, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -1736,8 +1736,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 22.5, y: 0}
-  m_SizeDelta: {x: -65, y: 0}
+  m_AnchoredPosition: {x: 35.9, y: 2.9}
+  m_SizeDelta: {x: -138.95786, y: -81.77174}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &785952560
 MonoBehaviour:
@@ -1814,7 +1814,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.15200001, y: 0.40150616}
   m_AnchorMax: {x: 0.846, y: 0.90800005}
-  m_AnchoredPosition: {x: 27, y: -8.0228}
+  m_AnchoredPosition: {x: 0.72, y: -8.0228}
   m_SizeDelta: {x: -72.39377, y: -16.045593}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &838684020
@@ -1922,7 +1922,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.021000002, y: 0.40150616}
   m_AnchorMax: {x: 0.102000006, y: 0.90800005}
-  m_AnchoredPosition: {x: 43.1, y: -4}
+  m_AnchoredPosition: {x: 21.638, y: -4.0227}
   m_SizeDelta: {x: 2.3298416, y: -8.045532}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &949453450
@@ -2076,7 +2076,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0.000045776367}
+  m_AnchoredPosition: {x: 0, y: 0.000061035156}
   m_SizeDelta: {x: 350.73694, y: -0.000091552734}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &950740703
@@ -2500,12 +2500,12 @@ PrefabInstance:
     - target: {fileID: 8350442129140005067, guid: ff0030a81fe3e094583334239f3c9473,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 1.0683136
+      value: 1.7940938
       objectReference: {fileID: 0}
     - target: {fileID: 8350442129140005067, guid: ff0030a81fe3e094583334239f3c9473,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 1.0839844
+      value: 1.544148
       objectReference: {fileID: 0}
     - target: {fileID: 8350442129140005067, guid: ff0030a81fe3e094583334239f3c9473,
         type: 3}
@@ -2560,12 +2560,12 @@ PrefabInstance:
     - target: {fileID: 8350442129140005067, guid: ff0030a81fe3e094583334239f3c9473,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -22
       objectReference: {fileID: 0}
     - target: {fileID: 8350442129140005067, guid: ff0030a81fe3e094583334239f3c9473,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -14.099976
       objectReference: {fileID: 0}
     - target: {fileID: 8350442129140005067, guid: ff0030a81fe3e094583334239f3c9473,
         type: 3}
@@ -3109,7 +3109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.69411767, g: 1, b: 0.68235296, a: 1}
+  m_Color: {r: 0.25490198, g: 0.6784314, b: 0.23921569, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4953,7 +4953,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0.17254902, g: 0.10980393, b: 0.27450982, a: 1}
   m_RaycastTarget: 1
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -4965,7 +4965,7 @@ MonoBehaviour:
     m_FontStyle: 1
     m_BestFit: 1
     m_MinSize: 2
-    m_MaxSize: 50
+    m_MaxSize: 65
     m_Alignment: 4
     m_AlignByGeometry: 0
     m_RichText: 1
