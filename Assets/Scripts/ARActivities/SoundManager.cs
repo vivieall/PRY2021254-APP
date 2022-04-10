@@ -17,4 +17,16 @@ public class SoundManager : MonoBehaviour
     {
         controlAudio.PlayOneShot(audios[index], volume);
     }
+
+    public void IsLooping(bool state)
+    {
+        controlAudio.loop=state;
+    }
+
+    public void SelecAudioLoop(int index, float volume)
+    {
+        controlAudio.clip = audios[index];
+        controlAudio.volume = volume;
+        controlAudio.Play();
+    }
 }
