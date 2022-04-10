@@ -440,6 +440,74 @@ public class SceneUIManager : MonoBehaviour
     }
     #endregion
 
+    #region ChangeLvl
+    public void PromptChooselvlMath()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de nivel?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowChooselvlMath();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+
+    public void PromptChooselvlComm()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de nivel?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowChooselvlComm();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+
+    public void PromptChooselvlPSocial()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de nivel?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowChooselvlPSocial();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+
+    public void PromptChooselvlScience()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de nivel?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowChooselvlScience();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+    #endregion
+
+    #region ChangeTheme
+    public void PromptChooseThemeMath()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de tema?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowTemaMath();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+
+    public void PromptChooseThemeComm()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de tema?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowTemaComm();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+
+    public void PromptChooseThemePSocial()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de tema?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowTemaPSocial();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+
+    public void PromptChooseThemeScience()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de tema?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowTemaScience();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+    #endregion
+
+    #region ChangeCategory
+    public void PromptChooseCategory()
+    {
+        ConfirmPopup.ConfirmOperation("¿Desea cambiar de categoría?", () => {
+            ConfirmPopup.gameObject.SetActive(false); ShowCategoria();
+        }, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
+    #endregion
     public void submitLogin2()
     {
         PersistanceHandler persistanceHandler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();

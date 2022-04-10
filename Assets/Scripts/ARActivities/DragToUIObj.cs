@@ -98,7 +98,7 @@ public class DragToUIObj: MonoBehaviour, IDragHandler, IEndDragHandler, IBeginDr
     }
     public void SetAnswer(GameObject correct)
     {
-        Debug.Log(correct.name);
+        //Debug.Log(correct.name);
         CurrentObject2 = correct;
     }
 
