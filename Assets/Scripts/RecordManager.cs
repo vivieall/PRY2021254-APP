@@ -25,6 +25,7 @@ public class RecordManager : MonoBehaviour
     private LevelRecord[] allLevels;
     private string IdChild;
     private List<GameObject> buttonList;
+    [SerializeField] Text messageText;
 
     public void LoadRecord()
     {
@@ -47,6 +48,10 @@ public class RecordManager : MonoBehaviour
                 g.transform.GetChild(0).GetChild(0).GetComponent<Image>().sprite = Resources.Load<Sprite>("Levels/" + allLevels[i].level.idLevel.ToString());
                 buttonList.Add(g.gameObject);
             }
+            messageText.text = "Niveles iniciados";
+        }
+        else {
+            messageText.text = "No se ha registrado actividad";
         }
         ButtonTemplate.SetActive(false);
     }

@@ -158,6 +158,18 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_PasswordSpecialist;
     #endregion
 
+    #region Get Premium
+    [Header("Get Premium Inputs")]
+    [SerializeField] private Text m_PremiumTextLabel;
+    [SerializeField] private Button m_PremiumSiBoton;
+    [SerializeField] private Button m_PremiumNoBoton;
+    [SerializeField] private Button m_PremiumAceptarBoton;
+    [SerializeField] private InputField m_InputNumeroTarjeta;
+    [SerializeField] private InputField m_InputMesCaducidad;
+    [SerializeField] private InputField m_InputAnoCaducidad;
+    [SerializeField] private InputField m_InputCCV;
+    #endregion
+
     #region Lists
     [Header("Lists Managers")]
     [SerializeField] private ListManager favoritesListManager;
@@ -388,6 +400,16 @@ public class SceneUIManager : MonoBehaviour
         ShowMessageWindow();
     }
 
+    public void SwitchPremium(bool on) {
+        premiumOn = on;
+
+        m_PremiumAceptarBoton.gameObject.SetActive(on);
+        m_PremiumNoBoton.gameObject.SetActive(!on);
+        m_PremiumSiBoton.gameObject.SetActive(!on);
+
+        m_PremiumTextLabel.text = on ? "¡Ya eres premium!" : "¿Está seguro que desea adquirir el servicio premium?" ;
+    }
+
     public void getCodigoNino(){
         if(premiumOn == true){
             CallGetRequestSpecialistFromChild(loggedChild.idChild, delegate (Specialist response)
@@ -554,6 +576,9 @@ public class SceneUIManager : MonoBehaviour
             datosUsuarioLogeado.names = response.names;
             datosUsuarioLogeado.lastNames = response.lastNames;
             datosUsuarioLogeado.birthday = response.birthday;
+            datosUsuarioLogeado.premium = response.premium;
+
+            SwitchPremium(datosUsuarioLogeado.premium);
 
             if (showSavedProfiles) {
                 ShowPerfilsGuardados();
@@ -672,18 +697,33 @@ public class SceneUIManager : MonoBehaviour
         ///Debug.Log("ID BUSCADO: " + loggedChild.idChild);
         m_BienvenidaNino.text = "Hola, " + loggedChild.names + "!";
 
-        CallGetChildrenFavoriteLevelsApi(Int32.Parse(loggedChild.idChild), delegate (Level[] response)
-        {
-            Debug.Log(response);
-            loggedChildFavoriteLevels = response;
-            PopulateFavoriteLevels();
-        });
+        int childId = Int32.Parse(loggedChild.idChild);
 
-        CallGetChildrenCustomLevelListsApi(Int32.Parse(loggedChild.idChild), delegate (CustomList[] response)
-        {
-            Debug.Log(response);
-            loggedChildCustomLists = response;
-            PopulateCustomLists();
+        CallGetCompletedLevelsApi(childId, delegate (LevelRecord[] completedLevelsReponse) {
+            IEnumerable<int> completedLevelsIds = completedLevelsReponse.Select(levelRecord => levelRecord.level.idLevel);
+
+            foreach(LevelButtonListItem levelListItemToEdit in levelButtonListItems) {
+                levelListItemToEdit.completedCheck.gameObject.SetActive(completedLevelsIds.Contains(levelListItemToEdit.levelId));
+            }
+
+            foreach(LevelRecord record in completedLevelsReponse) {
+                LevelButtonListItem levelListItemToEdit = levelButtonListItems.Where(e => e.levelId == record.level.idLevel).First();
+                levelListItemToEdit.completedCheck.gameObject.SetActive(true);
+            }
+
+            CallGetChildrenFavoriteLevelsApi(childId, delegate (Level[] response)
+            {
+                Debug.Log(response);
+                loggedChildFavoriteLevels = response;
+                PopulateFavoriteLevels();
+            });
+
+            CallGetChildrenCustomLevelListsApi(childId, delegate (CustomList[] response)
+            {
+                Debug.Log(response);
+                loggedChildCustomLists = response;
+                PopulateCustomLists();
+            });
         });
 
         for(int i = 0; i < loggedChild.symptoms.Length; i++){
@@ -695,7 +735,6 @@ public class SceneUIManager : MonoBehaviour
             ShowCategoria();
         }
     }
-
 
     public void getChildren()
     {
@@ -1065,6 +1104,25 @@ public class SceneUIManager : MonoBehaviour
         }
     }
 
+    IEnumerator GetCompletedLevels(string url, Action<LevelRecord[]> response) {
+        UnityWebRequest uwr = UnityWebRequest.Get(url);
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+        Debug.Log("Token: " + token);
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + uwr.downloadHandler.text);
+            response(JsonHelper.FromJson<LevelRecord>(fixJson(uwr.downloadHandler.text)));
+        }
+    }
+
     private void CallGetRequestGuardianApi(string id, Action<GuardianData> response)
     {
         StartCoroutine(GetRequestGuardian("https://teapprendo.herokuapp.com/guardians/listByIdGuardian?idGuardian=" + id, response ));    }
@@ -1149,6 +1207,7 @@ public class SceneUIManager : MonoBehaviour
         public string lastNames;
         public string birthday;
         public string idGuardian;
+        public bool premium;
     }
 
     private class GuardianResponse
@@ -1297,6 +1356,7 @@ public class SceneUIManager : MonoBehaviour
         public string names;
         public string lastNames;
         public string birthday;
+        public bool premium;
     }
 
     public class DefaultResponse
@@ -1359,12 +1419,26 @@ public class SceneUIManager : MonoBehaviour
     }
 
     [Serializable]
+    public class PremiumPaymentDto {
+        public string cardNumber;
+        public string dueDate;
+        public string ccv;
+        public int idGuardian;
+    }
+
+    [Serializable]
     public class Level {
         public int idLevel;
         public string description;
         public Topic topic;
         public string video;
     }
+
+    [Serializable]
+	public class LevelRecord {
+        public int idLevelRecord;
+		public Level level;
+	}
 
     [Serializable]
     public class Topic {
@@ -1438,6 +1512,43 @@ public class SceneUIManager : MonoBehaviour
         }
     }
 
+    /*private void UpdateCompletedLevelsUIs() {
+        foreach(CustomList customList in loggedChildCustomLists) {
+            customListList.CreateList(customList.idCustomLevelList, customList.name, customListManager);
+            ListManager listManager = customListList.getLists().Last();
+
+            IEnumerable<int> childFavoriteLevelsIds = customList.levels.Select(nivel => nivel.idLevel);
+
+            foreach(LevelButtonListItem levelButtonListItem in levelButtonListItems) {
+                if (childFavoriteLevelsIds.Contains(levelButtonListItem.levelId)) {
+                    listManager.Add(levelButtonListItem);
+                }
+            }
+
+        }
+    }*/
+
+    public void GetPremiumFormSubmit() {
+        ConfirmPopup.ConfirmOperation("¿Confirmar adquirir la versión premium?", () => {
+            ConfirmPopup.SetLoadingState(true);
+
+            string cardNumber = m_InputNumeroTarjeta.text;
+            string expiryMonth = m_InputMesCaducidad.text;
+            string expiryYear = m_InputAnoCaducidad.text;
+            string ccv = m_InputCCV.text;
+
+            CallPremiumPaymentApi(cardNumber, expiryMonth, expiryYear, ccv, delegate (DefaultResponse response){
+                if (response.idResponse >= 0) {
+                    datosUsuarioLogeado.premium = true;
+                    SwitchPremium(datosUsuarioLogeado.premium);
+                    ShowPerfilsGuardados();
+                }
+                InformationPopup.PopupMessage(response.message);
+                ConfirmPopup.SetLoadingState(false);
+            });
+        }, () => {});
+    }
+
     public void EditCustomList(ListManager listManager)
     {
         string name = listManager.editNameInputField.text;
@@ -1501,6 +1612,10 @@ public class SceneUIManager : MonoBehaviour
         }
     }
 
+    private void CallGetCompletedLevelsApi(int IdChild, Action<LevelRecord[]> response) {
+        StartCoroutine(GetCompletedLevels("https://teapprendo.herokuapp.com/levelRecords/listByIdChild?idChild=" + IdChild, response));
+    }
+
     private void CallAddCustomListApi(int idChild, string name, Action<DefaultResponse> response)
     {
         AddCustomLevelListDto addCustomLevelListDto = new AddCustomLevelListDto();
@@ -1519,6 +1634,22 @@ public class SceneUIManager : MonoBehaviour
         string json = JsonUtility.ToJson(editCustomLevelListDto);
         Debug.Log(json);
         StartCoroutine(PutRequestUpdateCustomList("https://teapprendo.herokuapp.com/children/updateNameCustomLevelList", json, response));
+    }
+
+    private void CallPremiumPaymentApi(string cardNumber, string expiryMonth, string expiryYear, string ccv, Action<DefaultResponse> response)
+    {
+        PremiumPaymentDto premiumPaymentDto = new PremiumPaymentDto();
+        premiumPaymentDto.cardNumber = cardNumber;
+
+        string dueDate = expiryMonth.Length == 1 ? "0" + expiryMonth : expiryMonth;
+        dueDate += "/" + (expiryYear.Length > 2 ? expiryYear.Substring(expiryYear.Length - 2) : expiryYear);
+
+        premiumPaymentDto.dueDate = dueDate;
+        premiumPaymentDto.ccv = ccv;
+        premiumPaymentDto.idGuardian = Int32.Parse(id_guardian);
+        string json = JsonUtility.ToJson(premiumPaymentDto);
+        Debug.Log(json);
+        StartCoroutine(AddFavoriteLevelRequest("https://teapprendo.herokuapp.com/payment/payPremium", json, response));
     }
 
     public void AddLevelToCustomList(ListManager listManager, LevelButtonListItem levelButtonListItem)
