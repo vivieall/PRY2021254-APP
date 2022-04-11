@@ -39,3 +39,5 @@ sysinfo.txt
 *.unitypackage
 *.tgz
 Assets/.DS_Store
+Assets/StreamingAssets/HiddenARCore.meta
+QCAR/somedata16
