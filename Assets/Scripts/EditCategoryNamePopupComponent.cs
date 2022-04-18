@@ -10,6 +10,8 @@ using System.Linq;
 
 public class EditCategoryNamePopupComponent : MonoBehaviour
 {
+    [SerializeField] public GameObject UpdateCategoryNameConfirmationPopup;
+
     [Serializable]
 	private class UpdateCategoryNameData
 	{
@@ -18,7 +20,7 @@ public class EditCategoryNamePopupComponent : MonoBehaviour
 	}
     private string IdChild;
 
-    void Start()
+    public void LoadIdChild()
     {
         IdChild = GameObject.Find("UICamera").GetComponent<SceneUIManager>().getIdChild();
     }
@@ -29,7 +31,9 @@ public class EditCategoryNamePopupComponent : MonoBehaviour
     public void ExecuteOnAccept() { 
         UpdateData();
         OnAccept.Invoke();
-        gameObject.SetActive(false); }
+        gameObject.SetActive(false);
+        UpdateCategoryNameConfirmationPopup.SetActive(true);
+    }
 	public void ExecuteOnDecline() { 
         OnDecline.Invoke(); 
         gameObject.SetActive(false); }
@@ -73,7 +77,6 @@ public class EditCategoryNamePopupComponent : MonoBehaviour
         else
         {
             Debug.Log("Received: " + uwr.downloadHandler.text);
-            //GameObject.Find("SelectCategory").GetComponent<RecreacionManager>().GetChildData();
         }
     }
 }
