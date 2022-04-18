@@ -148,7 +148,14 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_InputFechaDiaChildUpdate;
     [SerializeField] private InputField m_InputFechaMesChildUpdate;
     [SerializeField] private InputField m_InputFechaAnioChildUpdate;
-    [SerializeField] private InputField m_GeneroChildUpdate;
+    [SerializeField] private Button m_SexoMasculinoButton;
+    [SerializeField] private Button m_SexoFemeninoButton;
+    [SerializeField] private Button m_GradoLeveButton;
+    [SerializeField] private Button m_GradoModeradoButton;
+    [SerializeField] private Button m_GradoGraveButton;
+    [SerializeField] private Button m_AvatarMasculinoButton;
+    [SerializeField] private Button m_AvatarFemeninoButton;
+    [SerializeField] private Button m_AvatarAdicionalButton;
     [SerializeField] private Text m_ErrorTextLogin;
     #endregion
 
@@ -182,6 +189,16 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] public Sprite avatar1;
     [SerializeField] public Sprite avatar2;
     [SerializeField] public Sprite avatar3;
+    #endregion
+
+    #region Popups
+    [Header("Popups")]
+    [SerializeField] private GameObject m_RegisterConfirmationPopupUI;
+    [SerializeField] private GameObject m_RegisterChildConfirmationPopupUI;
+    [SerializeField] private GameObject m_UpdateProfileConfirmationPopupUI;
+    [SerializeField] private GameObject m_UpdateChildProfileConfirmationPopupUI;
+    [SerializeField] private GameObject m_ChangeChildProfileConfirmationPopupUI;
+    [SerializeField] private GameObject m_ChangeAvatarConfirmationPopupUI;
     #endregion
 
     //private bool sesionIniciada;
@@ -600,10 +617,15 @@ public class SceneUIManager : MonoBehaviour
 
     void blankRegisterSpace()
     {
-        m_Username.text = "";
-        m_Email.text = "";
-        m_Password.text = "";
-        m_ConfirmPassword.text = "";
+        m_InputNombre.text = "";
+        m_InputApellido.text = "";
+        m_InputUsuario.text = "";
+        m_InputFechaAnio.text = "";
+        m_InputFechaMes.text = "";
+        m_InputFechaDia.text = "";
+        m_InputCorreo.text = "";
+        m_InputContrasena.text = "";
+        m_InputContrasenaConf.text = "";
     }
 
     void blankRegisterChildSpace()
@@ -656,7 +678,7 @@ public class SceneUIManager : MonoBehaviour
                                 cuentaRegistradaConExito = false;
                                 blankRegisterSpace();
                                 print("Cuenta creada con exito");
-                                ShowLoguin();
+                                ShowRegisterConfirmationPopup();
                             }
                             else
                             {
@@ -833,7 +855,7 @@ public class SceneUIManager : MonoBehaviour
                                     datosUsuarioLogeado.names = response.names;
                                     datosUsuarioLogeado.lastNames = response.lastNames;
                                     datosUsuarioLogeado.birthday = response.birthday;
-                                    ShowPerfilsGuardados();
+                                    ShowUpdateProfileConfirmationPopup();
                                 }
                                 else
                                 {
@@ -964,6 +986,7 @@ public class SceneUIManager : MonoBehaviour
         ShowUI(m_PerfilNinoVistaDatosUI);
     }
     public void ShowPerfilNinoModificar(){
+        setButtonsChildPerfil();
         setChildPerfil();
         ShowUI(m_PerfilNinoModificarsUI);
     }
@@ -1001,6 +1024,28 @@ public class SceneUIManager : MonoBehaviour
     }
     public void ShowVariedadesFiltro(){
         ShowUI(m_VariedadesFiltroUI);
+    }
+    public void ShowRegisterConfirmationPopup(){
+        m_RegisterConfirmationPopupUI.SetActive(true);
+    }
+    public void ShowRegisterChildConfirmationPopup(){
+        m_RegisterChildConfirmationPopupUI.SetActive(true);
+    }
+    public void ShowUpdateProfileConfirmationPopup(){
+        m_UpdateProfileConfirmationPopupUI.SetActive(true);
+    }
+    public void ShowUpdateChildProfileConfirmationPopup(){
+        m_UpdateChildProfileConfirmationPopupUI.SetActive(true);
+    }
+    public void ShowChangeChildProfileConfirmationPopup(){
+        m_ChangeChildProfileConfirmationPopupUI.transform.Find("Text").GetComponent<Text>().text = "¿Está seguro de salir del perfil de " + loggedChild.names + "?";
+        m_ChangeChildProfileConfirmationPopupUI.SetActive(true);
+    }
+    public void ShowChangeAvatarConfirmationPopup(){
+        m_ChangeAvatarConfirmationPopupUI.SetActive(true);
+    }
+    public void ResetAvatar(){
+        m_AvatarMasculinoButton.onClick.Invoke();
     }
 
     private void CallRegisterGuardianApi(string user, string pass, string email, string names, string lastnames, string birthday, Action<GuardianResponse> response)
@@ -1191,9 +1236,39 @@ public class SceneUIManager : MonoBehaviour
         m_InputFechaDiaChildUpdate.text = loggedChild.birthday.Substring(8, 2);
         m_InputFechaMesChildUpdate.text = loggedChild.birthday.Substring(5, 2);
         m_InputFechaAnioChildUpdate.text = loggedChild.birthday.Substring(0, 4);
-        nivelAutismoChildUpdate = loggedChild.asdLevel;
-        generoChildUpdate = loggedChild.gender;
-        avatarChildUpdate = loggedChild.avatar;
+
+        if(loggedChild.gender == "M")
+            //m_SexoMasculinoButton.interactable = false;
+            m_SexoMasculinoButton.onClick.Invoke();
+        else if(loggedChild.gender == "F")
+            m_SexoFemeninoButton.onClick.Invoke();
+        
+        if(loggedChild.asdLevel == "Leve")
+            m_GradoLeveButton.onClick.Invoke();
+        else if(loggedChild.asdLevel == "Moderado")
+            m_GradoModeradoButton.onClick.Invoke();
+        else if(loggedChild.asdLevel == "Grave")
+            m_GradoGraveButton.onClick.Invoke();
+
+        if(loggedChild.avatar == "avatar1")
+            m_AvatarMasculinoButton.onClick.Invoke();
+        else if(loggedChild.avatar == "avatar2")
+            m_AvatarFemeninoButton.onClick.Invoke();
+        else if(loggedChild.avatar == "avatar3")
+            m_AvatarAdicionalButton.onClick.Invoke();
+        
+    }
+
+    public void setButtonsChildPerfil()
+    {
+        m_SexoMasculinoButton.interactable = true;
+        m_SexoFemeninoButton.interactable = true;
+        m_GradoLeveButton.interactable = true;
+        m_GradoModeradoButton.interactable = true;
+        m_GradoGraveButton.interactable = true;
+        m_AvatarMasculinoButton.interactable = true;
+        m_AvatarFemeninoButton.interactable = true;
+        m_AvatarAdicionalButton.interactable = true;
     }
 
     private class GuardianData
@@ -1243,7 +1318,7 @@ public class SceneUIManager : MonoBehaviour
                 if (response.idChild != null)
                 {
                     print("Niño creado con exito");
-                    ShowPerfilsGuardados();
+                    ShowRegisterChildConfirmationPopup();
                 }
                 else
                 {
@@ -1272,7 +1347,7 @@ public class SceneUIManager : MonoBehaviour
                 if (response.idChild != null)
                 {
                     print("Niño actualizado con exito");
-                    ShowPerfilsGuardados();
+                    ShowUpdateChildProfileConfirmationPopup();
                 }
                 else
                 {
