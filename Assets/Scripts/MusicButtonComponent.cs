@@ -28,8 +28,18 @@ public class MusicButtonComponent : MonoBehaviour
 
     public void UpdateButtonState()
 	{
-        ImageComponent.overrideSprite = (AudioListener.volume != 0.0f) ? IsPlayingImage : IsPausedImage;
-	}
+        //ImageComponent.overrideSprite = (AudioListener.volume != 0.0f) ? IsPlayingImage : IsPausedImage;
+        //ImageComponent.overrideSprite = AudioPlayer.isPlaying ? IsPlayingImage : IsPausedImage;
+
+        if (AudioListener.volume != 0.0f || AudioPlayer.isPlaying)
+        {
+            ImageComponent.overrideSprite = IsPlayingImage;
+        }
+        else if (AudioListener.volume == 0.0f || !AudioPlayer.isPlaying)
+        {
+            ImageComponent.overrideSprite = IsPausedImage;
+        }
+    }
 
     public void Toggle()
 	{
@@ -44,8 +54,23 @@ public class MusicButtonComponent : MonoBehaviour
         UpdateButtonState();
     }
 
-    // Update proper button image when changing windows / views
-	void OnEnable()
+    public void ToggleMusic()
+    {
+        if (AudioPlayer.isPlaying)
+        {
+            AudioPlayer.Pause();
+            AudioListener.volume = 0.0f;
+        }
+        else
+        {
+            AudioPlayer.Play();
+            AudioListener.volume = 1.0f;
+        }
+        UpdateButtonState();
+    }
+
+// Update proper button image when changing windows / views
+void OnEnable()
 	{
 		UpdateButtonState();
 	}
