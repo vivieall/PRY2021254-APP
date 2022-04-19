@@ -114,6 +114,13 @@ public class ListManager : MonoBehaviour
 		Remove((ListItemManager) levelButtonListItem);
 	}
 
+	public bool isEmpty(){
+		if (items == null) {
+			return true;
+		}
+		return items.Count == 0;
+	}
+
 	public void RemoveAll() {
 		ListItemManager[] children = ContentPanel.GetComponentsInChildren<ListItemManager>(true);
 		foreach(ListItemManager listItem in children) {

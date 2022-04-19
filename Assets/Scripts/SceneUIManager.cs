@@ -199,6 +199,12 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private GameObject m_UpdateChildProfileConfirmationPopupUI;
     [SerializeField] private GameObject m_ChangeChildProfileConfirmationPopupUI;
     [SerializeField] private GameObject m_ChangeAvatarConfirmationPopupUI;
+    [SerializeField] private GameObject m_ErrorLoginPopupUI;
+    #endregion
+
+    #region Empty Favorite Levels List Message
+    [Header("Empty Favorite Levels List Message")]
+    [SerializeField] private Text m_EmptyFavoriteLevelsListMessageTextLabel;
     #endregion
 
     //private bool sesionIniciada;
@@ -737,6 +743,12 @@ public class SceneUIManager : MonoBehaviour
             {
                 Debug.Log(response);
                 loggedChildFavoriteLevels = response;
+
+                if(loggedChildFavoriteLevels == null || loggedChildFavoriteLevels.Length == 0)
+                    m_EmptyFavoriteLevelsListMessageTextLabel.gameObject.SetActive(true);
+                else
+                    m_EmptyFavoriteLevelsListMessageTextLabel.gameObject.SetActive(false);
+
                 PopulateFavoriteLevels();
             });
 
@@ -1046,6 +1058,9 @@ public class SceneUIManager : MonoBehaviour
     }
     public void ResetAvatar(){
         m_AvatarMasculinoButton.onClick.Invoke();
+    }
+    public void ShowErrorLoginPopup(){
+        m_ErrorLoginPopupUI.SetActive(true);
     }
 
     private void CallRegisterGuardianApi(string user, string pass, string email, string names, string lastnames, string birthday, Action<GuardianResponse> response)
@@ -1381,6 +1396,7 @@ public class SceneUIManager : MonoBehaviour
         if (uwr.isNetworkError)
         {
             Debug.Log("Error While Sending: " + uwr.error);
+            ShowErrorLoginPopup();
         }
         else
         {
@@ -1781,6 +1797,7 @@ public class SceneUIManager : MonoBehaviour
                 if (response.idResponse >= 0) {
                     LevelButtonListItem levelListItemToAdd = levelButtonListItems.Where(e => e.levelId == nivelSeleccionado).First();
                     favoritesListManager.Add(levelListItemToAdd);
+                    m_EmptyFavoriteLevelsListMessageTextLabel.gameObject.SetActive(false);
                     ShowUI(m_ListaLikesUI);
                 } else {
                     InformationPopup.PopupMessage(response.message);
@@ -1797,6 +1814,8 @@ public class SceneUIManager : MonoBehaviour
             CallDeleteFavoriteLevelApi(Int32.Parse(loggedChild.idChild), levelButtonListItem.levelId, delegate (DefaultResponse response){
                 if (response.idResponse >= 0) {
                     favoritesListManager.Remove(levelButtonListItem);
+                    if(favoritesListManager.isEmpty())
+                        m_EmptyFavoriteLevelsListMessageTextLabel.gameObject.SetActive(true);
                 }
                 InformationPopup.PopupMessage(response.message);
                 ConfirmPopup.SetLoadingState(false);
