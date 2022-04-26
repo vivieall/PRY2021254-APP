@@ -199,6 +199,13 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private GameObject m_UpdateChildProfileConfirmationPopupUI;
     [SerializeField] private GameObject m_ChangeChildProfileConfirmationPopupUI;
     [SerializeField] private GameObject m_ChangeAvatarConfirmationPopupUI;
+    [SerializeField] private GameObject m_ErrorLoginPopupUI;
+    [SerializeField] private GameObject m_UnavailableLevelPopupUI;
+    #endregion
+
+    #region Empty Favorite Levels List Message
+    [Header("Empty Favorite Levels List Message")]
+    [SerializeField] private Text m_EmptyFavoriteLevelsListMessageTextLabel;
     #endregion
 
     //private bool sesionIniciada;
@@ -553,7 +560,7 @@ public class SceneUIManager : MonoBehaviour
 
         if (m_InputContrasenaLogin.text == "" || m_InputUsuarioLogin.text == "")
         {
-              m_ErrorTextLogin.text = "Verifique no dejar campos vacíos";
+              ShowErrorPopup("Verifique no dejar campos vacíos");
         }
         else
         {
@@ -566,7 +573,7 @@ public class SceneUIManager : MonoBehaviour
     }
 
     public void processLoginResponse(LoginResponse response, bool showSavedProfiles) {
-        m_ErrorTextLogin.text = "Validando, espere un momento";
+        //m_ErrorTextLogin.text = "Validando, espere un momento";    
         PlayerPrefs.DeleteAll();
         Debug.Log("Validando...");
 
@@ -607,9 +614,9 @@ public class SceneUIManager : MonoBehaviour
         else
         {
             if(response.message == "Contraseña incorrecta")
-                m_ErrorTextLogin.text = "Usuario o contraseña no válido";
+                ShowErrorPopup("Usuario o contraseña no válido");
             else
-                m_ErrorTextLogin.text = response.message;
+                ShowErrorPopup(response.message);
 
             Debug.Log("Llamada a la API no válida...");
         }
@@ -651,59 +658,55 @@ public class SceneUIManager : MonoBehaviour
 
     public void SubmitRegister2()
     {
-        foreach (string emailSet in Emails)
+        if(m_InputUsuario.text != "" && m_InputCorreo.text != "" && m_InputContrasena.text != "" && m_InputContrasenaConf.text != "" && m_InputNombre.text != "" && m_InputApellido.text != "" && m_InputFechaAnio.text != "" && m_InputFechaMes.text != "" && m_InputFechaDia.text != "")
         {
-            if (m_InputCorreo.text.Contains(emailSet))
+            if(validateEmail(m_InputCorreoUpdate.text))
             {
                 cuentaRegistradaConExito = true;
-                if (m_InputUsuario.text == "" || m_InputCorreo.text == "" || m_InputContrasena.text == "" || m_InputContrasenaConf.text == "")
-                {
-                    m_ErrorText.text = "Verifica que ningún campo este vacío";
-                    return;
-                }
-
                 if (m_InputContrasena.text == m_InputContrasenaConf.text)
                 {
                     if (m_InputContrasena.text.Length >= MaxLenght)
                     {
                         m_ErrorText.text = "Validando, espere un momento";
                         CallRegisterGuardianApi(m_InputUsuario.text, m_InputContrasena.text, m_InputCorreo.text,
-                            m_InputNombre.text, m_InputApellido.text, m_InputFechaAnio.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaDia.text,
-                            delegate (GuardianResponse response)
-                        {
-                            m_ErrorText.text = response.message;
-                            if (response.idResponse >= 0)
+                        m_InputNombre.text, m_InputApellido.text, m_InputFechaAnio.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaDia.text,delegate (GuardianResponse response)
                             {
-                                ////ESCRIBIR CODIGO DE ACEPTACION AL REGISTRARSE
-                                cuentaRegistradaConExito = false;
-                                blankRegisterSpace();
-                                print("Cuenta creada con exito");
-                                ShowRegisterConfirmationPopup();
+                                m_ErrorText.text = response.message;
+                                if (response.idResponse >= 0)
+                                {
+                                    ////ESCRIBIR CODIGO DE ACEPTACION AL REGISTRARSE
+                                    cuentaRegistradaConExito = false;
+                                    blankRegisterSpace();
+                                    print("Cuenta creada con exito");
+                                    ShowRegisterConfirmationPopup();
+                                }
+                                else
+                                {
+                                    ///ACCION AL NO REGISTRAR CUENTA
+                                }
                             }
-                            else
-                            {
-                                ///ACCION AL NO REGISTRAR CUENTA
-
-                            }
-                        });
+                        );
                     }
                     else
-
                     {
-                        m_ErrorText.text = "Tu contraseña debe contener mínimo 8 caracteres";
+                        ShowErrorPopup("Tu contraseña debe contener mínimo 8 caracteres");
                     }
                 }
                 else
                 {
-                    m_ErrorText.text = "Las contraseñas no coinciden";
+                    ShowErrorPopup("Las contraseñas no coinciden");
                     return;
                 }
             }
-
-            if (!m_InputCorreo.text.Contains(emailSet) && !cuentaRegistradaConExito)
+            else
             {
-                m_ErrorText.text = "Email no válido";
-            }
+                ShowErrorPopup("Email no válido");
+            }   
+        } 
+        else
+        {
+            ShowErrorPopup("Verifica que ningún campo este vacío");
+            return;
         }
     }
 
@@ -737,6 +740,12 @@ public class SceneUIManager : MonoBehaviour
             {
                 Debug.Log(response);
                 loggedChildFavoriteLevels = response;
+
+                if(loggedChildFavoriteLevels == null || loggedChildFavoriteLevels.Length == 0)
+                    m_EmptyFavoriteLevelsListMessageTextLabel.gameObject.SetActive(true);
+                else
+                    m_EmptyFavoriteLevelsListMessageTextLabel.gameObject.SetActive(false);
+
                 PopulateFavoriteLevels();
             });
 
@@ -822,30 +831,21 @@ public class SceneUIManager : MonoBehaviour
     {
         PersistanceHandler persistanceHandler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
 
-        foreach (string emailSet in Emails)
+        if ( m_InputNombreUpdate.text != "" && m_InputApellidoUpdate.text != "" && m_InputFechaAnioUpdate.text != "" && m_InputFechaMesUpdate.text != "" && m_InputFechaDiaUpdate.text != "" && m_InputCorreoUpdate.text != "")
         {
-            if (m_InputCorreoUpdate.text.Contains(emailSet))
+            if(validateEmail(m_InputCorreoUpdate.text))
             {
                 cuentaRegistradaConExito = true;
                 m_InputContrasenaNuevaUpdate.text = m_InputContrasenaActualUpdate.text;
                 m_InputContrasenaNuevaConfUpdate.text = m_InputContrasenaActualUpdate.text;
-
-                if ( m_InputNombreUpdate.text == "" || m_InputApellidoUpdate.text == "" || m_InputFechaAnioUpdate.text == "" || m_InputFechaMesUpdate.text == "" || m_InputFechaDiaUpdate.text == "" || m_InputCorreoUpdate.text == "" || m_InputContrasenaActualUpdate.text == "" || m_InputContrasenaNuevaUpdate.text == "" || m_InputContrasenaNuevaConfUpdate.text == "")
-                {
-                    m_ErrorUpdateGuardianText.text = "Verifica que ningún campo este vacío";
-                    return;
-                }
 
                 if (m_InputContrasenaNuevaUpdate.text == m_InputContrasenaNuevaConfUpdate.text)
                 {
                     if (m_InputContrasena.text.Length >= MaxLenght)
                     {
                         m_ErrorUpdateGuardianText.text = "Cambios guardados con éxito";
-                        CallUpdateGuardianApi(id_guardian, m_InputContrasenaActualUpdate.text, m_InputContrasenaNuevaUpdate.text, m_InputCorreoUpdate.text,
-                            m_InputNombreUpdate.text, m_InputApellidoUpdate.text, m_InputFechaAnioUpdate.text + "-" + m_InputFechaMesUpdate.text + "-" + m_InputFechaDiaUpdate.text,
-                            delegate (GuardianData response)
+                        CallUpdateGuardianApi(id_guardian, m_InputContrasenaActualUpdate.text, m_InputContrasenaNuevaUpdate.text,  m_InputCorreoUpdate.text, m_InputNombreUpdate.text, m_InputApellidoUpdate.text, m_InputFechaAnioUpdate.text + "-" + m_InputFechaMesUpdate.text + "-" + m_InputFechaDiaUpdate.text, delegate (GuardianData response)
                             {
-
                                 if (response.idGuardian != null)
                                 {
                                     print("Cuenta actualizada con éxito");
@@ -861,24 +861,32 @@ public class SceneUIManager : MonoBehaviour
                                 {
                                     ///ACCION AL NO REGISTRAR CUENTA
                                 }
-                            });
+                            }
+                        );
                     }
                     else
                     {
-                        m_ErrorUpdateGuardianText.text = "Tu contraseña debe contener mínimo 8 caracteres";
+                        //m_ErrorUpdateGuardianText.text = "Tu contraseña debe contener mínimo 8 caracteres";
+                        ShowErrorPopup("Tu contraseña debe contener mínimo 8 caracteres");
                     }
                 }
                 else
                 {
-                    m_ErrorUpdateGuardianText.text = "Verifique los datos ingresados";
+                    //m_ErrorUpdateGuardianText.text = "Verifique los datos ingresados";
+                    ShowErrorPopup("Verifique los datos ingresados");
                     return;
                 }
             }
-
-            if (!m_InputCorreoUpdate.text.Contains(emailSet) && !cuentaRegistradaConExito)
-            {
-                m_ErrorUpdateGuardianText.text = "Ingrese un correo válido";
-            }
+            else
+            {    
+                //m_ErrorUpdateGuardianText.text = "Ingrese un correo válido";
+                ShowErrorPopup("Ingrese un correo válido");
+            }  
+        }
+        else
+        {
+            ShowErrorPopup("Verifica que ningún campo este vacío");
+            return;
         }
     }
 
@@ -1046,6 +1054,13 @@ public class SceneUIManager : MonoBehaviour
     }
     public void ResetAvatar(){
         m_AvatarMasculinoButton.onClick.Invoke();
+    }
+    public void ShowErrorPopup(string message){
+        m_ErrorLoginPopupUI.transform.Find("Text").GetComponent<Text>().text = message;
+        m_ErrorLoginPopupUI.SetActive(true);
+    }
+    public void ShowUnavailableLevelPopup(){
+        m_UnavailableLevelPopupUI.SetActive(true);
     }
 
     private void CallRegisterGuardianApi(string user, string pass, string email, string names, string lastnames, string birthday, Action<GuardianResponse> response)
@@ -1306,7 +1321,7 @@ public class SceneUIManager : MonoBehaviour
 
         if (m_InputNombreChild.text == "" || m_InputApellidoChild.text == "" || m_InputFechaAnioChild.text == "" || m_InputFechaMesChild.text == "" || m_InputFechaDiaChild.text == "" || generoChild == "" || nivelAutismoChild == "" || avatarChild == "")
         {
-            m_ErrorCreateChildText.text = "Debe completar todos los campos";
+            ShowErrorPopup("Debe completar todos los campos");
             return;
         }
 
@@ -1331,7 +1346,6 @@ public class SceneUIManager : MonoBehaviour
     {
         int[] sintomas2 = new int[] { };
 
-
         for (int i = 0; i < 7; i++)
         {
             if (sintomasUpdate[i] == true)
@@ -1339,6 +1353,13 @@ public class SceneUIManager : MonoBehaviour
                 sintomas2 = sintomas2.Concat(new int[] { i + 1 }).ToArray();
             }
         }
+
+        if (m_InputNombreChildUpdate.text == "" || m_InputApellidoChildUpdate.text == "" || m_InputFechaAnioChildUpdate.text == "" || m_InputFechaMesChildUpdate.text == "" || m_InputFechaDiaChildUpdate.text == "" || generoChildUpdate == "" || nivelAutismoChildUpdate == "" || avatarChildUpdate == "")
+        {
+            ShowErrorPopup("Debe completar todos los campos");
+            return;
+        }
+
         CallUpdateChildApi(loggedChild.idChild, m_InputNombreChildUpdate.text, m_InputApellidoChildUpdate.text, avatarChildUpdate, m_InputFechaAnioChildUpdate.text + "-" + m_InputFechaMesChildUpdate.text + "-" + m_InputFechaDiaChildUpdate.text, generoChildUpdate, nivelAutismoChildUpdate, sintomas2,
             delegate (ChildDataResponse response)
             {
@@ -1381,6 +1402,7 @@ public class SceneUIManager : MonoBehaviour
         if (uwr.isNetworkError)
         {
             Debug.Log("Error While Sending: " + uwr.error);
+            ShowErrorPopup("Requiere conectividad de internet");
         }
         else
         {
@@ -1781,6 +1803,7 @@ public class SceneUIManager : MonoBehaviour
                 if (response.idResponse >= 0) {
                     LevelButtonListItem levelListItemToAdd = levelButtonListItems.Where(e => e.levelId == nivelSeleccionado).First();
                     favoritesListManager.Add(levelListItemToAdd);
+                    m_EmptyFavoriteLevelsListMessageTextLabel.gameObject.SetActive(false);
                     ShowUI(m_ListaLikesUI);
                 } else {
                     InformationPopup.PopupMessage(response.message);
@@ -1797,6 +1820,8 @@ public class SceneUIManager : MonoBehaviour
             CallDeleteFavoriteLevelApi(Int32.Parse(loggedChild.idChild), levelButtonListItem.levelId, delegate (DefaultResponse response){
                 if (response.idResponse >= 0) {
                     favoritesListManager.Remove(levelButtonListItem);
+                    if(favoritesListManager.isEmpty())
+                        m_EmptyFavoriteLevelsListMessageTextLabel.gameObject.SetActive(true);
                 }
                 InformationPopup.PopupMessage(response.message);
                 ConfirmPopup.SetLoadingState(false);

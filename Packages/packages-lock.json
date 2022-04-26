@@ -10,11 +10,11 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.animation": {
-      "version": "3.2.14",
-      "depth": 0,
+      "version": "3.2.17",
+      "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "2.1.0",
+        "com.unity.2d.common": "2.1.2",
         "com.unity.mathematics": "1.1.0",
         "com.unity.2d.sprite": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
@@ -23,7 +23,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.common": {
-      "version": "2.1.0",
+      "version": "2.1.2",
       "depth": 1,
       "source": "registry",
       "dependencies": {
@@ -47,12 +47,12 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.2d.psdimporter": {
-      "version": "2.1.10",
+      "version": "2.1.11",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.2d.common": "2.1.0",
-        "com.unity.2d.animation": "3.2.14",
+        "com.unity.2d.common": "2.1.2",
+        "com.unity.2d.animation": "3.2.17",
         "com.unity.2d.sprite": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -81,7 +81,7 @@
       "dependencies": {}
     },
     "com.unity.collab-proxy": {
-      "version": "1.14.12",
+      "version": "1.14.15",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -113,7 +113,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.ide.vscode": {
-      "version": "1.2.4",
+      "version": "1.2.5",
       "depth": 0,
       "source": "registry",
       "dependencies": {},
@@ -143,7 +143,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.test-framework": {
-      "version": "1.1.30",
+      "version": "1.1.31",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -213,7 +213,7 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.xr.legacyinputhelpers": {
-      "version": "2.1.8",
+      "version": "2.1.9",
       "depth": 2,
       "source": "registry",
       "dependencies": {
