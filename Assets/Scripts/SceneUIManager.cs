@@ -279,23 +279,6 @@ public class SceneUIManager : MonoBehaviour
         return nivelSeleccionado;
     }
 
-    public void getCodigoNino(){
-        if(premiumOn == true){
-            CallGetRequestSpecialistFromChild(loggedChild.idChild, delegate (Specialist response)
-            {
-                if(response.idSpecialist > 0){
-                    m_UsernameSpecialist.text = response.username;
-                    m_PasswordSpecialist.text = response.password;
-                    ShowCodigoNinoWindow();
-                }
-            });
-        }
-        else if(premiumOn == false){
-            m_MessageWindowResponseText.text = "Debe adquirir la versión premium";
-            ShowMessageWindow();
-        }
-    }
-
     void Start()
     {
         AllUIs = new ArrayList();
@@ -585,11 +568,6 @@ public class SceneUIManager : MonoBehaviour
         CallGetRequestPasswordReset(m_ResetPasswordEmail.text, delegate (DefaultResponse response)
         {
             m_ErrorTextResetPassword.text = response.message;
-
-            if (response.idResponse == 1)
-            {
-                //Correcto
-            }
         });   
     }
     #endregion
@@ -616,10 +594,6 @@ public class SceneUIManager : MonoBehaviour
                                     cuentaRegistradaConExito = false;
                                     blankRegisterSpace();
                                     ShowRegisterConfirmationPopup();
-                                }
-                                else
-                                {
-                                    ///ACCION AL NO REGISTRAR CUENTA
                                 }
                             }
                         );
@@ -674,10 +648,6 @@ public class SceneUIManager : MonoBehaviour
                             datosUsuarioLogeado.birthday = response.birthday;
                             ShowUpdateProfileConfirmationPopup();
                         }
-                        else
-                        {
-                            ///ACCION AL NO REGISTRAR CUENTA
-                        }
                     }
                 );
             }
@@ -727,10 +697,6 @@ public class SceneUIManager : MonoBehaviour
                 {
                     ShowRegisterChildConfirmationPopup();
                 }
-                else
-                {
-                    ///ACCION AL NO REGISTRAR CUENTA
-                }
             });
     }
     #endregion
@@ -761,10 +727,6 @@ public class SceneUIManager : MonoBehaviour
                 {
                     ShowUpdateChildProfileConfirmationPopup();
                 }
-                else
-                {
-                    ///ACCION AL NO REGISTRAR CUENTA
-                }
             });
     }
     #endregion
@@ -779,6 +741,40 @@ public class SceneUIManager : MonoBehaviour
                 ShowPerfilsGuardados();
             }
         });
+    }
+    #endregion
+
+    #region Specialist
+    public void getCodigoNino(){
+        if(premiumOn == true)
+        {
+            CallGetRequestSpecialistByIdChild(loggedChild.idChild, delegate(Specialist getResponse)
+            {
+                if(getResponse.idSpecialist > 0) 
+                {
+                    m_UsernameSpecialist.text = getResponse.username;
+                    m_PasswordSpecialist.text = getResponse.names + " " +getResponse.lastNames;
+                    ShowCodigoNinoWindow();
+                }
+                else
+                {
+                    CallPostRequestSpecialistFromChild(loggedChild.idChild, delegate (Specialist postResponse)
+                    {
+                        if(postResponse.idSpecialist > 0)
+                        {
+                            m_UsernameSpecialist.text = postResponse.username;
+                            m_PasswordSpecialist.text = postResponse.names + " " + postResponse.lastNames;
+                            ShowCodigoNinoWindow();
+                        }
+                    });
+                }
+            });
+
+        }
+        else if(premiumOn == false){
+            m_MessageWindowResponseText.text = "Debe adquirir la versión premium";
+            ShowMessageWindow();
+        }
     }
     #endregion
 
@@ -1482,12 +1478,37 @@ public class SceneUIManager : MonoBehaviour
     #endregion
 
     #region Specialist Endpoints
-    private void CallGetRequestSpecialistFromChild(string idChild, Action<Specialist> response)
+    private void CallPostRequestSpecialistFromChild(string idChild, Action<Specialist> response)
     {
-        StartCoroutine(GetRequestSpecialistFromChild("https://teapprendo.herokuapp.com/children/activateSpecialist?idChild=" + idChild, response));
+        StartCoroutine(PostRequestSpecialistFromChild("https://teapprendo.herokuapp.com/children/activateSpecialist?idChild=" + idChild, response));
     }
 
-    IEnumerator GetRequestSpecialistFromChild(string url, Action<Specialist> response)
+    IEnumerator PostRequestSpecialistFromChild(string url, Action<Specialist> response)
+    {
+        UnityWebRequest uwr = new UnityWebRequest(url, "POST");
+        uwr.downloadHandler = (DownloadHandler) new DownloadHandlerBuffer();
+        string token = PlayerPrefs.GetString("token");
+        uwr.SetRequestHeader("Authorization", token);
+
+        yield return uwr.SendWebRequest();
+
+        if (uwr.isNetworkError)
+        {
+            Debug.Log("Error While Sending: " + uwr.error);
+        }
+        else
+        {
+            Debug.Log("Received: " + uwr.downloadHandler.text);
+            response(JsonUtility.FromJson<Specialist>(uwr.downloadHandler.text));
+        }
+    }
+
+    private void CallGetRequestSpecialistByIdChild(string idChild, Action<Specialist> response)
+    {
+        StartCoroutine(GetRequestSpecialistByIdChild("https://teapprendo.herokuapp.com/specialists/listByIdChild?idChild=" + idChild, response));
+    }
+
+    IEnumerator GetRequestSpecialistByIdChild(string url, Action<Specialist> response)
     {
         UnityWebRequest uwr = UnityWebRequest.Get(url);
         string token = PlayerPrefs.GetString("token");
@@ -1548,8 +1569,7 @@ public class SceneUIManager : MonoBehaviour
     }
 
     public void CloseResetPassword(){
-        m_ResetPasswordEmail.text = "";
-        m_ErrorTextResetPassword.text = "";
+        blankResetPassword();
         m_ResetPasswordWindow.SetActive(false);
     }
 
@@ -1578,12 +1598,13 @@ public class SceneUIManager : MonoBehaviour
     }
 
     public void ShowPerfilNiño(){
-        blankRegisterChildSpace();
-        nivelAutismoChild = "";
-        generoChild = "";
-        avatarChild = "";
-        m_ErrorCreateChildText.text = "";
-        ShowUI(m_PerfilNiñoCrearUI);
+        if(cantNinos>= 6)
+            ShowErrorPopup("Solo puede tener 6 cuentas");
+        else
+        {
+            blankRegisterChildSpace();
+            ShowUI(m_PerfilNiñoCrearUI);
+        }
     }
 
     public void ShowPerfilsGuardados(){
@@ -1594,8 +1615,6 @@ public class SceneUIManager : MonoBehaviour
 
     public void ShowActualizarDatos(){
         setProfileData();
-        m_InputContrasenaActualUpdate.text = m_InputContrasenaLogin.text;
-        m_ErrorUpdateGuardianText.text = "";
         ShowUI(m_ActualizarDatosUI);
     }
 
@@ -1823,6 +1842,8 @@ public class SceneUIManager : MonoBehaviour
         m_InputFechaDiaUpdate.text = datosUsuarioLogeado.birthday.Substring(8, 2);
         m_InputFechaMesUpdate.text = datosUsuarioLogeado.birthday.Substring(5, 2);
         m_InputFechaAnioUpdate.text = datosUsuarioLogeado.birthday.Substring(0, 4);
+        m_InputContrasenaActualUpdate.text = m_InputContrasenaLogin.text;
+        m_ErrorUpdateGuardianText.text = "";
     }
     #endregion
 
@@ -1930,6 +1951,18 @@ public class SceneUIManager : MonoBehaviour
         m_InputFechaDiaChild.text = "";
         m_InputFechaMesChild.text = "";
         m_InputFechaAnioChild.text = "";
+        nivelAutismoChild = "";
+        generoChild = "";
+        avatarChild = "";
+        m_ErrorCreateChildText.text = "";
+    }
+    #endregion
+
+    #region Empy Input Field - Reset Password
+    void blankResetPassword()
+    {
+        m_ResetPasswordEmail.text = "";
+        m_ErrorTextResetPassword.text = "";
     }
     #endregion
 
@@ -2107,7 +2140,6 @@ public class SceneUIManager : MonoBehaviour
         public string names;
         public string lastNames;
         public string username;
-        public string password;
     }
     #endregion   
 }
