@@ -18,6 +18,7 @@ public class CustomListList : MonoBehaviour
     public void PromptCreateList()
     {
         renameListPopupComponent.gameObject.SetActive(true);
+        renameListPopupComponent.gameObject.transform.SetAsLastSibling();
         renameListPopupComponent.SetSaveButtonAction(() => {
             sceneUIManager.AddCustomList(renameListPopupComponent.nameInput.text);
             renameListPopupComponent.nameInput.text = "";
@@ -33,7 +34,6 @@ public class CustomListList : MonoBehaviour
         customListList.transform.localScale = Vector3.one;
         customListList.transform.position = this.transform.position;
         this.gameObject.SetActive(false);
-        customListList.CreateNewButton.gameObject.SetActive(false);
         customListList.gameObject.SetActive(true);
 		customListList.GetComponent<RectTransform>().sizeDelta = this.GetComponent<RectTransform>().sizeDelta;
 

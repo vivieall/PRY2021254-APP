@@ -154,7 +154,6 @@ public class SceneUIManager : MonoBehaviour
     #region Specialist Data
     [Header("Specialist Data")]
     [SerializeField] private InputField m_UsernameSpecialist;
-    [SerializeField] private InputField m_PasswordSpecialist;
     #endregion
 
     #region Get Premium
@@ -369,7 +368,6 @@ public class SceneUIManager : MonoBehaviour
     public void processLoginResponse(LoginResponse response, bool showSavedProfiles) {
         //m_ErrorTextLogin.text = "Validando, espere un momento";    
         PlayerPrefs.DeleteAll();
-        Debug.Log("Validando...");
 
         if (response.idGuardian != null) 
         {
@@ -410,8 +408,6 @@ public class SceneUIManager : MonoBehaviour
                 ShowErrorPopup("Usuario o contraseña no válido");
             else
                 ShowErrorPopup(response.message);
-
-            Debug.Log("Llamada a la API no válida...");
         }
     }
 
@@ -441,9 +437,6 @@ public class SceneUIManager : MonoBehaviour
     {
         CallGetRequestChildrenApi(id_guardian, delegate (ChildDataResponse[] response)
         {
-            foreach (ChildDataResponse c in response){
-                Debug.Log(c.idChild);
-            }
             ninosGuardian = response;
             cantNinos = response.Length;
 
@@ -753,7 +746,6 @@ public class SceneUIManager : MonoBehaviour
                 if(getResponse.idSpecialist > 0) 
                 {
                     m_UsernameSpecialist.text = getResponse.username;
-                    m_PasswordSpecialist.text = getResponse.names + " " +getResponse.lastNames;
                     ShowCodigoNinoWindow();
                 }
                 else
@@ -763,7 +755,6 @@ public class SceneUIManager : MonoBehaviour
                         if(postResponse.idSpecialist > 0)
                         {
                             m_UsernameSpecialist.text = postResponse.username;
-                            m_PasswordSpecialist.text = postResponse.names + " " + postResponse.lastNames;
                             ShowCodigoNinoWindow();
                         }
                     });
@@ -1017,12 +1008,10 @@ public class SceneUIManager : MonoBehaviour
 
         if (uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
             ShowErrorPopup("Requiere conectividad de internet");
         }
         else
         {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<LoginResponse>(uwr.downloadHandler.text));
         }
     }
@@ -1040,11 +1029,7 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
-        {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
+        if (!uwr.isNetworkError)
         {
             response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
         }
@@ -1063,13 +1048,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<GuardianData>(uwr.downloadHandler.text));
         }
     }
@@ -1099,13 +1079,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<GuardianResponse>(uwr.downloadHandler.text));
         }
     }
@@ -1136,13 +1111,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<GuardianData>(uwr.downloadHandler.text));
         }
     }
@@ -1162,11 +1132,7 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
-        {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
+        if (!uwr.isNetworkError)
         {
             response(JsonHelper.FromJson<ChildDataResponse>(fixJson(uwr.downloadHandler.text)));
         }
@@ -1199,13 +1165,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<ChildDataResponse>(uwr.downloadHandler.text));
         }
     }
@@ -1237,13 +1198,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<ChildDataResponse>(uwr.downloadHandler.text));
         }
     }
@@ -1263,13 +1219,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
         }
     }
@@ -1289,11 +1240,7 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
-        {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
+        if (!uwr.isNetworkError)
         {
             response(JsonHelper.FromJson<Level>(fixJson(uwr.downloadHandler.text)));
         }
@@ -1320,13 +1267,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
         }
     }
@@ -1352,13 +1294,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
         }
     }
@@ -1378,11 +1315,7 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
-        {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
+        if (!uwr.isNetworkError)
         {
             response(JsonHelper.FromJson<CustomList>(fixJson(uwr.downloadHandler.text)));
         }
@@ -1427,13 +1360,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<DefaultResponse>(uwr.downloadHandler.text));
         }
     }
@@ -1465,13 +1393,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonHelper.FromJson<LevelRecord>(fixJson(uwr.downloadHandler.text)));
         }
     }
@@ -1492,13 +1415,8 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
+        if (!uwr.isNetworkError)
         {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
-        {
-            Debug.Log("Received: " + uwr.downloadHandler.text);
             response(JsonUtility.FromJson<Specialist>(uwr.downloadHandler.text));
         }
     }
@@ -1516,11 +1434,7 @@ public class SceneUIManager : MonoBehaviour
 
         yield return uwr.SendWebRequest();
 
-        if (uwr.isNetworkError)
-        {
-            Debug.Log("Error While Sending: " + uwr.error);
-        }
-        else
+        if (!uwr.isNetworkError)
         {
             response(JsonUtility.FromJson<Specialist>(uwr.downloadHandler.text));
         }
