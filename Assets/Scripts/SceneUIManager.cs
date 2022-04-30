@@ -193,6 +193,7 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private GameObject m_ChangeAvatarConfirmationPopupUI;
     [SerializeField] private GameObject m_ErrorLoginPopupUI;
     [SerializeField] private GameObject m_UnavailableLevelPopupUI;
+    [SerializeField] private GameObject m_ResetPasswordConfirmationPopupUI;
     #endregion
 
     #region Favorite Levels
@@ -548,21 +549,23 @@ public class SceneUIManager : MonoBehaviour
     #region Reset Password Guardian
     public void submitResetPassword()
     {
-
         if (m_ResetPasswordEmail.text == "")
         {
-            m_ErrorTextResetPassword.text = "Debe ingresar un correo electrónico";
+            ShowErrorPopup("Debe ingresar un correo electrónico");
             return;
         }
         else if (!validateEmail(m_ResetPasswordEmail.text))
         {
-            m_ErrorTextResetPassword.text = "Correo no válido";
+            ShowErrorPopup("Correo no válido");
             return;
         }
 
         CallGetRequestPasswordReset(m_ResetPasswordEmail.text, delegate (DefaultResponse response)
         {
-            m_ErrorTextResetPassword.text = response.message;
+            if (response.idResponse >= 0)
+                ResetPasswordConfirmationPopup();
+            else
+                ShowErrorPopup(response.message);
         });   
     }
     #endregion
@@ -579,17 +582,18 @@ public class SceneUIManager : MonoBehaviour
                 {
                     if (m_InputContrasena.text.Length >= MinLenght && m_InputContrasena.text.Length <= MaxLenght)
                     {
-                        m_ErrorText.text = "Validando, espere un momento";
+                        //m_ErrorText.text = "Validando, espere un momento";
                         CallRegisterGuardianApi(m_InputUsuario.text, m_InputContrasena.text, m_InputCorreo.text,
                         m_InputNombre.text, m_InputApellido.text, m_InputFechaAnio.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaDia.text,delegate (GuardianResponse response)
                             {
-                                //m_ErrorText.text = response.message;
                                 if (response.idResponse >= 0)
                                 {
                                     cuentaRegistradaConExito = false;
                                     blankRegisterSpace();
                                     ShowRegisterConfirmationPopup();
                                 }
+                                else
+                                    ShowErrorPopup(response.message);
                             }
                         );
                     }
@@ -1670,8 +1674,12 @@ public class SceneUIManager : MonoBehaviour
     public void ShowUnavailableLevelPopup(){
         m_UnavailableLevelPopupUI.SetActive(true);
     }
-    #endregion
     
+    public void ResetPasswordConfirmationPopup(){
+        CloseResetPassword();
+        m_ResetPasswordConfirmationPopupUI.SetActive(true);
+    }
+    #endregion
     #region Popup Change Level - Theme - Category
         #region ChangeLvl
     public void PromptChooselvlMath()
