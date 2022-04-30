@@ -16,6 +16,7 @@ public class SceneUIManager : MonoBehaviour
     
     [Header("Scene Manager")]
     [SerializeField] private GameObject m_LoguinUI;
+    [SerializeField] private GameObject m_RegisterUI;
     [SerializeField] private GameObject m_PerfilNiñoCrearUI;
     [SerializeField] private GameObject m_PerfilesGuardadosUI = null;
     [SerializeField] private GameObject m_ActualizarDatosUI = null;
@@ -282,6 +283,7 @@ public class SceneUIManager : MonoBehaviour
     {
         AllUIs = new ArrayList();
         AllUIs.Add(m_LoguinUI);
+        AllUIs.Add(m_RegisterUI);
         AllUIs.Add(m_PerfilNiñoCrearUI);
         AllUIs.Add(m_PerfilesGuardadosUI);
         AllUIs.Add(m_ActualizarDatosUI);
@@ -581,7 +583,7 @@ public class SceneUIManager : MonoBehaviour
                         CallRegisterGuardianApi(m_InputUsuario.text, m_InputContrasena.text, m_InputCorreo.text,
                         m_InputNombre.text, m_InputApellido.text, m_InputFechaAnio.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaDia.text,delegate (GuardianResponse response)
                             {
-                                m_ErrorText.text = response.message;
+                                //m_ErrorText.text = response.message;
                                 if (response.idResponse >= 0)
                                 {
                                     cuentaRegistradaConExito = false;
@@ -1476,6 +1478,10 @@ public class SceneUIManager : MonoBehaviour
 
 	public void ShowLoguin(){
         ShowUI(m_LoguinUI);
+    }
+
+    public void ShowRegister() {
+        ShowUI(m_RegisterUI);
     }
 
     public void ShowResetPassword(){
