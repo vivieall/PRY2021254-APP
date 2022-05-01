@@ -1127,7 +1127,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: fc93055e88475d842840a99b9e45bd43,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fc93055e88475d842840a99b9e45bd43,
         type: 3}
@@ -1203,6 +1203,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: libro (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fc93055e88475d842840a99b9e45bd43,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc93055e88475d842840a99b9e45bd43, type: 3}
@@ -1307,7 +1312,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: fc93055e88475d842840a99b9e45bd43,
         type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fc93055e88475d842840a99b9e45bd43,
         type: 3}
@@ -1383,6 +1388,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: libro (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fc93055e88475d842840a99b9e45bd43,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc93055e88475d842840a99b9e45bd43, type: 3}
@@ -2392,7 +2402,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xBFCu\xE1ntas botellas hay?"
+  m_Text: "\xBFCu\xE1ntos libros hay en la mesa?"
 --- !u!222 &1090014331
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2506,7 +2516,7 @@ PrefabInstance:
     - target: {fileID: -8679921383154817045, guid: fc93055e88475d842840a99b9e45bd43,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: fc93055e88475d842840a99b9e45bd43,
         type: 3}
@@ -2582,6 +2592,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: libro (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: fc93055e88475d842840a99b9e45bd43,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fc93055e88475d842840a99b9e45bd43, type: 3}
@@ -3469,7 +3484,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Coloca en la pizarra la cantidad de botellas
+  m_Text: Coloca en la mesa la cantidad de libros
 --- !u!222 &1379168500
 CanvasRenderer:
   m_ObjectHideFlags: 0
