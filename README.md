@@ -4,7 +4,12 @@ Aplicación móvil de realidad aumentada para mejorar el aprendizaje en niños c
 > Unity v2019.4.36f1 (updated)
 > Vuforia SDK + ARCore.
 
-https://xd.adobe.com/view/f987e080-cd55-44ea-aa70-31650bc04151-acd4/?fullscreen
+Prototipo: https://xd.adobe.com/view/f987e080-cd55-44ea-aa70-31650bc04151-acd4/?fullscreen
+
+Desarrollo implementado:
+
+![alt text](https://i.ibb.co/C57pmfz/image.png)
+
 
 Proyecto desarrollado por: @Vivieall (app móvil) & @JYellow363 (dashboard web).
 
