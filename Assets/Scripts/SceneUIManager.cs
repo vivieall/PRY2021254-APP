@@ -175,6 +175,7 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private ListManager customListManager;
     [SerializeField] private Text customListManagerLabel;
     [SerializeField] private CustomListList customListList;
+    [SerializeField] private Text m_EmptyCustomListMessageTextLabel;
     #endregion
 
     #region Specialist Data
@@ -542,6 +543,7 @@ public class SceneUIManager : MonoBehaviour
         premiumOn = false;
         m_ErrorTextLogin.text = "";
         resetChildren();
+        blankLogin();
         ShowLoguin();
     }
     #endregion
@@ -936,6 +938,16 @@ public class SceneUIManager : MonoBehaviour
         listManager.Refresh();
         customListManagerLabel.text = listManager.Name;
         customListManager = listManager;
+
+        if(!listManager.isEmpty())
+        {
+            m_EmptyCustomListMessageTextLabel.text = "";
+        }
+        else
+        {
+            m_EmptyCustomListMessageTextLabel.text = "No se ha agregado ningún nivel";
+        }
+
         if (customListManager.deleteButton != null) {
             customListManager.deleteButton.onClick.RemoveAllListeners();
             customListManager.deleteButton.onClick.AddListener(() => {
@@ -1848,11 +1860,33 @@ public class SceneUIManager : MonoBehaviour
     }
     #endregion
 
+    #region Convert To Lowercase - Registry Username
+    public void ConvertRegistryUsernameToLowerCase()
+    {
+        m_InputUsuario.text = m_InputUsuario.text.ToLower();
+    }
+    #endregion
+
+    #region Convert To Lowercase - Login Username
+    public void ConvertLoginUsernameToLowerCase()
+    {
+        m_InputUsuarioLogin.text = m_InputUsuarioLogin.text.ToLower();
+    }
+    #endregion
+
     #region FixJSON
     string fixJson(string value)
     {
         value = "{\"Items\":" + value + "}";
         return value;
+    }
+    #endregion
+
+    #region Empty Login
+    void blankLogin()
+    {
+        m_InputContrasenaLogin.text = "";
+        m_InputUsuarioLogin.text = "";
     }
     #endregion
 
