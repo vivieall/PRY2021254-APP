@@ -2402,7 +2402,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xBFCu\xE1ntas botellas hay?"
+  m_Text: "\xBFCu\xE1ntos libros hay en la mesa?"
 --- !u!222 &1090014331
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3484,7 +3484,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Coloca en la pizarra la cantidad de botellas
+  m_Text: Coloca en la mesa la cantidad de libros
 --- !u!222 &1379168500
 CanvasRenderer:
   m_ObjectHideFlags: 0

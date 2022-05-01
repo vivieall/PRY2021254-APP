@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Comm_Activity2.unity
     guid: ff0138a0704c5004582a89d5c328fa17
+  - enabled: 1
+    path: Assets/Scenes/Math_Activity3.unity
+    guid: 59537881cc65bb3489b7b06af811d915
   m_configObjects:
     com.unity.xr.management.arcore_loader: {fileID: 11400000, guid: 343129741aee3d348a20c6fb07fb7ae1,
       type: 2}
