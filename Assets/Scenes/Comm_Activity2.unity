@@ -1492,7 +1492,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -0.099998474, y: -0.20000076}
+  m_AnchoredPosition: {x: -0.099998474, y: -0.19999695}
   m_SizeDelta: {x: 3.4028168, y: -9.832474}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &551841620
@@ -3634,7 +3634,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "\xBFQu\xE9 verdura ves?"
+  m_Text: "\xBFQu\xE9 verdura es?"
 --- !u!222 &1241485586
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5346,7 +5346,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.29999924, y: 1.2999992}
+  m_AnchoredPosition: {x: 0.29999542, y: 1.300003}
   m_SizeDelta: {x: 45.272522, y: 51.959686}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1976254995
