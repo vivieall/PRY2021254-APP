@@ -687,7 +687,7 @@ public class SceneUIManager : MonoBehaviour
 
         if (m_InputNombreChild.text == "" || m_InputApellidoChild.text == "" || m_InputFechaAnioChild.text == "" || m_InputFechaMesChild.text == "" || m_InputFechaDiaChild.text == "" || generoChild == "" || nivelAutismoChild == "" || avatarChild == "")
         {
-            ShowErrorPopup("Debe completar todos los campos");
+            ShowErrorPopup("Verifique no dejar campos vacíos");
             return;
         }
 
@@ -717,7 +717,7 @@ public class SceneUIManager : MonoBehaviour
 
         if (m_InputNombreChildUpdate.text == "" || m_InputApellidoChildUpdate.text == "" || m_InputFechaAnioChildUpdate.text == "" || m_InputFechaMesChildUpdate.text == "" || m_InputFechaDiaChildUpdate.text == "" || generoChildUpdate == "" || nivelAutismoChildUpdate == "" || avatarChildUpdate == "")
         {
-            ShowErrorPopup("Debe completar todos los campos");
+            ShowErrorPopup("Verifique no dejar campos vacíos");
             return;
         }
 
@@ -983,9 +983,17 @@ public class SceneUIManager : MonoBehaviour
                 if (response.idResponse >= 0) {
                     datosUsuarioLogeado.premium = true;
                     SwitchPremium(datosUsuarioLogeado.premium);
+                    InformationPopup.PopupMessage(response.message);
                     ShowPerfilsGuardados();
                 }
-                InformationPopup.PopupMessage(response.message);
+                if (m_InputNumeroTarjeta.text == "" || m_InputMesCaducidad.text == "" || m_InputAnoCaducidad.text == "" ) {
+                    ConfirmPopup.SetLoadingState(false);
+                    ShowErrorPopup("Verifica que ningún campo este vacío");
+                }
+                 if (response.idResponse != 1 && m_InputNumeroTarjeta.text != "" && m_InputMesCaducidad.text != "" && m_InputAnoCaducidad.text != ""  ) {
+                    ConfirmPopup.SetLoadingState(false);
+                    ShowErrorPopup("Los datos no son correctos");
+                }
                 ConfirmPopup.SetLoadingState(false);
             });
         }, () => {});
