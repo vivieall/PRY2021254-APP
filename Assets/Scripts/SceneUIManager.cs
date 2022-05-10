@@ -366,6 +366,7 @@ public class SceneUIManager : MonoBehaviour
                 persistanceHandler.LoginResponse = response;
                 processLoginResponse(response, true);
             });
+            PromptLoading();
         }
     }
 
@@ -571,33 +572,49 @@ public class SceneUIManager : MonoBehaviour
         });   
     }
     #endregion
-    
+
     #region Register Guardian
     public void SubmitRegister2()
     {
-        if(m_InputUsuario.text != "" && m_InputCorreo.text != "" && m_InputContrasena.text != "" && m_InputContrasenaConf.text != "" && m_InputNombre.text != "" && m_InputApellido.text != "" && m_InputFechaAnio.text != "" && m_InputFechaMes.text != "" && m_InputFechaDia.text != "")
+        string actualTime = DateTime.UtcNow.ToLocalTime().ToString("dd-MM-yyyy");
+        string fNacimientoCuidador = m_InputFechaDia.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaAnio.text;
+        DateTime fNacimientoCuidadorDATETIME;
+        //DateTime.TryParse(fNacimientoCuidador, out fNacimientoCuidadorDATETIME);
+        //Debug.Log(DateTime.UtcNow.ToLocalTime().Subtract(fNacimientoCuidadorDATETIME).Days);
+        if (m_InputUsuario.text != "" && m_InputCorreo.text != "" && m_InputContrasena.text != "" && m_InputContrasenaConf.text != "" &&
+            m_InputNombre.text != "" && m_InputApellido.text != "" && m_InputFechaAnio.text != "" && m_InputFechaMes.text != "" && m_InputFechaDia.text != "")
         {
-            if(validateEmail(m_InputCorreo.text))
+            if (validateEmail(m_InputCorreo.text))
             {
                 cuentaRegistradaConExito = true;
                 if (m_InputContrasena.text == m_InputContrasenaConf.text)
                 {
                     if (m_InputContrasena.text.Length >= MinLenght && m_InputContrasena.text.Length <= MaxLenght)
                     {
-                        //m_ErrorText.text = "Validando, espere un momento";
-                        CallRegisterGuardianApi(m_InputUsuario.text, m_InputContrasena.text, m_InputCorreo.text,
-                        m_InputNombre.text, m_InputApellido.text, m_InputFechaAnio.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaDia.text,delegate (GuardianResponse response)
+                        if (DateTime.TryParse(fNacimientoCuidador, out fNacimientoCuidadorDATETIME) != false)
+                        {
+                            if (DateTime.UtcNow.ToLocalTime().Subtract(fNacimientoCuidadorDATETIME).Days >= 13 * 365)
                             {
-                                if (response.idResponse >= 0)
+                                //m_ErrorText.text = "Validando, espere un momento";
+                                CallRegisterGuardianApi(m_InputUsuario.text, m_InputContrasena.text,
+                                    m_InputCorreo.text, m_InputNombre.text, m_InputApellido.text,
+                                m_InputFechaAnio.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaDia.text, delegate (GuardianResponse response)
                                 {
-                                    cuentaRegistradaConExito = false;
-                                    blankRegisterSpace();
-                                    ShowRegisterConfirmationPopup();
+                                    if (response.idResponse >= 0)
+                                    {
+                                        cuentaRegistradaConExito = false;
+                                        blankRegisterSpace();
+                                        ShowRegisterConfirmationPopup();
+                                    }
+                                    else
+                                        ShowErrorPopup(response.message);
                                 }
-                                else
-                                    ShowErrorPopup(response.message);
+                                );
                             }
-                        );
+                            else { ShowErrorPopup("Debes tener más de 13 años para ser cuidador"); }
+                        }
+                        else { ShowErrorPopup("Fecha mal ingresada"); }
+
                     }
                     else
                     {
@@ -613,8 +630,8 @@ public class SceneUIManager : MonoBehaviour
             else
             {
                 ShowErrorPopup("Email no válido");
-            }   
-        } 
+            }
+        }
         else
         {
             ShowErrorPopup("Verifica que ningún campo este vacío");
@@ -623,39 +640,52 @@ public class SceneUIManager : MonoBehaviour
     }
     #endregion
 
+
     #region Update Guardian
     public void SubmitUpdateGuardian()
     {
         PersistanceHandler persistanceHandler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
-
+        string actualTime = DateTime.UtcNow.ToLocalTime().ToString("dd-MM-yyyy");
+        string fNacimientoCuidadorUpdate = m_InputFechaDiaUpdate.text + "-" + m_InputFechaMesUpdate.text + "-" + m_InputFechaAnioUpdate.text;
+        DateTime fNacimientoCuidadorDATETIMEUpdate;
         if ( m_InputNombreUpdate.text != "" && m_InputApellidoUpdate.text != "" && m_InputFechaAnioUpdate.text != "" && m_InputFechaMesUpdate.text != "" && m_InputFechaDiaUpdate.text != "" && m_InputCorreoUpdate.text != "")
         {
-            if(validateEmail(m_InputCorreoUpdate.text))
+            if (DateTime.TryParse(fNacimientoCuidadorUpdate, out fNacimientoCuidadorDATETIMEUpdate) != false)
             {
-                cuentaRegistradaConExito = true;
-                m_InputContrasenaNuevaUpdate.text = m_InputContrasenaActualUpdate.text;
-                m_InputContrasenaNuevaConfUpdate.text = m_InputContrasenaActualUpdate.text;
-             
-                m_ErrorUpdateGuardianText.text = "Cambios guardados con éxito";
-                CallUpdateGuardianApi(id_guardian, m_InputContrasenaActualUpdate.text, m_InputContrasenaNuevaUpdate.text,  m_InputCorreoUpdate.text, m_InputNombreUpdate.text, m_InputApellidoUpdate.text, m_InputFechaAnioUpdate.text + "-" + m_InputFechaMesUpdate.text + "-" + m_InputFechaDiaUpdate.text, delegate (GuardianData response)
+                if (DateTime.UtcNow.ToLocalTime().Subtract(fNacimientoCuidadorDATETIMEUpdate).Days >= 13 * 365)
+                {
+
+                    if (validateEmail(m_InputCorreoUpdate.text))
                     {
-                        if (response.idGuardian != null)
-                        {
-                            datosUsuarioLogeado.username = response.username;
-                            datosUsuarioLogeado.password = response.password;
-                            datosUsuarioLogeado.email = response.email;
-                            datosUsuarioLogeado.names = response.names;
-                            datosUsuarioLogeado.lastNames = response.lastNames;
-                            datosUsuarioLogeado.birthday = response.birthday;
-                            ShowUpdateProfileConfirmationPopup();
-                        }
+                        cuentaRegistradaConExito = true;
+                        m_InputContrasenaNuevaUpdate.text = m_InputContrasenaActualUpdate.text;
+                        m_InputContrasenaNuevaConfUpdate.text = m_InputContrasenaActualUpdate.text;
+                     
+                        m_ErrorUpdateGuardianText.text = "Cambios guardados con éxito";
+                        CallUpdateGuardianApi(id_guardian, m_InputContrasenaActualUpdate.text, m_InputContrasenaNuevaUpdate.text,  m_InputCorreoUpdate.text, m_InputNombreUpdate.text, m_InputApellidoUpdate.text, m_InputFechaAnioUpdate.text + "-" + m_InputFechaMesUpdate.text + "-" + m_InputFechaDiaUpdate.text, delegate (GuardianData response)
+                            {
+                                if (response.idGuardian != null)
+                                {
+                                    datosUsuarioLogeado.username = response.username;
+                                    datosUsuarioLogeado.password = response.password;
+                                    datosUsuarioLogeado.email = response.email;
+                                    datosUsuarioLogeado.names = response.names;
+                                    datosUsuarioLogeado.lastNames = response.lastNames;
+                                    datosUsuarioLogeado.birthday = response.birthday;
+                                    ShowUpdateProfileConfirmationPopup();
+                                }
+                            }
+                        );
                     }
-                );
+                    else
+                    {    
+                        ShowErrorPopup("Ingrese un correo válido");
+                    }
+                }
+                else { ShowErrorPopup("Debes tener más de 13 años para ser cuidador"); }
             }
-            else
-            {    
-                ShowErrorPopup("Ingrese un correo válido");
-            }  
+            else { ShowErrorPopup("Fecha mal ingresada"); }
+
         }
         else
         {
@@ -685,11 +715,26 @@ public class SceneUIManager : MonoBehaviour
             }
         }
 
+        string actualTime = DateTime.UtcNow.ToLocalTime().ToString("dd-MM-yyyy");
+        string fNacimientoChild = m_InputFechaDia.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaAnio.text;
+        DateTime fNacimientoChildDATETIME;
+
         if (m_InputNombreChild.text == "" || m_InputApellidoChild.text == "" || m_InputFechaAnioChild.text == "" || m_InputFechaMesChild.text == "" || m_InputFechaDiaChild.text == "" || generoChild == "" || nivelAutismoChild == "" || avatarChild == "")
         {
             ShowErrorPopup("Verifique no dejar campos vacíos");
             return;
         }
+        if (DateTime.TryParse(fNacimientoChild, out fNacimientoChildDATETIME) == false)
+        {
+            ShowErrorPopup("Fecha mal ingresada");
+            return;
+        }
+        if (DateTime.UtcNow.ToLocalTime().Subtract(fNacimientoChildDATETIME).Days < 2 * 365)
+        {
+            ShowErrorPopup("El niño debe tener más de 2 años");
+            return;
+        }
+
 
         CallRegisterChildApi(id_guardian, m_InputNombreChild.text, m_InputApellidoChild.text, avatarChild, m_InputFechaAnioChild.text + "-" + m_InputFechaMesChild.text + "-" + m_InputFechaDiaChild.text, generoChild, nivelAutismoChild, sintomas2,
             delegate (ChildDataResponse response)
@@ -715,9 +760,23 @@ public class SceneUIManager : MonoBehaviour
             }
         }
 
+        string actualTime = DateTime.UtcNow.ToLocalTime().ToString("dd-MM-yyyy");
+        string fNacimientoChildUpdate = m_InputFechaDiaChildUpdate.text + "-" + m_InputFechaMesChildUpdate.text + "-" + m_InputFechaAnioChildUpdate.text;
+        DateTime fNacimientoChildDATETIMEUpdate;
+
         if (m_InputNombreChildUpdate.text == "" || m_InputApellidoChildUpdate.text == "" || m_InputFechaAnioChildUpdate.text == "" || m_InputFechaMesChildUpdate.text == "" || m_InputFechaDiaChildUpdate.text == "" || generoChildUpdate == "" || nivelAutismoChildUpdate == "" || avatarChildUpdate == "")
         {
             ShowErrorPopup("Verifique no dejar campos vacíos");
+            return;
+        }
+        if (DateTime.TryParse(fNacimientoChildUpdate, out fNacimientoChildDATETIMEUpdate) == false)
+        {
+            ShowErrorPopup("Fecha mal ingresada");
+            return;
+        }
+        if (DateTime.UtcNow.ToLocalTime().Subtract(fNacimientoChildDATETIMEUpdate).Days < 2 * 365)
+        {
+            ShowErrorPopup("El niño debe tener más de 2 años");
             return;
         }
 
@@ -1768,9 +1827,18 @@ public class SceneUIManager : MonoBehaviour
             ConfirmPopup.gameObject.SetActive(false); ShowCategoria();
         }, () => { ConfirmPopup.gameObject.SetActive(false); });
     }
-        #endregion
     #endregion
+    #endregion
+
+    public void PromptLoading()
+    {
+        InformationPopup.PopupMessage("Cargando, por favor espere");
+        //ConfirmPopup.ConfirmOperation("¿Desea cambiar de nivel?", () => {
+        //    ConfirmPopup.gameObject.SetActive(false); ShowChooselvlMath();
+        //}, () => { ConfirmPopup.gameObject.SetActive(false); });
+    }
     
+
     #region Set Guardian Profile Data
     public void setGuardianProfileData() 
     {
