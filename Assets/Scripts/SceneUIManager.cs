@@ -353,6 +353,7 @@ public class SceneUIManager : MonoBehaviour
     #region Login Guardian
     public void submitLogin2()
     {
+        PlayerPrefs.DeleteAll();
         PersistanceHandler persistanceHandler = GameObject.Find("PersistantObject").GetComponent<PersistanceHandler>();
 
         if (m_InputContrasenaLogin.text == "" || m_InputUsuarioLogin.text == "")
@@ -372,10 +373,9 @@ public class SceneUIManager : MonoBehaviour
 
     public void processLoginResponse(LoginResponse response, bool showSavedProfiles) {
         //m_ErrorTextLogin.text = "Validando, espere un momento";    
-
+        PlayerPrefs.DeleteAll();
         if (response.idGuardian != null) 
         {
-            PlayerPrefs.DeleteAll();
             if (toggleSesion.isOn)
             {
                 PlayerPrefs.SetString("SavePasswordToggle_Data", m_InputContrasenaLogin.text);
