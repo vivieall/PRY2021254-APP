@@ -206,6 +206,7 @@ public class SceneUIManager : MonoBehaviour
     [Header("Logout")]
     [SerializeField] private ConfirmPopupComponent ConfirmPopup;
     [SerializeField] private InformationPopupComponent InformationPopup;
+    [SerializeField] private InformationPopupComponent WaitPopup;
     #endregion
 
     GuardianData datosUsuarioLogeado = new GuardianData();
@@ -374,6 +375,7 @@ public class SceneUIManager : MonoBehaviour
     public void processLoginResponse(LoginResponse response, bool showSavedProfiles) {
         //m_ErrorTextLogin.text = "Validando, espere un momento";    
         PlayerPrefs.DeleteAll();
+        WaitPopup.gameObject.SetActive(false);
         if (response.idGuardian != null) 
         {
             if (toggleSesion.isOn)
@@ -1832,7 +1834,7 @@ public class SceneUIManager : MonoBehaviour
 
     public void PromptLoading()
     {
-        InformationPopup.PopupMessage("Cargando, por favor espere");
+        WaitPopup.PopupMessage("Cargando, por favor espere");
         //ConfirmPopup.ConfirmOperation("¿Desea cambiar de nivel?", () => {
         //    ConfirmPopup.gameObject.SetActive(false); ShowChooselvlMath();
         //}, () => { ConfirmPopup.gameObject.SetActive(false); });
