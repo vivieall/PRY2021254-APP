@@ -6981,7 +6981,7 @@ PrefabInstance:
     - target: {fileID: 4702679400486087861, guid: 667c19b4f8417c141ac2c90f920a9baa,
         type: 3}
       propertyPath: m_Text
-      value: Espere mientras carga
+      value: Espere mientras carga...
       objectReference: {fileID: 0}
     - target: {fileID: 4702679400486087862, guid: 667c19b4f8417c141ac2c90f920a9baa,
         type: 3}
@@ -8881,7 +8881,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 42.59}
+  m_AnchoredPosition: {x: 0, y: 42.589996}
   m_SizeDelta: {x: 282.12732, y: -482.26947}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &204482349
@@ -68047,7 +68047,7 @@ MonoBehaviour:
   m_FontData:
     m_Font: {fileID: 12800000, guid: c930e5401e45d4de1ab7982d5ebd0674, type: 3}
     m_FontSize: 10
-    m_FontStyle: 2
+    m_FontStyle: 0
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
@@ -85873,8 +85873,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1824465689}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 31.9, z: -7427.461}
-  m_LocalScale: {x: 11.478584, y: 11.4785795, z: 4.0553102}
+  m_LocalPosition: {x: 3.5, y: 33.2, z: -7427.46}
+  m_LocalScale: {x: 17.562515, y: 17.56251, z: 6.2047243}
   m_Children: []
   m_Father: {fileID: 377881185}
   m_RootOrder: 2
@@ -85918,7 +85918,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 72014e5f06b810a448be300e40fc8d9a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 43953ede54bb0084fb4d30aee4560c23, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
