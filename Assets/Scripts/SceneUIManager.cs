@@ -59,6 +59,8 @@ public class SceneUIManager : MonoBehaviour
     [SerializeField] private InputField m_InputFechaMes;
     [SerializeField] private InputField m_InputFechaAnio;
     [SerializeField] private InputField m_InputUsuario;
+    [SerializeField] private Toggle m_TooglePrivacy;
+    [SerializeField] private ConfirmPopupComponent ConfirmLeerCondiciones;
     #endregion
 
     #region Update Guardian
@@ -578,6 +580,11 @@ public class SceneUIManager : MonoBehaviour
     #region Register Guardian
     public void SubmitRegister2()
     {
+        if (m_TooglePrivacy.isOn==false)
+        {
+            ShowErrorPopup("Debes aceptar el acuerdo de privacidad");
+            return;
+        }
         string actualTime = DateTime.UtcNow.ToLocalTime().ToString("dd-MM-yyyy");
         string fNacimientoCuidador = m_InputFechaDia.text + "-" + m_InputFechaMes.text + "-" + m_InputFechaAnio.text;
         DateTime fNacimientoCuidadorDATETIME;
@@ -641,6 +648,13 @@ public class SceneUIManager : MonoBehaviour
         }
     }
     #endregion
+    public void PromptAcceptConditions()
+    {
+        ConfirmLeerCondiciones.ConfirmOperation("¿Acepta los terminos y condiciones presentados?", () => {
+            ConfirmPopup.gameObject.SetActive(false); m_TooglePrivacy.isOn =true;
+        }, () => { ConfirmPopup.gameObject.SetActive(false); m_TooglePrivacy.isOn = false; });
+
+    }
 
 
     #region Update Guardian

@@ -15,12 +15,22 @@ public class SceneSwitcher : MonoBehaviour
     {
         //SceneType
         //1->Math 2->Comm 3->PerSoc 4->C&T
-        string temp = parameters.Substring(0,1);
-        int scenenum = int.Parse(temp);
-        temp = parameters.Substring(1, 1);
-        int activitynum = int.Parse(temp);
-        
-        Handler.PlayActivity(scenenum, activitynum);
+        if (parameters.Length==2)
+        {
+            string temp = parameters.Substring(0,1);
+            int scenenum = int.Parse(temp);
+            temp = parameters.Substring(1, 1);
+            int activitynum = int.Parse(temp);
+            Handler.PlayActivity(scenenum, activitynum);
+        }
+        if (parameters.Length == 3)
+        {
+            string temp = parameters.Substring(0, 2);
+            int scenenum = int.Parse(temp);
+            temp = parameters.Substring(2, 1);
+            int activitynum = int.Parse(temp);
+            Handler.PlayActivity(scenenum, activitynum);
+        }
     }
 
     public void setInfo(GameObject obj)
